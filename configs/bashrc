@@ -1,0 +1,16 @@
+# .bashrc
+
+# Exports
+export PS1="\\u@\h \\W]\\$ "
+export EDITOR=vi
+export HISTFILESIZE=3000
+export HISTCONTROL=ignoredups
+
+# Global aliases
+alias rm='rm -I' # warn if removing more than three files or recursive
+alias showjobs="showq -u $USER"
+alias canceljobs="mjobctl -c -w user=$USER"
+
+# project aliases
+export FAMDIR="/projects/b1049/Niccolo_NGS/genomes/sameer"
+alias cdfam='cd ${FAMDIR}'
