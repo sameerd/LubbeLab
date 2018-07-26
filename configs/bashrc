@@ -11,6 +11,10 @@ alias rm='rm -I' # warn if removing more than three files or recursive
 alias showjobs="showq -u $USER"
 alias canceljobs="mjobctl -c -w user=$USER"
 
+# Prevent git from using ssh-askpass
+[ -n "$SSH_CONNECTION" ] && unset SSH_ASKPASS
+export GIT_ASKPASS=
+
 # project aliases
 export FAMDIR="/projects/b1049/Niccolo_NGS/genomes/sameer"
 alias cdfam='cd ${FAMDIR}'
