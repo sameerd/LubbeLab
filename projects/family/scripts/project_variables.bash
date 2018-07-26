@@ -2,7 +2,7 @@
 
 
 # Create small data set of just one chromosome
-BASEDIR="/projects/b1049/Niccolo_NGS/genomes/sameer"
+BASEDIR="/projects/b1049/sameer/LubbeLab/projects/family"
 
 DATADIR="${BASEDIR}/data"
 
