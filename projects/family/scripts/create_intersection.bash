@@ -22,7 +22,7 @@ ${JAVA} -jar ${GATK} \
    -T SelectVariants \
    -R ${GENOMEREF} \
    --variant ${MERGED_VCF} \
+   -restrictAllelesTo BIALLELIC \
    -o ${INTERSECTION_VCF} \
    -select "set == \"Intersection\""
-#   -restrictAllelesTo BIALLELIC \
 

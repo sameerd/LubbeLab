@@ -29,9 +29,8 @@ ${JAVA} -jar ${GATK} \
    -R ${GENOMEREF} \
    --variant ${INTERSECTION_VCF} \
    -restrictAllelesTo BIALLELIC \
-   -o ${OUTPUT_VCF} \
-   -select "vc.getGenotype(\"${P1_SAMPLE}\").isHet() && 
- vc.getGenotype(\"${P2_SAMPLE}\").isHet() && vc.getGenotype(\"${C1_SAMPLE}\").isHom() && vc.getGenotype(\"${C2_SAMPLE}\").isHom()"
+   -o ${INTERSECTION_FILTERED_VCF} \
+   -select "vc.getGenotype(\"${P1_SAMPLE}\").isHet() && vc.getGenotype(\"${P2_SAMPLE}\").isHet() && vc.getGenotype(\"${C1_SAMPLE}\").isHom() && vc.getGenotype(\"${C2_SAMPLE}\").isHom()"
 
 
 # Different approach: Using Picard's FilterVcf tools

@@ -9,4 +9,9 @@ SAMTOOLS="${PROGRAMSDIR}/samtools/samtools"
 GATK="${PROGRAMSDIR}/gatk/GenomeAnalysisTK.jar"
 PICARD="${PROGRAMSDIR}/picard/picard.jar"
 VCFSORT="${PROGRAMSDIR}/vcftools/bin/vcf-sort"
+
+ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"
+ANNOVAR_CONVERT="${ANNOVARDIR}/convert2annovar.pl"
+ANNOVAR_TABLE="${ANNOVARDIR}/table_annovar.pl"
+
 JAVA=java

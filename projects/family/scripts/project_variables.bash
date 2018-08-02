@@ -37,6 +37,8 @@ C2_SORTED="${WORKINGDIR}/${C2}.Cleaned_SNPIndel_Sorted.vcf"
 
 MERGED_VCF="${WORKINGDIR}/merged.vcf"
 INTERSECTION_VCF="${WORKINGDIR}/intersection.vcf"
+INTERSECTION_FILTERED_VCF="${WORKINGDIR}/intersection_filtered.vcf"
+ANNOVAR_INPUT="${WORKINGDIR}/annovar.avinput"
 OUTPUT_VCF="${OUTPUTDIR}/output.vcf"
 
 
