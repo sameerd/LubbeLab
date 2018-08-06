@@ -35,6 +35,12 @@ P2_SORTED="${WORKINGDIR}/${P2}.Cleaned_SNPIndel_Sorted.vcf"
 C1_SORTED="${WORKINGDIR}/${C1}.Cleaned_SNPIndel_Sorted.vcf"
 C2_SORTED="${WORKINGDIR}/${C2}.Cleaned_SNPIndel_Sorted.vcf"
 
+P1_ANNO="${P1_SORTED}.txt"
+P2_ANNO="${P2_SORTED}.txt"
+C1_ANNO="${C1_SORTED}.txt"
+C2_ANNO="${C2_SORTED}.txt"
+
+
 MERGED_VCF="${WORKINGDIR}/merged.vcf"
 INTERSECTION_VCF="${WORKINGDIR}/intersection.vcf"
 INTERSECTION_FILTERED_VCF="${WORKINGDIR}/intersection_filtered.vcf"

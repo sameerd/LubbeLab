@@ -17,7 +17,7 @@ echo ${OUTPUTDIR}
 # Annotate the variants file
 
 ${ANNOVAR_CONVERT} -format vcf4 \
-        "${INTERSECTION_FILTERED_VCF}" \
+        "${MERGED_VCF}" \
         -allsample -withfreq \
         -includeinfo \
         -outfile "${ANNOVAR_INPUT}"
@@ -29,6 +29,6 @@ ${ANNOVAR_CONVERT} -format vcf4 \
 # Convert to Annovar Table
 ${ANNOVAR_TABLE} "${ANNOVAR_INPUT}" \
         "${ANNOVARDIR}/humandb/" -buildver hg19 \
-        -protocol refGene,gnomad_genome,cadd13gt20,exac03,clinvar_20170905 \
-        -operation g,f,f,f,f \
+        -protocol refGene,gnomad_genome,cadd13gt10 \
+        -operation g,f,f \
         -remove -otherinfo -nastring .

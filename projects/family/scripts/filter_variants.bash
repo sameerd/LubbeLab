@@ -19,11 +19,6 @@ echo ${OUTPUTDIR}
 module load java
 
 
-# vc.getGenotype(\"${P1_SAMPLE}\").isHet() && 
-# vc.getGenotype(\"${P2_SAMPLE}\").isHet() &&
-# vc.getGenotype(\"${C1_SAMPLE}\").isHom() &&
-# vc.getGenotype(\"${C2_SAMPLE}\").isHom() &&
-
 ${JAVA} -jar ${GATK} \
    -T SelectVariants \
    -R ${GENOMEREF} \

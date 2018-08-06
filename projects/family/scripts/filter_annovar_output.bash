@@ -29,12 +29,18 @@ NR==1 {
     ix[$i] = i
 }
 NR>1 {
-  if ($ix["gnomAD_genome_ALL"] < 0.1 && $ix["CADD13_PHRED"] > 20)
+  if (($ix["gnomAD_genome_ALL"] == "." || $ix["gnomAD_genome_ALL"] < 0.05 ) && $ix["CADD13_PHRED"] > 15 && ($ix["Func.refGene"] == "exonic" || $ix["Func.refGene"] == "exonic;splicing" || $ix["Func.refGene"] == "splicing" ) )
     print $0
 }
 '
 
 awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
 
-cut -f1-9,11,20 "$OUTPUT_TXT" > "$OUTPUT_TXT_SMALL"
+
+paste <(cut -f1-9,11,20 ${OUTPUT_TXT}) \
+      <(cut -f46 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f47 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f48 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f49 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      >${OUTPUT_TXT_SMALL}
 
