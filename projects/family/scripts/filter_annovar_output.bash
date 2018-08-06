@@ -36,11 +36,12 @@ NR>1 {
 
 awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
 
-
-paste <(cut -f1-9,11,20 ${OUTPUT_TXT}) \
-      <(cut -f46 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f47 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f48 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f49 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+cut -f1-9,11,20 ${OUTPUT_TXT} \
+      | paste - <(cut -f33 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f34 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f35 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f36 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
       >${OUTPUT_TXT_SMALL}
 
+awk '{if ($13 == "1/1" && $14 == "0/1" && $15 == "0/1" && $16 == "1/1" ) print $0}' \
+        "${OUTPUT_TXT_SMALL}" > "${OUTPUT_TXT_SMALLER}"
