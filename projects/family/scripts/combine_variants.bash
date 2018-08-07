@@ -27,7 +27,8 @@ ${JAVA} -jar ${GATK} \
    -V:P2,vcf "${P2_SORTED}" \
    -V:C1,vcf "${C1_SORTED}" \
    -V:C2,vcf "${C2_SORTED}" \
-   -o "${COMBINED_VCF}" \
-   -genotypeMergeOptions UNIQUIFY
+   -o "${MERGED_VCF}" \
+   -genotypeMergeOptions UNIQUIFY \
+   -filteredRecordsMergeType KEEP_UNCONDITIONAL
 
 
