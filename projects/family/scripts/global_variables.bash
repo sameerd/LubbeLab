@@ -8,6 +8,7 @@ PROGRAMSDIR="${PROJECTDIR}/genetics_programs"
 SAMTOOLS="${PROGRAMSDIR}/samtools/samtools" 
 GATK="${PROGRAMSDIR}/gatk/GenomeAnalysisTK.jar"
 PICARD="${PROGRAMSDIR}/picard/picard.jar"
+VCFTOOLS="${PROGRAMSDIR}/vcftools/bin/vcftools"
 VCFSORT="${PROGRAMSDIR}/vcftools/bin/vcf-sort"
 
 ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"

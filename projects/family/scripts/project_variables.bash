@@ -49,6 +49,7 @@ ANNOVAR_INPUT="${WORKINGDIR}/annovar.avinput"
 ANNOVAR_OUTPUT="${ANNOVAR_INPUT}.hg19_multianno.txt"
 
 OUTPUT_VCF="${OUTPUTDIR}/output.vcf"
+OUTPUT_VCFTOOLS="${OUTPUTDIR}/output.vcftools"
 OUTPUT_TXT="${OUTPUTDIR}/output.txt"
 OUTPUT_TXT_SMALL="${OUTPUTDIR}/output.small.txt"
 OUTPUT_TXT_SMALLER="${OUTPUTDIR}/output.smaller.txt"
