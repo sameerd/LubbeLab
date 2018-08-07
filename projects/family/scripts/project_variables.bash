@@ -53,5 +53,6 @@ OUTPUT_VCFTOOLS="${OUTPUTDIR}/output.vcftools"
 OUTPUT_TXT="${OUTPUTDIR}/output.txt"
 OUTPUT_TXT_SMALL="${OUTPUTDIR}/output.small.txt"
 OUTPUT_TXT_SMALLER="${OUTPUTDIR}/output.smaller.txt"
+OUTPUT_YCHR="${OUTPUTDIR}/output.chrY.txt"
 
 
