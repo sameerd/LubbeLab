@@ -46,11 +46,11 @@ NR>1 {
 #awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
 
 cut -f1-7,9,11,20 ${OUTPUT_TXT} \
-      | paste - <(cut -f33 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f34 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f35 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      | paste - <(cut -f36 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
+      | paste - <(cut -f33 "${OUTPUT_TXT}" | awk -F: 'NR == 1 {print "C1"}; NR > 1 {print $1}') \
+      | paste - <(cut -f34 "${OUTPUT_TXT}" | awk -F: 'NR == 1 {print "P1"}; NR > 1 {print $1}') \
+      | paste - <(cut -f35 "${OUTPUT_TXT}" | awk -F: 'NR == 1 {print "P2"}; NR > 1 {print $1}') \
+      | paste - <(cut -f36 "${OUTPUT_TXT}" | awk -F: 'NR == 1 {print "C2"}; NR > 1 {print $1}') \
       > ${OUTPUT_TXT_SMALL}
 
-awk '{if ($12 == "1/1" && $13 == "0/1" && $14 == "0/1" && $15 == "1/1" ) print $0}' \
+awk 'NR == 1 {print $0}; NR > 1 {if ($12 == "1/1" && $13 == "0/1" && $14 == "0/1" && $15 == "1/1" ) print $0}' \
         "${OUTPUT_TXT_SMALL}" > "${OUTPUT_TXT_SMALLER}"
