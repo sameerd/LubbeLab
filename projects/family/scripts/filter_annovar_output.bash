@@ -29,19 +29,28 @@ NR==1 {
     ix[$i] = i
 }
 NR>1 {
-  if (($ix["gnomAD_genome_ALL"] == "." || $ix["gnomAD_genome_ALL"] < 0.05 ) && $ix["CADD13_PHRED"] > 15 && ($ix["Func.refGene"] == "exonic" || $ix["Func.refGene"] == "exonic;splicing" || $ix["Func.refGene"] == "splicing" ) )
+  if (($ix["gnomAD_genome_ALL"] == "." \
+          || $ix["gnomAD_genome_ALL"] < 0.05 ) \
+       && ($ix["Func.refGene"] == "exonic" \
+          || $ix["Func.refGene"] == "exonic;splicing" \
+          || $ix["Func.refGene"] == "splicing" ) \
+       && ($ix["ExonicFunc.refGene"] != "synonymous SNV" \
+          || ($ix["ExonicFunc.refGene"] == "synonymous SNV" \
+              && $ix["CADD13_PHRED"] > 15) \
+          ) \
+    )
     print $0
 }
 '
 
-awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
+#awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
 
-cut -f1-9,11,20 ${OUTPUT_TXT} \
+cut -f1-7,9,11,20 ${OUTPUT_TXT} \
       | paste - <(cut -f33 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
       | paste - <(cut -f34 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
       | paste - <(cut -f35 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
       | paste - <(cut -f36 "${OUTPUT_TXT}" | awk -F: '{print $1}') \
-      >${OUTPUT_TXT_SMALL}
+      > ${OUTPUT_TXT_SMALL}
 
-awk '{if ($13 == "1/1" && $14 == "0/1" && $15 == "0/1" && $16 == "1/1" ) print $0}' \
+awk '{if ($12 == "1/1" && $13 == "0/1" && $14 == "0/1" && $15 == "1/1" ) print $0}' \
         "${OUTPUT_TXT_SMALL}" > "${OUTPUT_TXT_SMALLER}"
