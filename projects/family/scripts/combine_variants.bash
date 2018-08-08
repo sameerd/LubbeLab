@@ -31,4 +31,10 @@ ${JAVA} -jar ${GATK} \
    -genotypeMergeOptions UNIQUIFY \
    -filteredRecordsMergeType KEEP_UNCONDITIONAL
 
+# Remove the missed calls
+# FIXME: use GENOTYPE_GIVEN_ALLELES or joint variant calling run
+# https://gatkforums.broadinstitute.org/gatk/discussion/3707/merging-vcf-files-keeping-reference-alleles
+sed 's/\.\/\./0\/0:0,999:99:9999,999,0/g' "${MERGED_VCF}" > "${MERGED2_VCF}"
+mv "${MERGED2_VCF}" "${MERGED_VCF}"
+
 
