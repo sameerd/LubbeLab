@@ -1,5 +1,6 @@
 library(dplyr)
 
+# FIXME: Make this readable from the command line
 x <- read.table("data/output/output.small.txt", header=TRUE, sep="\t")
 
 
@@ -9,7 +10,7 @@ parent_vars <- c("P1", "P2")
 genotype_vars <- c("C1", "P1", "P2", "C2")
 
 # Only select a few columns to view
-compact_viewer <-  function(z) z %>% select(1:7, genotype_vars)
+compact_viewer <-  function(z, n=1:7) z %>% select(n, genotype_vars)
 
 x_small <- x %>% 
   # convert genotype variables to character
@@ -31,11 +32,38 @@ homo_variants <- x_small %>%
   filter_at(children_vars, all_vars(.  == "1/1")) %>%
   filter_at(parent_vars, all_vars(. == "0/1"))
 
+
 homo_variants %>% compact_viewer()
 
+# Pick out the compound hetrozygous variants
 compound_het_variants <- x_small %>%
-   filter_at(children_vars, all_vars(.  == "0/1")) %>%
-   head(8) %>% compact_viewer()
+  # children should both be 0/1
+  filter_at(children_vars, all_vars(.  == "0/1")) %>%
+  # One of the parents should be 0/1
+  filter_at(parent_vars, any_vars(. == "0/1")) %>%
+  # None of the parents should be 1/1
+  filter_at(parent_vars, all_vars(. != "1/1")) %>%
+  # Remove any genes that appear by themselves
+  group_by(Gene.refGene) %>% filter(n() > 1) %>% 
+  ungroup() %>% as.data.frame() %>%
+  # paste all the genotypes together to create a family genotype
+  mutate(FamilyGt=paste(C1, P1, P2, C2, sep=":")) %>% 
+  group_by(Gene.refGene) %>%
+  # There are either 1 or 2 family genotypes per gene
+  # We are interested in the genes that have 2 family genotypes
+  filter(n_distinct(FamilyGt) == 2) %>%
+  ungroup() %>% as.data.frame() %>%
+  select(-FamilyGt)
+
+
+compound_het_variants %>% compact_viewer() %>% select(-Alt) %>% head(200)
+
+
+# save tables to disk
+write.table(homo_variants, file="data/output/homozygous_variants.txt", 
+            sep="\t", quote=FALSE, row.names=FALSE)
+write.table(compound_het_variants, file="data/output/compound_het_variants.txt", 
+            sep="\t", quote=FALSE, row.names=FALSE)
 
 
 
