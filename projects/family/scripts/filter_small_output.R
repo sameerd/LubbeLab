@@ -1,4 +1,4 @@
-library(dplyr)
+library(tidyverse)
 
 # FIXME: Make this readable from the command line
 x <- read.table("data/output/output.small.txt", header=TRUE, sep="\t")
@@ -24,13 +24,21 @@ x_small <- x %>%
   # Remove rows where any of the children are homozygous ref
   filter(C1 != "0/0", C2 != "0/0") %>%
   # Remove rows where both of the parents are homozygous ref
-  filter(!((P1 == "0/0") & (P2 == "0/0")))
+  filter(!((P1 == "0/0") & (P2 == "0/0"))) %>%
+  # Create a new column called SingleRefGene and split out ;
+  mutate(SingleRefGene = Gene.refGene) %>%
+  separate_rows(SingleRefGene, sep=";") %>%
+  distinct() # because sometimes the ";" includes genes of the same name
 
+
+x_small %>% slice(1:10) %>% compact_viewer() 
+ 
 
 # Pick out the homozygous variants
 homo_variants <- x_small %>% 
   filter_at(children_vars, all_vars(.  == "1/1")) %>%
-  filter_at(parent_vars, all_vars(. == "0/1"))
+  filter_at(parent_vars, all_vars(. == "0/1")) %>%
+  select(-SingleRefGene)
 
 
 homo_variants %>% compact_viewer()
@@ -44,25 +52,25 @@ compound_het_variants <- x_small %>%
   # None of the parents should be 1/1
   filter_at(parent_vars, all_vars(. != "1/1")) %>%
   # Remove any genes that appear by themselves
-  group_by(Gene.refGene) %>% filter(n() > 1) %>% 
+  group_by(SingleRefGene) %>% filter(n() > 1) %>% 
   ungroup() %>% as.data.frame() %>%
   # paste all the genotypes together to create a family genotype
   mutate(FamilyGt=paste(C1, P1, P2, C2, sep=":")) %>% 
-  group_by(Gene.refGene) %>%
+  group_by(SingleRefGene) %>%
   # There are either 1 or 2 family genotypes per gene
   # We are interested in the genes that have 2 family genotypes
   filter(n_distinct(FamilyGt) == 2) %>%
   ungroup() %>% as.data.frame() %>%
-  select(-FamilyGt)
+  select(-FamilyGt, -SingleRefGene)
 
 
 compound_het_variants %>% compact_viewer() %>% select(-Alt) %>% head(200)
 
 
 # save tables to disk
-write.table(homo_variants, file="data/output/homozygous_variants.txt", 
+write.table(homo_variants, file="data/output/homozygous_variants.txt",
             sep="\t", quote=FALSE, row.names=FALSE)
-write.table(compound_het_variants, file="data/output/compound_het_variants.txt", 
+write.table(compound_het_variants, file="data/output/compound_het_variants.txt",
             sep="\t", quote=FALSE, row.names=FALSE)
 
 

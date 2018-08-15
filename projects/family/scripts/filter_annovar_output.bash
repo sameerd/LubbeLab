@@ -34,16 +34,19 @@ NR>1 {
        && ($ix["Func.refGene"] == "exonic" \
           || $ix["Func.refGene"] == "exonic;splicing" \
           || $ix["Func.refGene"] == "splicing" ) \
-       && ($ix["ExonicFunc.refGene"] != "synonymous SNV" \
+       && (($ix["ExonicFunc.refGene"] != "synonymous SNV" \
+            && $ix["ExonicFunc.refGene"] != "nonsynonymous SNV") \
+          || ($ix["ExonicFunc.refGene"] == "nonsynonymous SNV" \
+              && ( $ix["Func.refGene"] == "exonic;splicing") ) \
           || ($ix["ExonicFunc.refGene"] == "synonymous SNV" \
-              && $ix["CADD13_PHRED"] > 15) \
+              && $ix["Func.refGene"] == "exonic;splicing" ) \
           ) \
     )
     print $0
 }
 '
 
-#awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
+awk -F'\t' "${awkcommand}" "${ANNOVAR_OUTPUT}"  > "$OUTPUT_TXT"
 
 cut -f1-7,9,11,20 ${OUTPUT_TXT} \
       | paste - <(cut -f33 "${OUTPUT_TXT}" | awk -F: 'NR == 1 {print "C1"}; NR > 1 {print $1}') \

@@ -13,6 +13,10 @@ OUTPUTDIR="${DATADIR}/output"
 GENOMEREF="${WORKINGDIR}/hg19.fa"
 GENOMEREF_DICT="${GENOMEREF%.*}".dict
 
+GENOMEREF_37="${WORKINGDIR}/human_g1k_v37.fasta"
+GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
+
+
 VARIANTFILTER_JS="${BASEDIR}/scripts/variantFilter.js"
 
 P1=9018
@@ -40,7 +44,6 @@ P2_ANNO="${P2_SORTED}.txt"
 C1_ANNO="${C1_SORTED}.txt"
 C2_ANNO="${C2_SORTED}.txt"
 
-
 MERGED_VCF="${WORKINGDIR}/merged.vcf"
 MERGED2_VCF="${WORKINGDIR}/merged2.vcf"
 INTERSECTION_VCF="${WORKINGDIR}/intersection.vcf"
@@ -56,4 +59,5 @@ OUTPUT_TXT_SMALL="${OUTPUTDIR}/output.small.txt"
 OUTPUT_TXT_SMALLER="${OUTPUTDIR}/output.smaller.txt"
 OUTPUT_YCHR="${OUTPUTDIR}/output.chrY.txt"
 
-
+PRE_GEN_VCF="${WORKINGDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
+PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
