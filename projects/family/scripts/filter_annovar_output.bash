@@ -37,7 +37,7 @@ NR>1 {
        && (($ix["ExonicFunc.refGene"] != "synonymous SNV" \
             && $ix["ExonicFunc.refGene"] != "nonsynonymous SNV") \
           || ($ix["ExonicFunc.refGene"] == "nonsynonymous SNV" \
-              && ( $ix["Func.refGene"] == "exonic;splicing") ) \
+            && ( 1 == 1 )) \
           || ($ix["ExonicFunc.refGene"] == "synonymous SNV" \
               && $ix["Func.refGene"] == "exonic;splicing" ) \
           ) \
