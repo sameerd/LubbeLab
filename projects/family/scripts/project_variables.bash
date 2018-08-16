@@ -13,16 +13,24 @@ OUTPUTDIR="${DATADIR}/output"
 GENOMEREF="${WORKINGDIR}/hg19.fa"
 GENOMEREF_DICT="${GENOMEREF%.*}".dict
 
+# FIXME: move to global variables and use the ref
 GENOMEREF_37="${WORKINGDIR}/human_g1k_v37.fasta"
 GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
 
-
 VARIANTFILTER_JS="${BASEDIR}/scripts/variantFilter.js"
 
+# Family 1
+# P's and C's stand for parents and children
 P1=9018
 P2=9019
 C1=9017
 C2=9020
+
+# Family 2
+# G's stand for generations
+G1=9021
+G2=9023
+G3=9030
 
 P1_SAMPLE="${P1}.P1"
 P2_SAMPLE="${P2}.P2"
@@ -59,5 +67,6 @@ OUTPUT_TXT_SMALL="${OUTPUTDIR}/output.small.txt"
 OUTPUT_TXT_SMALLER="${OUTPUTDIR}/output.smaller.txt"
 OUTPUT_YCHR="${OUTPUTDIR}/output.chrY.txt"
 
-PRE_GEN_VCF="${WORKINGDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
+PRE_GEN_VCF="${INPUTDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
 PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
+PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"

@@ -33,7 +33,7 @@ module load java
 # Using GATK4 because of a bug in gatk3
 
 ${GATK4} SelectVariants \
-   -R "${GENOMEREF_37}" \
+   -R "${GENOMEREF}" \
    -V "${PRE_GEN_VCF_SORTED}" \
    -O "${MERGED2_VCF}" \
    --remove-unused-alternates true \

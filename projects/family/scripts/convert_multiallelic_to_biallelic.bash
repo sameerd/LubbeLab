@@ -17,7 +17,7 @@ echo ${OUTPUTDIR}
 
 ${BCFTOOLS} norm \
    -m -both \
-   -f "${GENOMEREF_37}" \
+   -f "${GENOMEREF}" \
    -o "${MERGED_VCF}" \
    "${MERGED2_VCF}" 
 
