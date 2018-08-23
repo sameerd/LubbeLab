@@ -70,3 +70,6 @@ OUTPUT_YCHR="${OUTPUTDIR}/output.chrY.txt"
 PRE_GEN_VCF="${INPUTDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
 PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
 PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
+
+SNP_CHIP_INPUT="${WORKINGDIR}"/CytoSNP-850Kv1-2_iScan_B1.csv
+SNP_CHIP_VARIANTS="${WORKINGDIR}"/cytosnp_variants.txt
