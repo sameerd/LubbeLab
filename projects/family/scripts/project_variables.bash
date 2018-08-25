@@ -73,3 +73,8 @@ PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
 
 SNP_CHIP_INPUT="${WORKINGDIR}"/CytoSNP-850Kv1-2_iScan_B1.csv
 SNP_CHIP_VARIANTS="${WORKINGDIR}"/cytosnp_variants.txt
+SNP_CHIP_INTERVALS="${WORKINGDIR}"/intervals.list
+SNP_CHIP_VCF="${WORKINGDIR}"/snp_variants.vcf
+
+PLINK_OUTPUT="${WORKINGDIR}"/output.plink
+
