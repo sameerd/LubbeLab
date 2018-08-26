@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-# Create small data set of just one chromosome
 BASEDIR="/projects/b1049/sameer/LubbeLab/projects/family"
 
 DATADIR="${BASEDIR}/data"

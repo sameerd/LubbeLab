@@ -14,6 +14,8 @@ GATK4="${PROGRAMSDIR}/gatk_2017/gatk"
 PICARD="${PROGRAMSDIR}/picard/picard.jar"
 VCFTOOLS="${PROGRAMSDIR}/vcftools/bin/vcftools"
 VCFSORT="${PROGRAMSDIR}/vcftools/bin/vcf-sort"
+MERLIN="${PROGRAMSDIR}/merlin_src/merlin-1.1.2/executables/merlin"
+PEDSTATS="${PROGRAMSDIR}/merlin_src/merlin-1.1.2/executables/pedstats"
 
 ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"
 ANNOVAR_CONVERT="${ANNOVARDIR}/convert2annovar.pl"
