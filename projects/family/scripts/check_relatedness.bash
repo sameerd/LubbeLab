@@ -20,4 +20,9 @@ $VCFTOOLS \
         --out "${OUTPUT_VCFTOOLS}" \
         --relatedness2
 
+$VCFTOOLS \
+        --vcf "${MERGED_VCF}" \
+        --out "${OUTPUT_VCFTOOLS}" \
+        --relatedness
+
 
