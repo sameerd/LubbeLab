@@ -3,6 +3,8 @@ library(tidyverse)
 # FIXME: Make this readable from the command line
 x <- read.table("data/output/output.small.txt", header=TRUE, sep="\t")
 
+plot(as.integer(x$G1))
+
 
 children_vars <- c("C1", "C2")
 parent_vars <- c("P1", "P2")

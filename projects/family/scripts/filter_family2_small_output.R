@@ -14,7 +14,7 @@ x_small <- x %>%
   # convert genotype variables to character
   mutate_at(genotype_vars, funs(as.character(.)))  %>%
   # Make sure we only have bi-allelic variables
-  filter_at(genotype_vars, all_vars(. %in% c("0/0", "0/1", "1/1"))) 
+  filter_at(genotype_vars, all_vars(. %in% c("0/0", "0/1", "1/0", "1/1"))) 
 
 x_dominant <- x_small %>%
   filter(G1 == "0/1") %>%

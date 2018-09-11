@@ -59,7 +59,7 @@ FAMILY PERSON FATHER MOTHER GENDER DISEASE
 small.pedigree.table <- read.table(text=pedigree.string, sep=" ", header=TRUE)
 
 # a string for unknown genotypes
-xx.string <- paste(rep("x/x", nrow(genotypes)), collapse=" ")
+xx.string <- paste(rep("0/0", nrow(genotypes)), collapse=" ")
 
 # Get the first few columns of the pedigree file
 getSmallPedigree <- function(row.num, small.table=small.pedigree.table) {
@@ -74,6 +74,10 @@ getGenotypeInMerlinFormat <- function(gt) {
   # # split the genotypes from x/x to x x
   # gt <- strsplit(gt, "/")
 
+  # change 0 to 1 and 1 to 2
+  gt <- gsub("1", "2", gt, fixed=TRUE)
+  gt <- gsub("0", "1", gt, fixed=TRUE)
+
   # unlist creates a list in order then we collapse it
   return(paste(unlist(gt), collapse=" "))
 }
@@ -82,7 +86,7 @@ getGenotypeInMerlinFormat <- function(gt) {
 small.ped.lines = lapply(1:nrow(small.pedigree.table), getSmallPedigree)
 genotype.lines = lapply(1:nrow(small.pedigree.table), function(x) xx.string)
 genotype.lines[3] <- getGenotypeInMerlinFormat(genotypes$SS4009021)
-genotype.lines[7] <- getGenotypeInMerlinFormat(genotypes$SS4009023)
+genotype.lines[6] <- getGenotypeInMerlinFormat(genotypes$SS4009023)
 genotype.lines[9] <- getGenotypeInMerlinFormat(genotypes$SS4009030)
 
 ped.lines <- lapply(1:nrow(small.pedigree.table), function(row.num) 
@@ -93,5 +97,75 @@ file.con <- file("data/working/family2.ped")
 writeLines(unlist(ped.lines), file.con)
 close(file.con)
 
+# awk '{OFS=" "}{print $1, $2, "\n" "F", "0.9", "0.1"}' family2.dat  > family2.freq
+
+# Now write some fake data
+num_fake_markers = 20
+fake.markers = paste0("chr1_fake_", 1:num_fake_markers)
+
+# Create a fake mapfile
+fake.mapfile.df <- data.frame(CHROMOSOME="1",
+                      MARKER=fake.markers,
+                      POSITION=seq(1, num_fake_markers/5, length.out=num_fake_markers ))
+# push the position of the old markers since we are inserting these new ones first
+pushed.mapfile.df <- mapfile
+pushed.mapfile.df$POSITION <- pushed.mapfile.df$POSITION + num_fake_markers / 5.
+mapfile.fake <- rbind(fake.mapfile.df, pushed.mapfile.df)
+
+write.table(mapfile.fake, "data/working/family2_fake.map", row.names=FALSE, 
+            col.names=TRUE, quote=FALSE, sep="\t")
 
 
+# create fake dat file 
+fake.markers.df <- data.frame(CODE="M", DATATYPE=fake.markers)
+datfile.fake <- rbind(rbind(datfile[1,], fake.markers.df), datfile[2:nrow(datfile),])
+
+write.table(datfile.fake, "data/working/family2_fake.dat", row.names=FALSE,
+            col.names=FALSE, quote=FALSE, sep="\t")
+
+
+# create fake pedigree file
+# create zero genotypes
+#paste(rep("0/0", num_fake_markers * 2), collapse=" ")
+
+fake.genotype.lines <- list(length(genotype.lines))
+
+fake.genotype.lines[[1]] <- "4/1 3/4 2/2 3/4 1/3 3/2 1/3 1/2 2/1 1/2  0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0"
+fake.genotype.lines[[2]] <- "1/4 4/2 3/3 1/1 2/4 2/1 2/3 4/3 2/3 3/1  0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0"
+fake.genotype.lines[[3]] <- "3/3 1/1 2/1 1/3 2/3 1/2 2/2 1/3 3/2 3/3  1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2"
+fake.genotype.lines[[4]] <- "1/4 4/3 3/2 1/4 2/3 1/2 3/1 3/1 3/2 1/1  1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2"
+fake.genotype.lines[[5]] <- "3/3 1/4 2/1 2/4 1/4 2/2 1/2 3/3 2/3 4/1  1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1"
+fake.genotype.lines[[6]] <- "4/1 2/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2  1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1"
+fake.genotype.lines[[7]] <- "1/1 4/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2  1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2"
+fake.genotype.lines[[8]] <- "4/1 2/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2  1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1"
+fake.genotype.lines[[9]] <- "4/4 4/3 3/2 1/3 2/1 2/3 3/1 3/1 3/2 1/1  1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2"
+
+
+fake.ped.lines <- lapply(1:nrow(small.pedigree.table), function(row.num) 
+  #paste(small.ped.lines[[row.num]], fake.genotype.lines[[row.num]],
+  #      genotype.lines[[row.num]], sep=" ") 
+  paste(small.ped.lines[[row.num]], fake.genotype.lines[[row.num]], sep=" ") 
+)
+
+file.con <- file("data/working/family2_fake.ped")
+writeLines(unlist(fake.ped.lines), file.con)
+close(file.con)
+
+"
+   4/1 3/4 2/2 3/4 1/3 3/2 1/3 1/2 2/1 1/2 
+   1/4 4/2 3/3 1/1 2/4 2/1 2/3 4/3 2/3 3/1 
+   3/3 1/1 2/1 1/3 2/3 1/2 2/2 1/3 3/2 3/3 
+   1/4 4/3 3/2 1/4 2/3 1/2 3/1 3/1 3/2 1/1 
+   3/3 1/4 2/1 2/4 1/4 2/2 1/2 3/3 2/3 4/1 
+   4/1 2/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2 
+   1/1 4/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2 
+   4/1 2/4 3/2 1/4 4/3 1/2 3/3 3/2 3/1 1/2 
+   4/4 4/3 3/2 1/3 2/1 2/3 3/1 3/1 3/2 1/1 
+"
+ 
+ 
+ 
+ 
+ 
+ 
+ 
