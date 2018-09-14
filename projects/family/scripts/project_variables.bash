@@ -53,6 +53,7 @@ C2_ANNO="${C2_SORTED}.txt"
 
 MERGED_VCF="${WORKINGDIR}/merged.vcf"
 MERGED2_VCF="${WORKINGDIR}/merged2.vcf"
+MERGE_PHASED="${WORKINGDIR}"/merged_phased.vcf
 INTERSECTION_VCF="${WORKINGDIR}/intersection.vcf"
 INTERSECTION_FILTERED_VCF="${WORKINGDIR}/intersection_filtered.vcf"
 
