@@ -21,11 +21,15 @@ for filename in "${INPUTDIR}"/*.Cleaned_SNPIndel.vcf; do
   
   fbname=$(basename "${filename}") # basename of file
 
-  # Do not Sort if we have already sorted
-  [ -e "${fbname}" ] && continue
+  output_file="${WORKINGDIR}/${fbname}_Sorted.vcf"
+
+  # Do not Sort if we have already have an output file 
+  if [ -e "${output_file}" ]; then 
+    continue
+  fi
   
   ${JAVA} -jar ${PICARD} SortVcf \
     I="${filename}"\
-    O="${WORKINGDIR}/${fbname}_Sorted.vcf" \
+    O="${output_file}" \
     SEQUENCE_DICTIONARY="${GENOMEREF_DICT}"
 done
