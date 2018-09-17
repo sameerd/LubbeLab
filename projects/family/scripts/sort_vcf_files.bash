@@ -17,10 +17,13 @@ echo ${OUTPUTDIR}
 
 module load java
 
-for filename in "${INPUTDIR}"/*.vcf; do
-  [ -e "${filename}" ] || continue
-
+for filename in "${INPUTDIR}"/*.Cleaned_SNPIndel.vcf; do
+  
   fbname=$(basename "${filename}") # basename of file
+
+  # Do not Sort if we have already sorted
+  [ -e "${fbname}" ] && continue
+  
   ${JAVA} -jar ${PICARD} SortVcf \
     I="${filename}"\
     O="${WORKINGDIR}/${fbname}_Sorted.vcf" \
