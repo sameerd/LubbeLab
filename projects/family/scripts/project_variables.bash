@@ -12,9 +12,6 @@ OUTPUTDIR="${DATADIR}/output"
 GENOMEREF="${WORKINGDIR}/hg19.fa"
 GENOMEREF_DICT="${GENOMEREF%.*}".dict
 
-# FIXME: move to global variables and use the ref
-GENOMEREF_37="${WORKINGDIR}/human_g1k_v37.fasta"
-GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
 
 VARIANTFILTER_JS="${BASEDIR}/scripts/variantFilter.js"
 
@@ -46,11 +43,16 @@ P2_SORTED="${WORKINGDIR}/${P2}.Cleaned_SNPIndel_Sorted.vcf"
 C1_SORTED="${WORKINGDIR}/${C1}.Cleaned_SNPIndel_Sorted.vcf"
 C2_SORTED="${WORKINGDIR}/${C2}.Cleaned_SNPIndel_Sorted.vcf"
 
-
 G1_SORTED="${WORKINGDIR}/${G1}.Cleaned_SNPIndel_Sorted.vcf"
 G2_SORTED="${WORKINGDIR}/${G2}.Cleaned_SNPIndel_Sorted.vcf"
 G3_SORTED="${WORKINGDIR}/${G3}.Cleaned_SNPIndel_Sorted.vcf"
 
+G1_BAM_READY="${INPUTDIR}/bams/SS400${G1}_sorted_unique_realigned.bam"
+G1_G_VCF="${WORKINGDIR}/${G1}.g.vcf"
+G2_BAM_READY="${INPUTDIR}/bams/SS400${G2}_sorted_unique_realigned.bam"
+G2_G_VCF="${WORKINGDIR}/${G2}.g.vcf"
+G3_BAM_READY="${INPUTDIR}/bams/SS400${G3}_sorted_unique_realigned.bam"
+G3_G_VCF="${WORKINGDIR}/${G3}.g.vcf"
 
 
 P1_ANNO="${P1_SORTED}.txt"

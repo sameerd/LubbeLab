@@ -5,7 +5,6 @@ PROJECTDIR="/projects/b1049"
 PROGRAMSDIR="${PROJECTDIR}/genetics_programs"
 REFSDIR="${PROJECTDIR}/genetics_refs"
 
-
 #These are our resources
 SAMTOOLS="${PROGRAMSDIR}/samtools/samtools" 
 BCFTOOLS="${PROGRAMSDIR}/bcftools/bcftools"
@@ -23,6 +22,10 @@ ANNOVAR_TABLE="${ANNOVARDIR}/table_annovar.pl"
 
 # These are the references
 B37_to_HG19_CHAIN="${REFSDIR}/chain_files/b37tohg19.chain"
+
+GENOMEREF_37="${REFSDIR}/fasta/human_g1k_v37.fasta"
+GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
+
 
 JAVA=java
 
