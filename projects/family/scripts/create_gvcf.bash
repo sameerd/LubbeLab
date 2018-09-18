@@ -1,12 +1,13 @@
 #!/bin/bash
 
-#MSUB -A b1049
 #MSUB -e logs/errlog.dat
 #MSUB -o logs/outlog.dat
 
+#MSUB -A b1042
 #MSUB -l naccesspolicy=singlenode
-#MSUB -l walltime=336:00:00
-#MSUB -q genomicsburst
+#MSUB -l walltime=167:00:00 
+#MSUB -q genomicslong
+
 
 
 set -x
