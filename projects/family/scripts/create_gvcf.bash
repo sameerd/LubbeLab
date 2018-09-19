@@ -36,6 +36,9 @@ ${JAVA} -jar ${GATK} \
     -T HaplotypeCaller \
     -R "${GENOMEREF_37}" \
     --emitRefConfidence GVCF \
+    --variant_index_type LINEAR \
+    --variant_index_parameter 128000 \
+    -L 1 \
     -I ${!input_var} \
     -o ${!output_var}
 
