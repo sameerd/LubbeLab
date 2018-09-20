@@ -1,0 +1,5 @@
+{
+  "create_gvcf.haplotype_caller_erc.sample_name": "SS4009021",
+  "create_gvcf.haplotype_caller_erc.input_bam": "/projects/b1049/Niccolo_NGS/genomes/bams/SS4009021/SS4009021_5_sorted_unique_realigned.bam"
+}
+
