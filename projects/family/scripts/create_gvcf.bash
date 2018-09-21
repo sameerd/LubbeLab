@@ -20,7 +20,7 @@ do
 #MSUB -A b1042
 #MSUB -l naccesspolicy=singlenode
 #MSUB -l walltime=167:00:00 
-#MSUB -q genomicslong
+#MSUB -q genomics
 
 #MSUB -e logs/errlog.dat
 #MSUB -o logs/outlog.dat
