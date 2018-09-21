@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#MSUB -A b1049
+#MSUB -A b1042
 #MSUB -e /projects/b1049/sameer/LubbeLab/projects/family/logs/errlog.dat
 #MSUB -o /projects/b1049/sameer/LubbeLab/projects/family/logs/outlog.dat
 #MSUB -q short
@@ -15,7 +15,7 @@ if [[ -v PBS_O_WORKDIR ]]; then cd $PBS_O_WORKDIR; fi
 
 module load java
 
-java -Dconfig.file=scripts/cromwell_config.conf \
+java -Dconfig.file=cromwell/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-34.jar \
-     run -i inputs.json scripts/haplotype_caller.wdl
+     run -i cromwell/inputs.json cromwell/haplotype_caller.wdl
 
