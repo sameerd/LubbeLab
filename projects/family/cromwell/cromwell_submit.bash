@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #MSUB -A b1042
-#MSUB -e /projects/b1049/sameer/LubbeLab/projects/family/logs/errlog.dat
-#MSUB -o /projects/b1049/sameer/LubbeLab/projects/family/logs/outlog.dat
-#MSUB -q short
-#MSUB -l walltime=01:00:00
-#MSUB -l nodes=1:ppn=4
+#MSUB -e logs/errlog.dat
+#MSUB -o logs/outlog.dat
+#MSUB -q genomics
+#MSUB -l walltime=18:00:00
+#MSUB -l nodes=1:ppn=2
 
 set -x
 
