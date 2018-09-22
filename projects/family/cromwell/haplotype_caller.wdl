@@ -38,7 +38,7 @@ task GatherGVCFs {
   command {
     java -cp ${GATK} org.broadinstitute.gatk.tools.CatVariants \
     -R ${ref_fasta} \
-    ${sep="-V " input_gvcfs} \
+    -V ${sep=" -V " input_gvcfs} \
     -out "${sample_name}.g.vcf.gz"
   }
   output {
@@ -60,7 +60,6 @@ workflow CreateGVCF {
   File ref_fasta_index
   File ref_dict
   File input_bam_index
-
 
   scatter(chr in chromosomes) {
     call HaplotypeCallerERCPerChr {
