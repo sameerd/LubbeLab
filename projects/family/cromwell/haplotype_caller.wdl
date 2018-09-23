@@ -8,7 +8,7 @@ task HaplotypeCallerERCPerChr {
   File input_bam_index
 
   command {
-    java -jar -Xmx3G ${GATK} \
+    java -jar -Xmx7G ${GATK} \
       -T HaplotypeCaller \
       -ERC GVCF \
       --variant_index_type LINEAR \
@@ -22,8 +22,8 @@ task HaplotypeCallerERCPerChr {
     File gvcf = "raw.likelihood.g.vcf.gz"
   } 
   runtime {
-    rt_mem: "4gb"
-    rt_walltime: "15:00:00"
+    rt_mem: "8gb"
+    rt_walltime: "24:00:00"
   }
 }
 
@@ -45,8 +45,8 @@ task GatherGVCFs {
     File combined_gvcf_file = "${sample_name}.g.vcf.gz"
   }
   runtime {
-    rt_mem: "8gb"
-    rt_walltime: "3:00:00"
+    rt_mem: "16gb"
+    rt_walltime: "6:00:00"
   }
 }
 
