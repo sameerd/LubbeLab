@@ -1,13 +1,12 @@
 #!/bin/bash
 
-declare -a IDS=( "SS4009017" "SS4009018" "SS4009019" "SS4009020" "SS4009022" "SS4009030" )
-
 set -x
 
+# List of SS ID's to process to gvcfs
+declare -a IDS=( "SS4009017" "SS4009018" "SS4009019" "SS4009020" "SS4009022" "SS4009030" )
 
-# assuming this gets set from the scripts directory
+# assuming this script gets run from the scripts directory
 cwd=`pwd`
-
 
 for ID in "${IDS[@]}"
 do
@@ -22,6 +21,7 @@ do
   -l walltime=30:00:00 \
   -l nodes=1:ppn=2 \
   - <<EOJ
+#!/bin/bash
 
 module load java
 

@@ -46,7 +46,7 @@ task GatherGVCFs {
   }
   runtime {
     rt_mem: "16gb"
-    rt_walltime: "6:00:00"
+    rt_walltime: "9:00:00"
   }
 }
 
