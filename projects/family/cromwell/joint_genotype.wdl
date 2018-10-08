@@ -8,18 +8,18 @@ task CombineGVCFsAndJointGenotypePerChr {
   Array[File] input_gvcfs_index
 
   command {
-    java -jar -Xmx7G ${GATK} \
+    java -jar -Xmx15G ${GATK} \
       -T CombineGVCFs \
       -R ${ref_fasta} \
       -V ${sep=" -V " input_gvcfs} \
-      -L ${chr}:1-10000 \
+      -L ${chr} \
       -o combined.g.vcf.gz
 
-    java -jar -Xmx7G ${GATK} \
+    java -jar -Xmx15G ${GATK} \
       -T GenotypeGVCFs \
       -R ${ref_fasta} \
       -V combined.g.vcf.gz \
-      -L ${chr}:1-10000 \
+      -L ${chr} \
       --includeNonVariantSites \
       -o combined.vcf.gz
   }
@@ -27,8 +27,8 @@ task CombineGVCFsAndJointGenotypePerChr {
     File vcf = "combined.vcf.gz"
   } 
   runtime {
-    rt_mem: "8gb"
-    rt_walltime: "1:00:00"
+    rt_mem: "16gb"
+    rt_walltime: "40:00:00"
   }
 }
 
@@ -50,8 +50,8 @@ task GatherVCFs {
     File combined_vcf_file = "out.vcf.gz"
   }
   runtime {
-    rt_mem: "8gb"
-    rt_walltime: "1:00:00"
+    rt_mem: "16gb"
+    rt_walltime: "40:00:00"
   }
 }
 
