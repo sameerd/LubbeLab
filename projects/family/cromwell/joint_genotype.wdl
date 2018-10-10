@@ -80,12 +80,13 @@ task GatherVCFsProxy {
 }
 
 
-
-task HardFilterAndFlag {
+task HardFilterAndFlagPerChr {
   File GATK
   File ref_fasta 
   File ref_fasta_index
   File ref_dict
+
+  String chr
 
   File input_vcf
   File input_vcf_index
@@ -95,6 +96,7 @@ task HardFilterAndFlag {
       -T VariantFiltration \
       -R ${ref_fasta} \
       -V ${input_vcf} \
+      -L ${chr} \
       --genotypeFilterExpression "DP < 5" \
       --genotypeFilterName "LowDepth" \
       --genotypeFilterExpression "GQ < 20.0 && GQ > 0.0" \
@@ -117,6 +119,7 @@ task HardFilterAndFlag {
     rt_walltime: "40:00:00"
   }
 }
+
 
 task VariantRecalibratorSNP {
   File GATK
@@ -320,15 +323,26 @@ workflow CreateJointGenotypeVCF {
            ref_dict=ref_dict
   }
 
-  call HardFilterAndFlag {
-    input: GATK=GATK,
+  scatter(chr in chromosomes) {
+    call HardFilterAndFlagPerChr {
+      input: GATK=GATK,
+             ref_fasta=ref_fasta,
+             ref_fasta_index=ref_fasta_index,
+             ref_dict=ref_dict,
+             input_vcf=GatherVCFsProxy.vcf,
+             input_vcf_index=GatherVCFsProxy.vcf_index,
+             chr=chr
+    }
+  }
+  call GatherVCFs as HardFilterAndFlag {
+    input: input_vcfs=HardFilterAndFlagPerChr.vcf,
+           GATK=GATK,
            ref_fasta=ref_fasta,
            ref_fasta_index=ref_fasta_index,
-           ref_dict=ref_dict,
-           input_vcf=GatherVCFsProxy.vcf,
-           input_vcf_index=GatherVCFsProxy.vcf_index
+           ref_dict=ref_dict
   }
-  
+
+    
   call VariantRecalibratorSNP {
     input: GATK=GATK,
            ref_fasta=ref_fasta,
