@@ -17,7 +17,7 @@ msub -A b1042 \
 
 module load java
 
-java -DLOG_LEVEL=DEBUG -Dconfig.file=cromwell/cromwell_config.conf \
+java -Dconfig.file=cromwell/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
      run -i cromwell/joint_genotype_inputs/input.json \
      cromwell/joint_genotype.wdl
