@@ -257,11 +257,11 @@ task FlagVariants {
  command {
 
     ${VCFTOOLS} \
-      --vcf ${input_vcf} \
+      --gzvcf ${input_vcf} \
       --max-alleles 8 \
       --recode \
       --recode-INFO-all \
-      --out allele_reduction.vcf.gz
+      --stdout | gzip -c > allele_reduction.vcf.gz
 
     java -jar -Xmx15G ${GATK} \
       -R ${ref_fasta} \
