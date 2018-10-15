@@ -250,6 +250,8 @@ task FlagVariants {
   File ref_dict
 
   File VCFTOOLS 
+  File TABIX
+  File BGZIP
 
   File input_vcf
   File input_vcf_index
@@ -261,7 +263,11 @@ task FlagVariants {
       --max-alleles 8 \
       --recode \
       --recode-INFO-all \
-      --stdout | gzip -c > allele_reduction.vcf.gz
+      --stdout > allele_reduction.vcf
+
+    ${BGZIP} -c allele_reduction.vcf > allele_reduction.vcf.gz
+
+    ${TABIX} -p vcf allele_reduction.vcf.gz
 
     java -jar -Xmx15G ${GATK} \
       -R ${ref_fasta} \
@@ -290,34 +296,27 @@ workflow CreateJointGenotypeVCF {
   File ref_dict
 
   File VCFTOOLS
+  File TABIX
+  File BGZIP
 
   Array[File] input_gvcfs
   Array[File] input_gvcfs_index
 
-  #scatter(chr in chromosomes) {
-  #  call CombineGVCFsAndJointGenotypePerChr {
-  #    input: chr=chr, 
-  #           input_gvcfs=input_gvcfs,
-  #           input_gvcfs_index=input_gvcfs_index,
-  #           GATK=GATK,
-  #           ref_fasta=ref_fasta,
-  #           ref_fasta_index=ref_fasta_index,
-  #           ref_dict=ref_dict
-  #  }
-  #}
+  scatter(chr in chromosomes) {
+    call CombineGVCFsAndJointGenotypePerChr {
+      input: chr=chr, 
+             input_gvcfs=input_gvcfs,
+             input_gvcfs_index=input_gvcfs_index,
+             GATK=GATK,
+             ref_fasta=ref_fasta,
+             ref_fasta_index=ref_fasta_index,
+             ref_dict=ref_dict
+    }
+  }
 
-  #call GatherVCFs {
-  #  input: input_vcfs=CombineGVCFsAndJointGenotypePerChr.vcf,
-  #         GATK=GATK,
-  #         ref_fasta=ref_fasta,
-  #         ref_fasta_index=ref_fasta_index,
-  #         ref_dict=ref_dict
-  #}
-
-  ## Lets break the workflow for now and start here for debugging purposes
-  ##  FIXME: remove GatherVCFsProxy later
-  call GatherVCFsProxy {
-    input: GATK=GATK,
+  call GatherVCFs {
+    input: input_vcfs=CombineGVCFsAndJointGenotypePerChr.vcf,
+           GATK=GATK,
            ref_fasta=ref_fasta,
            ref_fasta_index=ref_fasta_index,
            ref_dict=ref_dict
@@ -329,8 +328,8 @@ workflow CreateJointGenotypeVCF {
              ref_fasta=ref_fasta,
              ref_fasta_index=ref_fasta_index,
              ref_dict=ref_dict,
-             input_vcf=GatherVCFsProxy.vcf,
-             input_vcf_index=GatherVCFsProxy.vcf_index,
+             input_vcf=GatherVCFs.vcf,
+             input_vcf_index=GatherVCFs.vcf_index,
              chr=chr
     }
   }
@@ -379,6 +378,8 @@ workflow CreateJointGenotypeVCF {
            ref_fasta_index=ref_fasta_index,
            ref_dict=ref_dict,
            VCFTOOLS=VCFTOOLS,
+           TABIX=TABIX,
+           BGZIP=BGZIP,
            input_vcf=ApplyRecalibrationSNPINDEL.vcf,
            input_vcf_index=ApplyRecalibrationSNPINDEL.vcf_index
   }
