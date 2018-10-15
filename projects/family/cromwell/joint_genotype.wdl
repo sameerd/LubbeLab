@@ -56,30 +56,6 @@ task GatherVCFs {
   }
 }
 
-task GatherVCFsProxy {
-  File GATK
-  File ref_fasta 
-  File ref_fasta_index
-  File ref_dict
-  
-  command {
-    echo java -jar -Xmx15G ${GATK} \
-      -T SelectVariants \
-      -R ${ref_fasta} \
-      -V /projects/b1049/sameer/LubbeLab/projects/family/data/input/tmp/out.vcf.gz \
-      -o out.vcf.gz
-  }
-  output {
-    File vcf= "/projects/b1049/sameer/LubbeLab/projects/family/data/input/tmp/out.vcf.gz"
-    File vcf_index = vcf + ".tbi"
-  }
-  runtime {
-    rt_mem: "1gb"
-    rt_walltime: "10:00"
-  }
-}
-
-
 task HardFilterAndFlagPerChr {
   File GATK
   File ref_fasta 
