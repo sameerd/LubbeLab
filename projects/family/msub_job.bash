@@ -56,7 +56,7 @@ msub \
   -o "${cwd}/logs/outlog.txt" \
   -d "${cwd}" \
   -q ${queue} \
-  -l ${walltime} \
+  -l walltime=${walltime} \
   -l nodes=1:ppn=2 \
   -A ${allocation} \
   "$1"
