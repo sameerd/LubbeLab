@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# default arguments
-allocation="b1042"
-queue="short"
-walltime="01:00:00"
+# arguments that go into msub
+allocation=""
+queue=""
+walltime=""
 
 show_help () 
 {
@@ -11,10 +11,13 @@ show_help ()
 echo "Usage: $0 [OPTIONS] script_filename"
 
 cat <<HEREDOC
+This script will try and choose intelligent arguments for allocation and
+walltime based on the queue variable.
+
 Optional arguments
--A   : allocation
--q   : queue
--w   : walltime
+-A   : allocation (default: b1042)
+-q   : queue (default: short)
+-w   : walltime (default: based on queue)
 HEREDOC
 
 }
@@ -47,6 +50,30 @@ if [[ $# < 1 ]] ; then
   show_help
   exit 1
 fi
+
+if [ -z "$queue" ]; then queue="short" fi
+echo "Setting queue to : $queue"
+
+if [ -z "$allocation" ]; then allocation="b1042" fi
+echo "Setting allocation to : $allocation"
+
+case "$queue" in
+  short)
+    if [ -z "$walltime" ]; then walltime="01:00:00"  fi
+    echo "Setting walltime to : $walltime"
+     ;;
+
+  genomics)
+    if [ -z "$walltime" ]; then walltime="03:00:00:00"  fi
+    echo "Setting walltime to : $walltime"
+      ;;
+
+  genomicslong)
+    if [ -z "$walltime" ]; then walltime="07:00:00:00"  fi
+    echo "Setting walltime to : $walltime"
+      ;;
+
+esac
 
 # assuming this will get run from the scripts directory
 cwd=`pwd`
