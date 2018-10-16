@@ -76,9 +76,12 @@ OUTPUT_TXT_SMALL="${OUTPUTDIR}/output.small.txt"
 OUTPUT_TXT_SMALLER="${OUTPUTDIR}/output.smaller.txt"
 OUTPUT_YCHR="${OUTPUTDIR}/output.chrY.txt"
 
+BEAGLE_OUTPUT_DIR="${WORKINGDIR}/beagle_output"
+
 PRE_GEN_VCF="${INPUTDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
 PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
 PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
+WGS_ALL_VCF="${INPUTDIR}/out.vcf.gz"
 
 SNP_CHIP_INPUT="${WORKINGDIR}"/CytoSNP-850Kv1-2_iScan_B1.csv
 SNP_CHIP_VARIANTS="${WORKINGDIR}"/cytosnp_variants.txt

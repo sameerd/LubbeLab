@@ -16,6 +16,13 @@ VCFSORT="${PROGRAMSDIR}/vcftools/bin/vcf-sort"
 MERLIN="${PROGRAMSDIR}/merlin_src/merlin-1.1.2/executables/merlin"
 PEDSTATS="${PROGRAMSDIR}/merlin_src/merlin-1.1.2/executables/pedstats"
 
+BEAGLE_5_0="${PROGRAMSDIR}/beagle/beagle.10Sep18.879.jar"
+BEAGLE_BREF3_DIR="${PROGRAMSDIR}/beagle/bref3"
+BEAGLE_GENETIC_MAP_DIR="${PROGRAMSDIR}/beagle/genetic_maps"
+REFINED_IBD="${PROGRAMSDIR}/beagle/refined-ibd.12Jul18.a0b.jar"
+MERGE_IBD="${PROGRAMSDIR}/beagle/merge-ibd-segments.12Jul18.a0b.jar"
+
+
 ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"
 ANNOVAR_CONVERT="${ANNOVARDIR}/convert2annovar.pl"
 ANNOVAR_TABLE="${ANNOVARDIR}/table_annovar.pl"

@@ -5,7 +5,6 @@ set -x
 source ./scripts/global_variables.bash
 source ./scripts/project_variables.bash
 
-BEAGLE_OUTPUT_DIR="${WORKINGDIR}/beagle_output"
 mkdir -p "${BEAGLE_OUTPUT_DIR}"
 
 chr=1
@@ -13,12 +12,13 @@ chr=1
 chromosomes=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22)
  
 for chr in ${chromosomes[@]}; do
-  ${JAVA} -jar ${BEAGLE_5_0} \
-        gt=${WGS_ALL_VCF} \
+  ${JAVA} -jar ${REFINED_IBD} \
+        gt=${BEAGLE_OUTPUT_DIR}/beagle_out_${chr}.vcf.gz \
+        out=${BEAGLE_OUTPUT_DIR}/ibd_out_${chr} \
         map="${BEAGLE_GENETIC_MAP_DIR}/plink.chr${chr}.GRCh37.map" \
-        ref="${BEAGLE_BREF3_DIR}/chr${chr}.1kg.phase3.v5a.b37.bref3" \
-        out=${BEAGLE_OUTPUT_DIR}/beagle_out_${chr} \
-        chrom=${chr}
+        chrom=${chr} \
+        lod=0.3 \
+        length=0.1
 done
 
 
