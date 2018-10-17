@@ -1,0 +1,14 @@
+{
+  "BeaglePhase.GATK": "/projects/b1049/genetics_programs/gatk/GenomeAnalysisTK.jar",
+  "BeaglePhase.ref_dict": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.dict",
+  "BeaglePhase.ref_fasta": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta",
+  "BeaglePhase.ref_fasta_index": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta.fai",
+  "BeaglePhase.Beagle": "/projects/b1049/genetics_programs/beagle/beagle.10Sep18.879.jar",
+  "BeaglePhase.BeagleBref3Dir": "/projects/b1049/genetics_programs/beagle/bref3",
+  "BeaglePhase.BeagleGeneticMapDir": "/projects/b1049/genetics_programs/beagle/genetic_maps",
+  "BeaglePhase.input_vcf_index": "/projects/b1049/sameer/LubbeLab/projects/family/data/input/out.vcf.gz.tbi",
+  "BeaglePhase.input_vcf": "/projects/b1049/sameer/LubbeLab/projects/family/data/input/out.vcf.gz",
+  "BeaglePhase.output_directory": "/projects/b1049/sameer/LubbeLab/projects/family/data/working/beagle_output",
+  "BeaglePhase.chromosomes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]
+}
+
