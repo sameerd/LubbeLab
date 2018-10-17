@@ -20,7 +20,7 @@ task BeaglePhasePerChr {
       -L ${chr} \
       -o chr.vcf.gz
 
-    java -jar -Xmx15G ${Beagle} \
+    java -jar -Xmx60G ${Beagle} \
         gt=chr.vcf.gz \
         map="${BeagleGeneticMapDir}/plink.chr${chr}.GRCh37.map" \
         ref="${BeagleBref3Dir}/chr${chr}.1kg.phase3.v5a.b37.bref3" \
@@ -34,7 +34,8 @@ task BeaglePhasePerChr {
     File log = "beagle_out_${chr}.log"
   } 
   runtime {
-    rt_mem: "16gb"
+    rt_ppn: 8
+    rt_mem: "64gb"
     rt_walltime: "5:00:00"
   }
 }
