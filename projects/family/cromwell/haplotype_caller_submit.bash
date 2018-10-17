@@ -27,7 +27,7 @@ module load java
 
 java -Dconfig.file=cromwell/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-34.jar \
-     run -i cromwell/haplotype_caller_inputs/haplotype_caller_${ID}.json \
+     run -i cromwell/inputs/haplotype_caller_${ID}.json \
      cromwell/haplotype_caller.wdl
 
 EOJ
