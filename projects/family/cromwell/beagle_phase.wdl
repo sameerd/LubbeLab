@@ -16,6 +16,7 @@ task BeaglePhasePerChr {
     java -jar -Xmx15G ${GATK} \
       -R ${ref_fasta} \
       -T SelectVariants \
+      --exclude_sample_name SS4009022 \
       -V ${input_vcf} \
       -L ${chr} \
       -o chr.vcf.gz
