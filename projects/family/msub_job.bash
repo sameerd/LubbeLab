@@ -63,7 +63,7 @@ case "$queue" in
     echo "Setting walltime to : $walltime"
     ;;
   genomics)
-    if [ -z "$walltime" ]; then walltime="03:00:00:00"; fi
+    if [ -z "$walltime" ]; then walltime="01:23:00:00"; fi
     echo "Setting walltime to : $walltime"
     ;;
   genomicslong)
