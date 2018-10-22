@@ -16,19 +16,25 @@ x_small <- x %>%
   # Make sure we only have bi-allelic variables
   filter_at(genotype_vars, all_vars(. %in% c("0/0", "0/1", "1/0", "1/1"))) 
 
-x_dominant <- x_small %>%
-  filter(G1 == "0/1") %>%
-  filter(G3 == "0/1")
-
 x_filtered <- x_small %>%
   # keep rows where generation 1 is same as generation 3
   filter(G1 == G3) %>%
+  # Since we decided that the disease is not in the reference genome
+  # we can throw out 0/0 as well for the affected individuals G1 and G3
+  filter(G1 != "0/0" ) %>%
   # Keep rows when Generation 2 is different from generation 1
   filter(G1 != G2 ) %>%
+  # Remove rows when Generation 2 is all alternate alleles 1/1
+  # this means that G1 and G3 are both 0/1
+  filter(G2 != "1/1" ) %>%
   # Create a new column called SingleRefGene and split out ;
   mutate(SingleRefGene = Gene.refGene) %>%
   separate_rows(SingleRefGene, sep=";") %>%
   distinct() # because sometimes the ";" includes genes of the same name
+
+x_dominant <- x_filtered %>%
+  filter(G1 == "0/1" | G1 == "1/0") %>%
+  filter(G3 == "0/1" | G3 == "1/0")
 
 
 x_filtered %>% slice(1:10) %>% compact_viewer() 
