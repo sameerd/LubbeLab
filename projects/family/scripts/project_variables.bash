@@ -81,7 +81,15 @@ BEAGLE_OUTPUT_DIR="${WORKINGDIR}/beagle_output"
 PRE_GEN_VCF="${INPUTDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
 PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
 PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
+
 WGS_ALL_VCF="${INPUTDIR}/out.vcf.gz"
+WGS_ALL_FILTERED_VCF="${WORKINGDIR}/wgs_all_filtered.vcf"
+WGS_ALL_FILTERED_VCF_hg19="${WORKINGDIR}/wgs_all_filtered_hg19.vcf"
+WGS_ALL_FILTERED_VCF_REJECTED="${WORKINGDIR}/wgs_all_filtered_rejected.vcf"
+WGS_ANNOVAR_INPUT="${WORKINGDIR}/wgs_annovar.avinput"
+WGS_ANNOVAR_OUTPUT="${ANNOVAR_INPUT}.hg19_multianno.txt"
+
+WGS_FAM2_VCF="${WORKINGDIR}/wgs_family2_hg19.vcf"
 
 SNP_CHIP_INPUT="${WORKINGDIR}"/CytoSNP-850Kv1-2_iScan_B1.csv
 SNP_CHIP_VARIANTS="${WORKINGDIR}"/cytosnp_variants.txt
