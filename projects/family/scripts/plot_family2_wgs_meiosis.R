@@ -55,9 +55,23 @@ x.chr1 <- x.filtered  %>%
         G2 == "0/0" & G3 == "0/1" ~ "unshared",
         G2 == "0/0" & G3 == "1/1" ~ "unshared" 
         )) %>%
+  mutate(G1G2G3 = case_when(
+        G1 == "0/0" & G2 == "0/0" & G3 == "0/0" ~ "noevidence",
+        G1 == "1/1" & G2 == "1/1" & G3 == "1/1" ~ "notsure",
+        G1 == "0/1" & G2 == "0/1" & G3 == "0/1" ~ "shared",
+        TRUE ~ "noevidence"
+        )) %>%
+  mutate(Gmatch = case_when(
+        G1 == "0/0" & G2 == "0/0" & G3 == "0/0" ~ "noevidence",
+        G1 == "1/1" & G2 == "1/1" & G3 == "1/1" ~ "notsure",
+        G1 == "0/1" & G2 == "0/0" & G3 == "0/1" ~ "shared",
+        TRUE ~ "noevidence"
+        )) %>%
   mutate(G1G2 = as.factor(G1G2)) %>%
   mutate(G1G3 = as.factor(G1G3)) %>%
   mutate(G2G3 = as.factor(G2G3)) %>%
+  mutate(G1G2G3 = as.factor(G1G2G3)) %>%
+  mutate(Gmatch = as.factor(Gmatch)) %>%
   #slice(1:30) %>%
   identity 
 
@@ -87,12 +101,14 @@ ggplot(x.chr1, aes(startpos, G2G3)) +
   ggtitle("Chromosome 1 Genotype sharing between 9030 (child) and 9023 (aunt)")
 ggsave("~/chr1_G2G3.png")
 
-x.chr1.melt <- melt(x.chr1 %>% select(startpos, G1G2, G1G3, G2G3),
-                   measure.vars=c("G1G2", "G1G3", "G2G3"), id.vars="startpos") %>% 
+x.chr1.melt <- melt(x.chr1 %>% select(startpos, G1G2, G1G3, G2G3, G1G2G3, Gmatch),
+                   measure.vars=c("G1G2", "G1G3", "G2G3", "G1G2G3", "Gmatch"), 
+                   id.vars="startpos") %>% 
                filter(value == "shared") %>%
-               mutate(variable = recode(variable, G1G2="9021-9023", 
-                             G1G3="9021-9030", G2G3="9023-9030"))
-x.chr1.melt%>%tail
+               mutate(variable = recode(variable, G1G2="9021 &\n9023", 
+                             G1G3="9021 &\n9030", G2G3="9023 &\n9030", 
+                             G1G2G3="9021 &\n9023 &\n9030",
+                             Gmath="disease\npattern"))
 
 # pull in hits file
 variant_hits_file <- "data/output/family2/generation_variants.txt"
