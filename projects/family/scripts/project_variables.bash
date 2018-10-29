@@ -86,6 +86,7 @@ BEAGLE_OUTPUT_DIR="${WORKINGDIR}/beagle_output"
 
 PRE_GEN_VCF="${INPUTDIR}/NM_SS400_EXOMEonly_02102017_EXOME_SNP.recal.snps.indel_VQSR_hardFiltered.vcf_alleleReduction.vcf.recode.vcf"
 PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
+PRE_GEN_VCF_SORTED_QC="${WORKINGDIR}/all_vcf_sorted_qc.vcf"
 PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
 
 WGS_ALL_VCF="${INPUTDIR}/out.vcf.gz"
