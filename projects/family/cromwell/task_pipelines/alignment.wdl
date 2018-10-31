@@ -1,12 +1,9 @@
 ## Tasks to align WGS data from HiSeq FASTQ files
-## All the BAM file processing tasks are in this file
 ## Uses BWA/SAMTOOLS/GATK4
 
-# This workflow takes an ID and two files
-# Then it does all the BAM file processing
-# and ends up with small .bam files ready for variant calling
-
-
+# This task takes an ID and two input fasta files that are gzipped. 
+# It does all the BAM file processing and ends up with a small 
+# .bam file ready for variant calling
 task alignment_task {
 
   String ID
@@ -14,17 +11,16 @@ task alignment_task {
   File input_file_2_gz
 
   File BWA
-  File GNOMEREF_V37
-  File GNOMEREF_V37_INDEX
+  File GATK4
+  File GENOMEREF_V37
+  File GENOMEREF_V37_INDEX
   File SAMTOOLS
-
-  String picard_tmp_dir = "TMP_DIR=/projects/b1042/LubbeLab/testtemp"
-  String picard_options = "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
-
-  String picard_arg_str = "${picard_tmp_dir}" + " " + "${picard_options}"
+  
+  String PICARD_ARG_STR
 
   Int core_count = 1
-  String samtools_mem = "30G"
+  String mem_str = "30G"
+
                        
   command {
       module load java
@@ -32,12 +28,12 @@ task alignment_task {
       # aligns reads in the FastQ to the reference genome to create a SAM file
       ${BWA} mem -M -t ${core_count} \
           -R "\$'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA'" \ 
-          ${GENOMEREF_V37} \
+          "${GENOMEREF_V37}" \
           "\$(zcat ${input_file_1_gz}" \ 
           "\$(zcat ${input_file_2_gz}" \  
         > "${ID}.sam"
 
-      # creates a BAM file
+      # creates a BAM file from the SAM file
       ${SAMTOOLS} view -bS \
           -t "${GENOMEREF_V37_INDEX}" \
           -@"${core_count}" \
@@ -46,7 +42,7 @@ task alignment_task {
 
       # sort the BAM file
       ${SAMTOOLS} sort \
-          -m "${samtools_mem}" \
+          -m "${mem_str}" \
           -@"${core_count}" \
           "${ID}.bam" \
           -o "${ID}_sorted.bam" \
@@ -55,8 +51,8 @@ task alignment_task {
       ${SAMTOOLS} index "${ID}_sorted.bam" 
     
       # Mark Duplicates
-      "${GATK4}" --java-options -Xmx30G MarkDuplicates \
-        "${picard_arg_str}" \
+      "${GATK4}" --java-options -Xmx"${mem_str}" MarkDuplicates \
+        "${PICARD_ARG_STR}" \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
         METRICS_FILE="${ID}_picard_metrics.out" 
@@ -70,12 +66,12 @@ task alignment_task {
   }
 
   runtime {
-    rt_alloc = "b1042"
-    rt_queue = "genomics"
-    rt_singlenode = 'true'
-    rt_walltime= "48:00:00"
-    rt_nodes = 1
-    rt_ppn = 1
-    rt_mem = "32gb"
+    rt_alloc : "b1042"
+    rt_queue : "genomics"
+    rt_singlenode : 'true'
+    rt_walltime : "48:00:00"
+    rt_nodes : 1
+    rt_ppn : 1
+    rt_mem : "32gb"
   }
 }

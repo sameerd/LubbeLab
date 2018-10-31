@@ -1,9 +1,16 @@
 
 ## Tasks to pick up the default resources
 ## These are just FILE pointers to programs and references
-task FetchResources {
+task fetch_resources {
   File progams_dir = "/projects/b1049/genetics_programs"
   File refs_dir = "/projects/b1049/genetics_refs"
+
+  File project_tmp_dir = "/projects/b1042/LubbeLab/testtemp"
+
+  String picard_tmp_dir = "TMP_DIR=${project_tmp_dir}"
+  String picard_options = "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
+  
+  command {}
 
   output {
     # Programs
@@ -12,8 +19,12 @@ task FetchResources {
     File SAMTOOLS = "${progams_dir}/samtools/samtools"
 
     # ReferenceFiles
-    File GNOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
-    File GNOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
+    File GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
+    File GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
+
+    # Additional Arguments
+    String PICARD_ARG_STR = "${picard_tmp_dir}" + " " + "${picard_options}"
+    
   }
 
 
