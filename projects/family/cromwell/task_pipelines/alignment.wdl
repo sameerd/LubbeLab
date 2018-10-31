@@ -10,18 +10,21 @@
 task alignment_task {
 
   String ID
-  File input_file_1
-  File input_file_2
+  File input_file_1_gz
+  File input_file_2_gz
 
   File BWA
   File GNOMEREF_V37
   File GNOMEREF_V37_INDEX
   File SAMTOOLS
 
-  String picard_arguments = "TMP_DIR=/projects/b1042/LubbeLab/testtemp ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
+  String picard_tmp_dir = "TMP_DIR=/projects/b1042/LubbeLab/testtemp"
+  String picard_options = "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
+
+  String picard_arg_str = "${picard_tmp_dir}" + " " + "${picard_options}"
 
   Int core_count = 1
-  String samtools_mem = "14G"
+  String samtools_mem = "30G"
                        
   command {
       module load java
@@ -30,8 +33,8 @@ task alignment_task {
       ${BWA} mem -M -t ${core_count} \
           -R "\$'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA'" \ 
           ${GENOMEREF_V37} \
-          "\$(zcat ${input_file_1}" \ 
-          "\$(zcat ${input_file_2}" \  
+          "\$(zcat ${input_file_1_gz}" \ 
+          "\$(zcat ${input_file_2_gz}" \  
         > "${ID}.sam"
 
       # creates a BAM file
@@ -52,8 +55,8 @@ task alignment_task {
       ${SAMTOOLS} index "${ID}_sorted.bam" 
     
       # Mark Duplicates
-      "${GATK4}" --java-options -Xmx10G MarkDuplicates \
-        "${picard_arguments} \
+      "${GATK4}" --java-options -Xmx30G MarkDuplicates \
+        "${picard_arg_str}" \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
         METRICS_FILE="${ID}_picard_metrics.out" 
@@ -69,10 +72,10 @@ task alignment_task {
   runtime {
     rt_alloc = "b1042"
     rt_queue = "genomics"
-    #PBS -l naccesspolicy=singlenode # Should we put in an option for this?
+    rt_singlenode = 'true'
     rt_walltime= "48:00:00"
     rt_nodes = 1
     rt_ppn = 1
-    rt_mem = "16gb"
+    rt_mem = "32gb"
   }
 }
