@@ -10,11 +10,11 @@ task alignment_task {
   File input_file_1_gz
   File input_file_2_gz
 
-  File BWA
-  File GATK4
-  File GENOMEREF_V37
-  File GENOMEREF_V37_INDEX
-  File SAMTOOLS
+  String BWA
+  String GATK4
+  String GENOMEREF_V37
+  String GENOMEREF_V37_INDEX
+  String SAMTOOLS
   
   String PICARD_ARG_STR
 
@@ -27,23 +27,23 @@ task alignment_task {
 
       # aligns reads in the FastQ to the reference genome to create a SAM file
       ${BWA} mem -M -t ${core_count} \
-          -R "\$'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA'" \ 
+          -R $'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA' \ 
           "${GENOMEREF_V37}" \
-          "\$(zcat ${input_file_1_gz}" \ 
-          "\$(zcat ${input_file_2_gz}" \  
+          <(zcat "${input_file_1_gz}") \ 
+          <(zcat "${input_file_2_gz}") \  
         > "${ID}.sam"
 
       # creates a BAM file from the SAM file
       ${SAMTOOLS} view -bS \
           -t "${GENOMEREF_V37_INDEX}" \
-          -@"${core_count}" \
+          -@${core_count} \
           -o "${ID}.bam" \
           "${ID}.sam" \
 
       # sort the BAM file
       ${SAMTOOLS} sort \
-          -m "${mem_str}" \
-          -@"${core_count}" \
+          -m ${mem_str} \
+          -@${core_count} \
           "${ID}.bam" \
           -o "${ID}_sorted.bam" \
       
@@ -51,7 +51,7 @@ task alignment_task {
       ${SAMTOOLS} index "${ID}_sorted.bam" 
     
       # Mark Duplicates
-      "${GATK4}" --java-options -Xmx"${mem_str}" MarkDuplicates \
+      ${GATK4} --java-options -Xmx${mem_str} MarkDuplicates \
         "${PICARD_ARG_STR}" \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
@@ -68,7 +68,7 @@ task alignment_task {
   runtime {
     rt_alloc : "b1042"
     rt_queue : "genomics"
-    rt_singlenode : 'true'
+    rt_singlenode : true
     rt_walltime : "48:00:00"
     rt_nodes : 1
     rt_ppn : 1
