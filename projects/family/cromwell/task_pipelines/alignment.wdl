@@ -19,7 +19,7 @@ task alignment_task {
   String PICARD_ARG_STR
 
   # We have a max of 24 cores on the genomics nodes
-  Int core_count = 1
+  Int core_count = 12
   # Also 128GB max of memory
   String mem_str = "30G"
 
@@ -69,7 +69,7 @@ task alignment_task {
   runtime {
     rt_alloc : "b1042"
     rt_queue : "genomics"
-    rt_singlenode : true
+    rt_naccesspolicy : "singlenode"
     rt_walltime : "48:00:00"
     rt_nodes : 1
     rt_ppn : core_count
