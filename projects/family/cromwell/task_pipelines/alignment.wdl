@@ -19,9 +19,13 @@ task alignment_task {
   String PICARD_ARG_STR
 
   # We have a max of 24 cores on the genomics nodes
+  # Samtools is using threads and not cores so do we want 
+  # one thread per core
   Int core_count = 12
   # Also 128GB max of memory
-  String mem_str = "30G"
+  String gatk_mem_str = "30G"
+  String samtools_mem_str = "5G" # this is memory per-thread
+
 
   command {
       module load java
@@ -43,7 +47,7 @@ task alignment_task {
 
       # sort the BAM file
       ${SAMTOOLS} sort \
-          -m ${mem_str} \
+          -m ${samtools_mem_str} \
           -@${core_count} \
           "${ID}.bam" \
           -o "${ID}_sorted.bam" \
@@ -52,7 +56,7 @@ task alignment_task {
       ${SAMTOOLS} index "${ID}_sorted.bam"
     
       # Mark Duplicates
-      ${GATK4} --java-options -Xmx${mem_str} MarkDuplicates \
+      ${GATK4} --java-options -Xmx${gatk_mem_str} MarkDuplicates \
         ${PICARD_ARG_STR} \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
