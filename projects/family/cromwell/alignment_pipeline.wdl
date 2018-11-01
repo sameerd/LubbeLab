@@ -13,19 +13,19 @@ workflow alignment_workflow {
   # The second column is the full path to the first fastq.gz file
   # The third column is the full path to the second fastz.gz file
   File input_samples_file = "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_NGS_samples_fastq.tsv" 
-  String output_destination_dir = "tmp_output"
+  String output_destination_dir = "/projects/b1042/LubbeLab/sameer/tmp_output"
 
   Array[Array[String]] input_samples = read_tsv(input_samples_file)
 
   call Utilities.fetch_resources as Definitions {
   }
-
+  
   scatter (sample in input_samples) {
     call Alignment.alignment_task {
       input:
-        ID=input_samples[0],
-        input_file_1_gz = input_samples[1],
-        input_file_2_gz = input_samples[2],
+        ID=sample[0],
+        input_file_1_gz = sample[1],
+        input_file_2_gz = sample[2],
         BWA = Definitions.BWA,
         GATK4 = Definitions.GATK4,
         GENOMEREF_V37 = Definitions.GENOMEREF_V37,
@@ -35,9 +35,9 @@ workflow alignment_workflow {
     }
   }
 
-  Array[Array[File]] output_files = [Alignment.alignment_task.bam_file, 
-        Alignment.alignment_task.bam_file_index]
-  output_files_flatten = flatten(output_files)
+  Array[Array[File]] output_files = [alignment_task.bam_file, 
+        alignment_task.bam_file_index]
+  Array[File] output_files_flatten = flatten(output_files)
 
   call Utilities.final_copy {
     input:
