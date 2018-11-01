@@ -12,8 +12,8 @@ workflow alignment_workflow {
   # This is a tsv file where the first column is the sample ID
   # The second column is the full path to the first fastq.gz file
   # The third column is the full path to the second fastz.gz file
-  File input_samples_file = "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_NGS_samples_fastq.tsv" 
-  String output_destination_dir = "/projects/b1042/LubbeLab/sameer/tmp_output"
+  File input_samples_file
+  String output_destination_dir
 
   Array[Array[String]] input_samples = read_tsv(input_samples_file)
 
