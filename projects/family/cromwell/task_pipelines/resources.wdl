@@ -10,7 +10,9 @@ task fetch_resources {
   String picard_tmp_dir = "TMP_DIR=${project_tmp_dir}"
   String picard_options = "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
   
-  command {}
+  command {
+    echo ""
+  }
 
   output {
     # Programs
@@ -27,6 +29,10 @@ task fetch_resources {
     
   }
 
+  runtime {
+    rt_queue : "short"
+    rt_walltime : "10:00"
+  }
 
 
 }

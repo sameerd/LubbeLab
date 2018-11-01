@@ -10,6 +10,7 @@ task alignment_task {
   File input_file_1_gz
   File input_file_2_gz
 
+  # Code these files as strings to cromwell doesn't localize them
   String BWA
   String GATK4
   String GENOMEREF_V37
@@ -18,10 +19,10 @@ task alignment_task {
   
   String PICARD_ARG_STR
 
+  # We have a max of 24 cores on the genomics nodes
   Int core_count = 1
   String mem_str = "30G"
 
-                       
   command {
       module load java
 
@@ -52,7 +53,7 @@ task alignment_task {
     
       # Mark Duplicates
       ${GATK4} --java-options -Xmx${mem_str} MarkDuplicates \
-        "${PICARD_ARG_STR}" \
+        ${PICARD_ARG_STR} \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
         METRICS_FILE="${ID}_picard_metrics.out" 
@@ -71,7 +72,7 @@ task alignment_task {
     rt_singlenode : true
     rt_walltime : "48:00:00"
     rt_nodes : 1
-    rt_ppn : 1
+    rt_ppn : core_count
     rt_mem : "32gb"
   }
 }
