@@ -1,17 +1,21 @@
 
 ## Tasks to pick up the default resources
-## These are just FILE pointers to programs and references
+## These are just File/String pointers to programs and references
 task fetch_resources {
   String progams_dir = "/projects/b1049/genetics_programs"
   String refs_dir = "/projects/b1049/genetics_refs"
 
   String project_tmp_dir = "/projects/b1042/LubbeLab/testtemp"
-
   String picard_tmp_dir = "TMP_DIR=${project_tmp_dir}"
-  String picard_options = "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
+
+  # picard options style (below) is changing in a future release
+  String picard_options = 
+    "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
   
   command {
-    echo ""
+    # We do nothing in this block but perhaps we could test for versions
+    # later or test to see if programs exist
+    echo " "
   }
 
   output {
@@ -21,18 +25,22 @@ task fetch_resources {
     String SAMTOOLS = "${progams_dir}/samtools/samtools"
 
     # ReferenceFiles
-    File GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
-    File GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
+    # If the Ref's below are coded as `Files` instead of `Strings` then
+    # they get localized into the execution directory. If we localize the
+    # few files that are named below then we lose access to the .dict .bwi
+    # .ann .pac etc files We would need to localize all of them by naming
+    # them below.  A shortcut (bad!) is to name them as strings so that we
+    # actually reference the original locations and the other files are
+    # automatically picked up from there. 
+    String GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
+    String GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
 
     # Additional Arguments
     String PICARD_ARG_STR = "${picard_tmp_dir}" + " " + "${picard_options}"
-    
   }
 
   runtime {
     rt_queue : "short"
     rt_walltime : "10:00"
   }
-
-
 }

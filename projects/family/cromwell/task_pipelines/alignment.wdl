@@ -10,7 +10,6 @@ task alignment_task {
   File input_file_1_gz
   File input_file_2_gz
 
-  # Code these files as strings to cromwell doesn't localize them
   String BWA
   String GATK4
   String GENOMEREF_V37
@@ -21,6 +20,7 @@ task alignment_task {
 
   # We have a max of 24 cores on the genomics nodes
   Int core_count = 1
+  # Also 128GB max of memory
   String mem_str = "30G"
 
   command {
@@ -28,10 +28,10 @@ task alignment_task {
 
       # aligns reads in the FastQ to the reference genome to create a SAM file
       ${BWA} mem -M -t ${core_count} \
-          -R $'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA' \ 
+          -R $'@RG\tID:${ID}\tSM:${ID}\tLB:${ID}\tPL:ILLUMINA' \
           "${GENOMEREF_V37}" \
-          <(zcat "${input_file_1_gz}") \ 
-          <(zcat "${input_file_2_gz}") \  
+          <(zcat "${input_file_1_gz}") \
+          <(zcat "${input_file_2_gz}") \
         > "${ID}.sam"
 
       # creates a BAM file from the SAM file
@@ -49,20 +49,20 @@ task alignment_task {
           -o "${ID}_sorted.bam" \
       
       # creates an index file for the BAM file
-      ${SAMTOOLS} index "${ID}_sorted.bam" 
+      ${SAMTOOLS} index "${ID}_sorted.bam"
     
       # Mark Duplicates
       ${GATK4} --java-options -Xmx${mem_str} MarkDuplicates \
         ${PICARD_ARG_STR} \
         I="${ID}_sorted.bam" \
         O="${ID}_sorted_unique.bam" \
-        METRICS_FILE="${ID}_picard_metrics.out" 
+        METRICS_FILE="${ID}_picard_metrics.out"
 
       # creates an index file for the BAM file
-      ${SAMTOOLS} index "${ID}_sorted_unique.bam" 
+      ${SAMTOOLS} index "${ID}_sorted_unique.bam"
   }
   output {
-      File bam_file = "${ID}_sorted_unique.bam" 
+      File bam_file = "${ID}_sorted_unique.bam"
       File bam_file_index = "${bam_file}" + ".bai"
   }
 
