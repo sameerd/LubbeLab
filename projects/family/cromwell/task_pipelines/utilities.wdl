@@ -44,3 +44,23 @@ task fetch_resources {
     rt_walltime : "10:00"
   }
 }
+
+# Copy output to a final directory outside the cromwell structure
+# From: https://github.com/broadinstitute/cromwell/issues/1641
+task final_copy {
+    Array[File] files
+    String destination
+
+    command {
+        mkdir -p ${destination}
+        cp -L -R -u ${sep=' ' files} ${destination}
+    }
+
+    output {
+        Array[File] out = files
+    }
+    runtime {
+      rt_queue : "short"
+      rt_walltime : "3:00:00"
+    }
+}

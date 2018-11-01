@@ -2,33 +2,47 @@
 ## files per ID and it outputs a BAM file that is ready for variant calling.
 
 
-import "./task_pipelines/resources.wdl" as Resources
+import "./task_pipelines/utilities.wdl" as Utilities
 import "./task_pipelines/alignment.wdl" as Alignment
 
 
 # WORKFLOW DEFINITION
 workflow alignment_workflow {
-  String ID="SS4009023"
 
-  File gz1 = "/projects/b1049/Niccolo_NGS/genomes/SS4009023/SS4009023_ST-E00180_234_L1_1.fq.gz"
-  File gz2 = "/projects/b1049/Niccolo_NGS/genomes/SS4009023/SS4009023_ST-E00180_234_L1_2.fq.gz"
+  # This is a tsv file where the first column is the sample ID
+  # The second column is the full path to the first fastq.gz file
+  # The third column is the full path to the second fastz.gz file
+  File input_samples_file = "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_NGS_samples_fastq.tsv" 
+  String output_destination_dir = "tmp_output"
 
-  call Resources.fetch_resources as Definitions {
+  Array[Array[String]] input_samples = read_tsv(input_samples_file)
 
+  call Utilities.fetch_resources as Definitions {
   }
 
-  call Alignment.alignment_task {
+  scatter (sample in input_samples) {
+    call Alignment.alignment_task {
+      input:
+        ID=input_samples[0],
+        input_file_1_gz = input_samples[1],
+        input_file_2_gz = input_samples[2],
+        BWA = Definitions.BWA,
+        GATK4 = Definitions.GATK4,
+        GENOMEREF_V37 = Definitions.GENOMEREF_V37,
+        GENOMEREF_V37_INDEX = Definitions.GENOMEREF_V37_INDEX,
+        SAMTOOLS = Definitions.SAMTOOLS,
+        PICARD_ARG_STR = Definitions.PICARD_ARG_STR
+    }
+  }
+
+  Array[Array[File]] output_files = [Alignment.alignment_task.bam_file, 
+        Alignment.alignment_task.bam_file_index]
+  output_files_flatten = flatten(output_files)
+
+  call Utilities.final_copy {
     input:
-      ID=ID,
-      input_file_1_gz = gz1,
-      input_file_2_gz = gz2,
-      BWA = Definitions.BWA,
-      GATK4 = Definitions.GATK4,
-      GENOMEREF_V37 = Definitions.GENOMEREF_V37,
-      GENOMEREF_V37_INDEX = Definitions.GENOMEREF_V37_INDEX,
-      SAMTOOLS = Definitions.SAMTOOLS,
-      PICARD_ARG_STR = Definitions.PICARD_ARG_STR
+      files = output_files_flatten,
+      destination = output_destination_dir
   }
-
 
 }

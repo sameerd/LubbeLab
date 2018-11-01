@@ -18,7 +18,11 @@ module load java
 
 java -Dconfig.file=cromwell/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
-     run -i cromwell/inputs/alignment_pipeline.json \
+     run -i $( {
+
+
+
+     } )\
      cromwell/alignment_pipeline.wdl
 
 EOJ
