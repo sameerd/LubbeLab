@@ -6,11 +6,11 @@ task fetch_resources {
   String refs_dir = "/projects/b1049/genetics_refs"
 
   String project_tmp_dir = "/projects/b1042/LubbeLab/testtemp"
-  String picard_tmp_dir = "TMP_DIR=${project_tmp_dir}"
+  String picard_tmp_dir = "--TMP_DIR=${project_tmp_dir}"
 
   # picard options style (below) is changing in a future release
   String picard_options = 
-    "ASSUME_SORTED=TRUE REMOVE_DUPLICATES=FALSE VALIDATION_STRINGENCY=LENIENT" 
+    "--ASSUME_SORTED=TRUE --REMOVE_DUPLICATES=FALSE --VALIDATION_STRINGENCY=LENIENT" 
   
   command {
     # We do nothing in this block but perhaps we could test for versions
