@@ -13,10 +13,15 @@ workflow alignment_workflow {
   # The second column is the path to the first fastq.gz file
   # The third column is the path to the second fastz.gz file
   File input_samples_file
+
   # To use relative paths in the file above we should set the 
-  # input_files_prefix variable so that when combined with 
+  # input_file_prefix variable so that when combined with 
   # fastq.gz files we get a full path
-  String input_file_prefix?  # /projects/b1049/etc/etc
+  String? input_file_prefix  # /projects/b1049/etc/etc
+  String real_input_file_prefix = if defined(input_file_prefix) then input_file_prefix + "/" else ""  
+
+  # Directory where we want the sorted_unique.bam and sorted_unique.bam.bai
+  # files copied
   String output_destination_dir
 
   # Remove all the samples that are commented out with 
@@ -30,13 +35,18 @@ workflow alignment_workflow {
 
   call Utilities.fetch_resources as Definitions {
   }
-  
+
+
   scatter (sample in input_samples) {
+    String sample_id = sample[0]
+    String input_file_1 = real_input_file_prefix + sample[1]
+    String input_file_2 = real_input_file_prefix + sample[2]
+
     call Alignment.alignment_task {
       input:
-        ID=sample[0],
-        input_file_1_gz = ${input_files_prefix + "/"} + sample[1],
-        input_file_2_gz = ${input_files_prefix + "/"} + sample[2],
+        ID=sample_id,
+        input_file_1_gz = input_file_1,
+        input_file_2_gz = input_file_2,
         BWA = Definitions.BWA,
         GATK4 = Definitions.GATK4,
         GENOMEREF_V37 = Definitions.GENOMEREF_V37,

@@ -77,6 +77,6 @@ task alignment_task {
     rt_walltime : "48:00:00"
     rt_nodes : 1
     rt_ppn : core_count
-    rt_mem : "32gb"
+    rt_mem : "64gb"
   }
 }

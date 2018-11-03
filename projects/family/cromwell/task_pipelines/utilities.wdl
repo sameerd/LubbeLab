@@ -66,18 +66,20 @@ task final_copy {
 }
 
 
-# Strip the leading hash from file lines as we sometimes want to use this as a
+# Strip the leading hash from file lines as we want to use this as a
 # comment character
 task strip_leading_hash {
 
   File input_file
+  String output_file_name = "input_file_nohash"
 
   command {
-      grep -v "^#" "${input_file}" > input_file_nohash
+    # Remove all lines that start with a hash
+    grep -v "^#" "${input_file}" > input_file_nohash
   }
 
   output {
-      File out = input_file_nohash
+      File out = output_file_name
   }
 
   runtime {
