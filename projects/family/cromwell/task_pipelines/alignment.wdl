@@ -19,13 +19,16 @@ task alignment_task {
   String PICARD_ARG_STR
 
   # We have a max of 24 cores on the genomics nodes
-  # Samtools is using threads and not cores so do we want 
-  # one thread per core
-  Int core_count = 12
   # Also 128GB max of memory
+  Int core_count = 12
   String gatk_mem_str = "30G"
   String samtools_mem_str = "5G" # this is memory per-thread
 
+  # memory requested for this task should be greater than
+  # max(gatk_men, samtools_mem * core_count) 
+  # and if this larger than 100GB then we should reduce the samtools_mem
+  # for now let's hard code sensible values
+  String task_mem_str = "64gb"
 
   command {
       module load java
@@ -77,6 +80,6 @@ task alignment_task {
     rt_walltime : "48:00:00"
     rt_nodes : 1
     rt_ppn : core_count
-    rt_mem : "64gb"
+    rt_mem : task_mem_str
   }
 }
