@@ -58,9 +58,9 @@ task alignment_task {
       # Mark Duplicates
       ${GATK4} --java-options -Xmx${gatk_mem_str} MarkDuplicates \
         ${PICARD_ARG_STR} \
-        I="${ID}_sorted.bam" \
-        O="${ID}_sorted_unique.bam" \
-        METRICS_FILE="${ID}_picard_metrics.out"
+        --INPUT="${ID}_sorted.bam" \
+        --OUTPUT="${ID}_sorted_unique.bam" \
+        --METRICS_FILE="${ID}_picard_metrics.out"
 
       # creates an index file for the BAM file
       ${SAMTOOLS} index "${ID}_sorted_unique.bam"
