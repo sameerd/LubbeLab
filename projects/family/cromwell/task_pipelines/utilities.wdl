@@ -48,19 +48,41 @@ task fetch_resources {
 # Copy output to a final directory outside the cromwell structure
 # From: https://github.com/broadinstitute/cromwell/issues/1641
 task final_copy {
-    Array[File] files
-    String destination
+  Array[File] files
+  String destination
 
-    command {
-        mkdir -p ${destination}
-        cp -L -R -u ${sep=' ' files} ${destination}
-    }
+  command {
+    mkdir -p ${destination}
+    cp -L -R -u ${sep=' ' files} ${destination}
+  }
 
-    output {
-        Array[File] out = files
-    }
-    runtime {
-      rt_queue : "short"
-      rt_walltime : "4:00:00"
-    }
+  output {
+    Array[File] out = files
+  }
+  runtime {
+    rt_queue : "short"
+    rt_walltime : "4:00:00"
+  }
+}
+
+
+# Strip the leading hash from file lines as we sometimes want to use this as a
+# comment character
+task strip_leading_hash {
+
+  File input_file
+
+  command {
+      grep -v "^#" "${input_file}" > input_file_nohash
+  }
+
+  output {
+      File out = input_file_nohash
+  }
+
+  runtime {
+    rt_queue : "short"
+    rt_walltime : "10:00"
+
+  }
 }
