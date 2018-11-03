@@ -12,7 +12,7 @@ msub -A b1042 \
   -d "${cwd}" \
   -q genomics \
   -l walltime=48:00:00 \
-  -l nodes=1:ppn=2 \
+  -l nodes=1:ppn=1 \
   - <<EOJ
 
 #!/bin/bash
