@@ -61,6 +61,6 @@ task final_copy {
     }
     runtime {
       rt_queue : "short"
-      rt_walltime : "3:00:00"
+      rt_walltime : "4:00:00"
     }
 }
