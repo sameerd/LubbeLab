@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -x
+
+cwd=`pwd`
+
 msub -A b1042 \
   -e "${cwd}/logs/errlog.txt" \
   -o "${cwd}/logs/outlog.txt" \
