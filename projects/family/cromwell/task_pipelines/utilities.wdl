@@ -34,6 +34,7 @@ task fetch_resources {
     # automatically picked up from there. 
     String GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
     String GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
+    String GENOMEREF_V37_2BIT = "${refs_dir}/fasta/human_g1k_v37.2bit"
 
     # Additional Arguments
     String PICARD_ARG_STR = "${picard_tmp_dir}" + " " + "${picard_options}"
@@ -71,11 +72,11 @@ task final_copy {
 task strip_leading_hash {
 
   File input_file
-  String output_file_name = "input_file_nohash"
+  String output_file_name = "file_nohash"
 
   command {
     # Remove all lines that start with a hash
-    grep -v "^#" "${input_file}" > input_file_nohash
+    grep -v "^#" "${input_file}" > "${output_file_name}"
   }
 
   output {
