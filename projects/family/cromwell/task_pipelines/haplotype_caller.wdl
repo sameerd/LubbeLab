@@ -32,7 +32,7 @@ task haplotype_caller_task {
       -- --driver-cores=2 \
          --driver-memory=12g \
          --executor-cores=22 \
-         --executor-memory=110GB
+         --executor-memory=108GB
   }
   output {
     File gvcf_file = "${output_file_name}"
@@ -43,6 +43,7 @@ task haplotype_caller_task {
     rt_walltime : "03:00:00"
     rt_nodes : 2
     rt_ppn : 24
+    rt_mem : "120gb"
     
   }
 
