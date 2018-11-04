@@ -10,7 +10,7 @@ task haplotype_caller_task {
   String GATK4
   String GENOMEREF_V37_2BIT 
 
-  String output_file_name = basename(input_bam_file, "*.bam") + "g.vcf.gz"
+  String output_file_name = basename(input_bam_file, "*.bam") + ".g.vcf"
   
   command {
     ## Modified from https://kb.northwestern.edu/page.php?id=86687
