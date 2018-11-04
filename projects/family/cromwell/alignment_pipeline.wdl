@@ -18,6 +18,7 @@ workflow alignment_workflow {
   # input_file_prefix variable so that when combined with 
   # fastq.gz files we get a full path
   String? input_file_prefix  # /projects/b1049/etc/etc
+  # add a trailing / if we have an input_file_prefix
   String real_input_file_prefix = if defined(input_file_prefix) then input_file_prefix + "/" else ""  
 
   # Directory where we want the sorted_unique.bam and sorted_unique.bam.bai
@@ -35,7 +36,6 @@ workflow alignment_workflow {
 
   call Utilities.fetch_resources as Definitions {
   }
-
 
   scatter (sample in input_samples) {
     String sample_id = sample[0]
@@ -60,6 +60,7 @@ workflow alignment_workflow {
         alignment_task.bam_file_index]
   Array[File] output_files_flatten = flatten(output_files)
 
+  # copy output files to output directory
   call Utilities.final_copy {
     input:
       files = output_files_flatten,
