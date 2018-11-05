@@ -1,6 +1,6 @@
 {
   "haplotype_caller_workflow.input_bam_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_bam_files.tsv",
   "haplotype_caller_workflow.output_destination_dir" : "/projects/b1042/LubbeLab/sameer/tmp_output",
-  "haplotype_caller_workflow.input_file_prefix" : "/projects/b1042/LubbeLab/sameer/NM_bams"
+  "haplotype_caller_workflow.input_file_prefix" : "/projects/b1049/sameer/LubbeLab/projects/family/data/input/bams"
 }
 
