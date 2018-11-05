@@ -40,7 +40,7 @@ task haplotype_caller_task {
   runtime {
     rt_alloc : "b1042"
     rt_queue : "genomics"
-    rt_walltime : "03:00:00"
+    rt_walltime : "24:00:00"
     rt_nodes : 2
     rt_ppn : 24
     rt_mem : "120gb"
