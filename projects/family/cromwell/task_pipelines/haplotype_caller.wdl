@@ -7,6 +7,9 @@ task haplotype_caller_task {
 
   File input_bam_file
 
+  Int? num_nodes = 2
+  String? walltime = "24:00:00"
+
   String GATK4
   String GENOMEREF_V37_2BIT 
 
@@ -29,7 +32,7 @@ task haplotype_caller_task {
       --output ${output_file_name} \
       --spark-runner SPARK \
       --spark-master spark://`hostname -i`:7077 \
-      -- --driver-cores=2 \
+      -- --driver-cores=${num_nodes} \
          --driver-memory=12g \
          --executor-cores=22 \
          --executor-memory=108GB
@@ -40,8 +43,8 @@ task haplotype_caller_task {
   runtime {
     rt_alloc : "b1042"
     rt_queue : "genomics"
-    rt_walltime : "24:00:00"
-    rt_nodes : 2
+    rt_walltime : walltime
+    rt_nodes : num_nodes
     rt_ppn : 24
     rt_mem : "120gb"
     
