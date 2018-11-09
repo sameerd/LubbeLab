@@ -37,17 +37,28 @@ workflow alignment_workflow {
   call Utilities.fetch_resources as Definitions {
   }
 
+  # First create all the SAM files
   scatter (sample in input_samples) {
     String sample_id = sample[0]
     String input_file_1 = real_input_file_prefix + sample[1]
     String input_file_2 = real_input_file_prefix + sample[2]
 
-    call Alignment.alignment_task {
+    call Alignment.alignment_create_samfile {
       input:
         ID=sample_id,
         input_file_1_gz = input_file_1,
         input_file_2_gz = input_file_2,
         BWA = Definitions.BWA,
+        GENOMEREF_V37 = Definitions.GENOMEREF_V37,
+        GENOMEREF_V37_INDEX = Definitions.GENOMEREF_V37_INDEX
+    }
+  }
+
+  # now process the SAM files into BAM files
+  scatter (sam_file in alignment_create_samfile.sam_file) {
+    call Alignment.alignment_task {
+      input:
+        sam_file=sam_file,
         GATK4 = Definitions.GATK4,
         GENOMEREF_V37 = Definitions.GENOMEREF_V37,
         GENOMEREF_V37_INDEX = Definitions.GENOMEREF_V37_INDEX,
@@ -56,6 +67,7 @@ workflow alignment_workflow {
     }
   }
 
+  # Merge all the bam files and index files into one array
   Array[Array[File]] output_files = [alignment_task.bam_file, 
         alignment_task.bam_file_index]
   Array[File] output_files_flatten = flatten(output_files)
