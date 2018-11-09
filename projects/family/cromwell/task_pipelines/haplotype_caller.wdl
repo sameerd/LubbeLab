@@ -5,6 +5,8 @@
 ## GVCF file
 task haplotype_caller_task {
 
+
+  # FIXME: Add the ability to add multiple bam files
   File input_bam_file
 
   Int? num_nodes = 2

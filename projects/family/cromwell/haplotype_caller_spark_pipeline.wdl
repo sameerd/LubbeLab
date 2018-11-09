@@ -36,6 +36,7 @@ workflow haplotype_caller_workflow {
   scatter (sample in input_bams) {
     String input_bam_file = real_input_file_prefix + sample[0]
 
+    # FIXME: Add the ability to add multiple BAM files per sample
     call HaplotypeCaller.haplotype_caller_task {
       input:
         input_bam_file = input_bam_file,
