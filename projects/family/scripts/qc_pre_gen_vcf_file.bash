@@ -11,8 +11,8 @@ module load java
 
 # Now do QC for WES file
 MAX_MISSING=0.1
-MIN_GQ=80
-MIN_DP=20
+MIN_GQ=20
+MIN_DP=5
 
 # calculate Ts/Tv ratio
 $VCFTOOLS --vcf "${PRE_GEN_VCF_SORTED}" \

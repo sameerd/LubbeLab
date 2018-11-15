@@ -14,14 +14,14 @@ module load java
 ${JAVA} -jar ${GATK} \
    -T SelectVariants \
    -R "${GENOMEREF}" \
-   -V "${PRE_GEN_VCF_SORTED}" \
+   -V "${PRE_GEN_VCF_SORTED_QC}" \
    -o "${MERGED2_VCF}" \
    -env -ef \
    -sn "SS400${G1}" \
    -sn "SS400${G2}" \
    -sn "SS400${G3}" 
 
-
+cp "${MERGED2_VCF}" "${MERGED_VCF}"
 
 
 
