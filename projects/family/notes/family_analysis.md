@@ -8,10 +8,11 @@ Started with the vcf file provided
 #### Family 2 Analysis
 1. **Select Samples** Extract family2 samples \[[Extract script](../scripts/extract_family2_samples_from_pre_gen.bash)\]
 1. **Annotate** variants with annovar \[[annotate\_variants.bash](../scripts/annotate_variants.bash)\]
-1. **Filter** annotated variants by matching the *all* of following three rules \[[Filter script](../scripts/filter_family2_annovar_output.bash)\]
+1. **Filter** annotated variants by matching the *all* of following four main rules \[[Filter script](../scripts/filter_family2_annovar_output.bash)\]
     1. MAF < 0.05
     1. Exonic region or splicing region
-    1. Matching *any one* of the following three subrules
+    1. Not a genomic\_superdups region
+    1. Match *any one* of the following three subrules to match this rule
         * ExonicFunc is not `synonymous SNV` and not `nonsynonymous SNV`
         * ExonicFunc is `nonsynonymous SNV`
         * ExonicFunc is `synonymous SNV` and Func.refGene is in `exonic:splicing`

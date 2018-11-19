@@ -20,6 +20,6 @@ ${ANNOVAR_CONVERT} -format vcf4 \
 # Convert to Annovar Table
 ${ANNOVAR_TABLE} "${ANNOVAR_INPUT}" \
         "${ANNOVARDIR}/humandb/" -buildver hg19 \
-        -protocol refGene,gnomad_genome,cadd13gt10 \
-        -operation g,f,f \
+        -protocol refGene,genomicSuperDups,gnomad_genome,gnomad_exome,cadd13gt10 \
+        -operation g,r,f,f,f \
         -remove -otherinfo -nastring .
