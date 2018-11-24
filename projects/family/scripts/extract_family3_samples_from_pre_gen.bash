@@ -10,8 +10,6 @@ echo ${OUTPUTDIR}
 ##first need to load the correct version of java (v2.8)
 module load java
 
-# FIXME: Need to remove idx files before running combine variants
-
 ${JAVA} -jar ${GATK} \
    -T SelectVariants \
    -R "${GENOMEREF}" \
@@ -23,6 +21,7 @@ ${JAVA} -jar ${GATK} \
    -sn "SS400${F3}" \
    -sn "SS400${F4}" 
 
+cp "${MERGED2_VCF}" "${MERGED_VCF}"
 
 
 

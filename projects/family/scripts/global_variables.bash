@@ -20,7 +20,9 @@ BEAGLE_5_0="${PROGRAMSDIR}/beagle/beagle.10Sep18.879.jar"
 BEAGLE_BREF3_DIR="${PROGRAMSDIR}/beagle/bref3"
 BEAGLE_GENETIC_MAP_DIR="${PROGRAMSDIR}/beagle/genetic_maps"
 REFINED_IBD="${PROGRAMSDIR}/beagle/refined-ibd.12Jul18.a0b.jar"
+IBDSEQ="${PROGRAMSDIR}/beagle/ibdseq.r1206.jar"
 MERGE_IBD="${PROGRAMSDIR}/beagle/merge-ibd-segments.12Jul18.a0b.jar"
+
 
 
 ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"
