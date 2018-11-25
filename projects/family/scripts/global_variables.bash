@@ -21,6 +21,8 @@ BEAGLE_BREF3_DIR="${PROGRAMSDIR}/beagle/bref3"
 BEAGLE_GENETIC_MAP_DIR="${PROGRAMSDIR}/beagle/genetic_maps"
 REFINED_IBD="${PROGRAMSDIR}/beagle/refined-ibd.12Jul18.a0b.jar"
 IBDSEQ="${PROGRAMSDIR}/beagle/ibdseq.r1206.jar"
+KING="${PROGRAMSDIR}/king/king"
+PLINK="${PROGRAMSDIR}/plink_feb2018/plink"
 MERGE_IBD="${PROGRAMSDIR}/beagle/merge-ibd-segments.12Jul18.a0b.jar"
 
 

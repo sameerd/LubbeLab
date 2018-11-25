@@ -92,6 +92,8 @@ PRE_GEN_VCF_SORTED="${WORKINGDIR}/all_vcf_sorted.vcf"
 PRE_GEN_VCF_SORTED_QC="${WORKINGDIR}/all_vcf_sorted_qc.vcf"
 PRE_GEN_VCF_REJECTED="${WORKINGDIR}/all_vcf_rejected.vcf"
 
+PRE_GEN_PLINK_FAM="${WORKINGDIR}/all_plink.fam"
+
 WGS_ALL_VCF="${INPUTDIR}/out.vcf.gz"
 WGS_ALL_FILTERED_VCF="${WORKINGDIR}/wgs_all_filtered.vcf"
 WGS_ALL_FILTERED_VCF_hg19="${WORKINGDIR}/wgs_all_filtered_hg19.vcf"
