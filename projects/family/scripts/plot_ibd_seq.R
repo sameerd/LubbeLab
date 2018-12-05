@@ -22,6 +22,7 @@ colnames(x) <- c("sample1", "sample1idx", "sample2", "sample2idx",
 #family_samples <- family2
 
 family_samples <- c("SS4009017", "SS4009018")
+#family_samples <- c("SS4009017", "SS4009019")
 
 subx <- x %>% 
  filter(sample1 %in% family_samples) %>% 
@@ -130,9 +131,9 @@ ggplot(data=chrom_sizes) +
         labels=scales::unit_format(unit="Mb", scale=1e-6)) + 
     scale_x_discrete(name = "chromosome", limits = names(chrom_key))  +
     theme(legend.position="none") +
-    ggtitle("IBD seq results between 9017 and 9018")
+    ggtitle(paste0("IBD seq results between ", family_samples[1], " and ", family_samples[2]))
 
 
 
-ggsave("~/ibd_seq_9017_9018.png")    
-#ggsave("~/chr1_family1.png")    
+#ggsave("~/ibd_seq_9017_9018.png")    
+ggsave("~/ibd_seq_9017_9019.png")    
