@@ -1,5 +1,5 @@
 ## This pipeline workflow takes a list of sorted_unique.bam files and creates
-## gvcf files out of them
+## gvcf files out of them # Uses SPARK
 
 import "./task_pipelines/utilities.wdl" as Utilities
 import "./task_pipelines/haplotype_caller.wdl" as HaplotypeCaller

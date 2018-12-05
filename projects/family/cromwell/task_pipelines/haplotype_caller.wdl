@@ -1,8 +1,7 @@
 ## Tasks to create GVCF files out of sorted BAM files
-## Uses GATK4 Spark
 
 ## This tasks takes a sorted (de-duped) BAM file and creates a 
-## GVCF file
+## GVCF file # Uses GATK4 Spark
 task haplotype_caller_task {
 
 
@@ -54,3 +53,50 @@ task haplotype_caller_task {
 
 }
 
+## This tasks takes a sorted (de-duped) BAM file and creates a 
+## GVCF file per chromosome # Uses GATK4 
+task HaplotypeCallerERCPerChr {
+
+  String GATK4
+  File ref_fasta 
+  String chr
+  File input_bam_file
+
+  command {
+
+    ${GATK4} --java-options "-Xmx7G" HaplotypeCaller \
+      -R ${ref_fasta} \
+      -I ${input_bam_file} \
+      -L ${chr} \
+      --emit-ref-confidence GVCF \
+      -o raw.likelihood.g.vcf.gz
+  }
+  output {
+    File gvcf = "raw.likelihood.g.vcf.gz"
+  } 
+  runtime {
+    rt_mem: "8gb"
+    rt_walltime: "24:00:00"
+  }
+}
+
+task GatherGVCFs {
+  Array[File] input_gvcfs
+  String sample_name
+  String GATK4
+  File ref_fasta 
+  
+  command {
+    ${GATK4} --java-options "-Xmx14G" GatherGVCFs \
+    -R ${ref_fasta} \
+    -V ${sep=" -V " input_gvcfs} \
+    -O "${sample_name}.g.vcf.gz"
+  }
+  output {
+    File gvcf_file = "${sample_name}.g.vcf.gz"
+  }
+  runtime {
+    rt_mem: "16gb"
+    rt_walltime: "9:00:00"
+  }
+}
