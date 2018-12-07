@@ -69,7 +69,7 @@ task HaplotypeCallerERCPerChr {
       -I ${input_bam_file} \
       -L ${chr} \
       --emit-ref-confidence GVCF \
-      -o raw.likelihood.g.vcf.gz
+      --output raw.likelihood.g.vcf.gz
   }
   output {
     File gvcf = "raw.likelihood.g.vcf.gz"
