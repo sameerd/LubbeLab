@@ -42,8 +42,7 @@ workflow haplotype_caller_workflow {
       input: sample_name=sample[0],
              input_bam_file=input_bam_file,
              GATK4=Definitions.GATK4,
-             ref_fasta=Definitions.GENOMEREF_V37,
-             ref_fasta_index=Definitions.GENOMEREF_V37_INDEX_FAI
+             ref_fasta=Definitions.GENOMEREF_V37
     }
 
   }
