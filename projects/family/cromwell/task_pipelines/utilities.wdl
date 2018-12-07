@@ -33,6 +33,7 @@ task fetch_resources {
     # actually reference the original locations and the other files are
     # automatically picked up from there. 
     String GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
+    String GENOMEREF_V37_INDEX_FAI = "${refs_dir}/fasta/human_g1k_v37.fasta.fai"
     String GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
     String GENOMEREF_V37_2BIT = "${refs_dir}/fasta/human_g1k_v37.2bit"
 

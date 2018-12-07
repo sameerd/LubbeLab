@@ -10,24 +10,27 @@ workflow haplotype_caller_sub_workflow {
   String input_bam_file
   String GATK4
   String ref_fasta
+  String ref_fasta_index
 
   Array[String] chromosomes
   
-
   # FIXME: Add the ability to add multiple BAM files per sample
   scatter(chr in chromosomes) {
     call HaplotypeCaller.HaplotypeCallerERCPerChr {
       input: chr=chr, 
              input_bam_file=input_bam_file,
+             input_bam_file_index=input_bam_file + ".bai",
              GATK4=GATK4,
-             ref_fasta=ref_fasta
+             ref_fasta=ref_fasta,
+             ref_fasta_index=ref_fasta_index
     }
   }
   call HaplotypeCaller.GatherGVCFs as hc_gather {
     input: sample_name=sample_name, 
            input_gvcfs=HaplotypeCallerERCPerChr.gvcf,
            GATK4=GATK4,
-           ref_fasta=ref_fasta
+           ref_fasta=ref_fasta,
+           ref_fasta_index=ref_fasta_index,
   }
 
   output {

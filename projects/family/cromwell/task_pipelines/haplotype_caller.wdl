@@ -59,8 +59,10 @@ task HaplotypeCallerERCPerChr {
 
   String GATK4
   File ref_fasta 
+  File ref_fasta_index
   String chr
   File input_bam_file
+  File input_bam_file_index
 
   command {
 
@@ -85,6 +87,7 @@ task GatherGVCFs {
   String sample_name
   String GATK4
   File ref_fasta 
+  File ref_fasta_index
   
   command {
     ${GATK4} --java-options "-Xmx14G" GatherGVCFs \
