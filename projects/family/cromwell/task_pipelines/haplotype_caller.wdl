@@ -96,9 +96,9 @@ task GatherGVCFs {
   File? ref_fasta_dict
   
   command {
-    ${GATK4} --java-options "-Xmx14G" GatherGVCFs \
+    ${GATK4} --java-options "-Xmx14G" GatherVcfs \
     -R ${ref_fasta} \
-    -V ${sep=" -V " input_gvcfs} \
+    --INPUT ${sep=" --INPUT " input_gvcfs} \
     -O "${sample_name}.g.vcf.gz"
   }
   output {
