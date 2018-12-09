@@ -241,7 +241,7 @@ task ApplyVQSR {
       -O allsamples.filtered.recal.snpsindels.vcf 
 
     #Let's flag variants with too many alleles #I typically use 8 as a cutoff?
-    ${VCFTools} \
+    ${VCFTOOLS} \
       --vcf allsamples.filtered.recal.snpsindels.vcf 
       --max-alleles 8 \
       --recode \
