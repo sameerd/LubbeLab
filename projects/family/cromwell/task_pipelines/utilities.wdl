@@ -91,3 +91,26 @@ task strip_leading_hash {
 
   }
 }
+
+## Task to gunzip files
+task gunzip_file {
+
+  File input_file
+  String output_file_name = basename(input_file, ".gz")
+
+  command {
+    gunzip < "${input_file}" > "${output_file_name}"
+  }
+ 
+  output {
+    File gunzipped_file = output_file_name
+  }
+
+  runtime {
+    rt_queue : "short"
+    rt_walltime : "03:59:00"
+  }
+
+
+
+}

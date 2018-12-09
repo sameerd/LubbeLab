@@ -33,16 +33,54 @@ workflow joint_genotype_workflow {
   call Utilities.fetch_resources as Definitions {
   }
 
+  # since this is an array of one dimensional arrays
+  # we can just flatten it
   Array[String] input_gvcfs_with_path = prefix(real_input_file_prefix, 
                                                flatten(input_gvcfs))
 
+  # Lets gunzip the vcf files
+  scatter (vcf_gz in input_gvcfs_with_path) {
+    call Utilities.gunzip_file as gunzipped_vcfs { 
+      input: input_file = vcf_gz
+    }
+  }
+
   call Genotyper.CombineGVCFs {
     input:
-      input_gvcfs = input_gvcfs_with_path,
+      input_gvcfs = gunzipped_vcfs.gunzipped_file,
       GATK4=Definitions.GATK4,
       ref_fasta=Definitions.GENOMEREF_V37
   }
   
+  call Genotyper.JointGenotype {
+    input:
+      combined_gvcf_file = CombineGVCFs.combined_gvcf_file,
+      GATK4=Definitions.GATK4,
+      ref_fasta=Definitions.GENOMEREF_V37
+  }
+
+  call Genotyper.ExtractandFilterSNPs {
+    input:
+      genotyped_raw_vcf_file = JointGenotype.genotyped_raw_vcf_file,
+      GATK4=Definitions.GATK4,
+      ref_fasta=Definitions.GENOMEREF_V37
+  }
+
+  call Genotyper.ExtractandFilterINDELs {
+    input:
+      genotyped_raw_vcf_file = JointGenotype.genotyped_raw_vcf_file,
+      GATK4=Definitions.GATK4,
+      ref_fasta=Definitions.GENOMEREF_V37
+  }
+
+  call Genotyper.CombineFilteredSNPsIndels {
+    input:
+      filtered_snps_vcf = ExtractandFilterSNPs.filtered_snps_vcf,
+      filtered_indels_vcf = ExtractandFilterINDELs.filtered_indels_vcf,
+      GATK4=Definitions.GATK4,
+      ref_fasta=Definitions.GENOMEREF_V37
+  }
+
 
   # copy output files to output directory
   #call Utilities.final_copy {
