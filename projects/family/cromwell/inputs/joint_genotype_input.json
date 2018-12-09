@@ -1,38 +1,7 @@
 {
-  "CreateJointGenotypeVCF.ref_fasta_index": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta.fai",
-  "CreateJointGenotypeVCF.ref_fasta": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta",
-  "CreateJointGenotypeVCF.input_gvcfs": [
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009013.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009014.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009015.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009016.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009017.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009018.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009019.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009020.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009021.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009022.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009023.g.vcf.gz", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009030.g.vcf.gz"],
-  "CreateJointGenotypeVCF.input_gvcfs_index": [
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009013.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009014.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009015.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009016.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009017.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009018.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009019.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009020.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009021.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009022.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009023.g.vcf.gz.tbi", 
-          "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs/SS4009030.g.vcf.gz.tbi"],
-   "CreateJointGenotypeVCF.chromosomes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X", "Y", "MT"],
-  "CreateJointGenotypeVCF.ref_dict": "/projects/b1049/genetics_refs/fasta/human_g1k_v37.dict",
-  "CreateJointGenotypeVCF.GATK": "/projects/b1049/genetics_programs/gatk/GenomeAnalysisTK.jar",
-  "CreateJointGenotypeVCF.VCFTOOLS": "/projects/b1049/genetics_programs/vcftools/bin/vcftools",
-  "CreateJointGenotypeVCF.TABIX": "/projects/b1049/genetics_programs/tabix-0.2.6/tabix",
-  "CreateJointGenotypeVCF.BGZIP": "/projects/b1049/genetics_programs/tabix-0.2.6/bgzip"
+  "joint_genotype_workflow.input_file_prefix": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/sample_datasets",
+  "joint_genotype_workflow.input_gvcf_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_gvcf_samples.tsv",
+  "joint_genotype_workflow.Definitions.project_tmp_dir": "/projects/b1042/LubbeLab/testtemp",
+  "joint_genotype_workflow.output_destination_dir": "/tmp"
 }
-
 
