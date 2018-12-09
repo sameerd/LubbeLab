@@ -127,8 +127,8 @@ task ExtractandFilterINDELs {
     ${GATK4} VariantFiltration \
       --reference "${ref_fasta}" \
       --variant allsamples.rawindels.vcf \
-      --filter-expression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0" 
-      --filter-name "indel_filter_1" 
+      --filter-expression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0" \
+      --filter-name "indel_filter_1"  \
       --output ${output_file_name}
   }
 
@@ -159,7 +159,6 @@ task CombineFilteredSNPsIndels {
 
     # Combine filtered SNPS/Indels
     ${GATK4} MergeVcfs \
-      --reference "${ref_fasta}" \
       --INPUT "${filtered_snps_vcf}" \
       --INPUT "${filtered_indels_vcf}" \
       --OUTPUT "${output_file_name}"
@@ -173,6 +172,101 @@ task CombineFilteredSNPsIndels {
     rt_mem: "32gb"
     rt_walltime: "02:00:00"
   }
+}
 
+# VQSR 
+task ApplyVQSR {
+
+  File filtered_vcf
+
+  String GATK4
+  String VCFTOOLS
+  String ref_fasta
+
+  String output_file_name = "allsamples.filtered.recal.snp.indels.allelereduction.VQSR.recode.vcf"
+
+  String VQSRFILTERLEVEL="99.9"
+  String VQSRargsSNP=" -tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 -an QD -an DP -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR --max-gaussians 5 "
+  String VQSRresourcesSNP=" -resource hapmap,known=false,training=true,truth=true,prior=15.0:/projects/b1049/genetics_refs/new_2018_bbustos/hapmap_3.3.b37.vcf -resource omni,known=false,training=true,truth=true,prior=12.0:/projects/b1049/genetics_refs/new_2018_bbustos/1000G_omni2.5.b37.vcf -resource 1000G,known=false,training=true,truth=false,prior=10.0:/projects/b1049/genetics_refs/new_2018_bbustos/1000G_phase1.snps.high_confidence.b37.vcf -resource dbsnp,known=true,training=false,truth=false,prior=2.0:/projects/b1049/genetics_refs/new_2018_bbustos/dbsnp_138.b37.vcf"
+  String VQSRargsINDEL=" -tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 --max-gaussians 4 -an QD -an DP -an FS -an SOR -an ReadPosRankSum -an MQRankSum "
+  String VQSRresourcesINDEL="-resource mills,known=false,training=true,truth=true,prior=12.0:/projects/b1049/genetics_refs/new_2018_bbustos/Mills_and_1000G_gold_standard.indels.b37.vcf -resource dbsnp,known=true,training=false,truth=false,prior=2.0:/projects/b1049/genetics_refs/new_2018_bbustos/dbsnp_138.b37.vcf"
+
+  command {
+    #VARIANT QUALITY SCORE RECALIBRATION - check tranch filter levels
+    # load R
+    module load java
+    module load R
+
+    #VQSR Step 1 [VariantRecalibrator] - SNPs
+    ${GATK4} VariantRecalibrator \
+      --reference ${ref_fasta} \
+      --variant ${filtered_vcf} \
+      -mode SNP \
+      -O SNP.recal \
+      --tranches-file SNP.tranches \
+      --rscript-file SNP.plots.R \
+      ${VQSRargsSNP} \
+      ${VQSRresourcesSNP}
+
+    #VQSR Step 2 [ApplyRecalibration] - SNPs
+    ${GATK4} ApplyVQSR \
+      --reference ${ref_fasta} \
+      -mode SNP \
+      --truth-sensitivity-filter-level \
+      ${VQSRFILTERLEVEL} \
+      --variant ${filtered_vcf} \
+      --tranches-file SNP.tranches \
+      --recal-file SNP.recal \
+      -O allsamples.filtered.recal.snps.vcf
+
+    #VQSR Step 3 [VariantRecalibrator] - INDELs
+    ${GATK4} VariantRecalibrator \
+      --reference ${ref_fasta} \
+      --variant allsamples.filtered.recal.snps.vcf \
+      -mode INDEL \
+      -O INDEL.recal \
+      --tranches-file INDEL.tranches \
+      --rscript-file INDEL.plots.R \
+      ${VQSRargsINDEL} \
+      ${VQSRresourcesINDEL} 
+
+    #VQSR Step 4 [ApplyRecalibration] - INDELs
+    ${GATK4} ApplyVQSR \
+      --reference ${ref_fasta} \
+      -mode INDEL \
+      --truth-sensitivity-filter-level ${VQSRFILTERLEVEL} \
+      --variant allsamples.filtered.recal.snps.vcf \
+      --tranches-file INDEL.tranches \
+      --recal-file INDEL.recal \
+      -O allsamples.filtered.recal.snpsindels.vcf 
+
+    #Let's flag variants with too many alleles #I typically use 8 as a cutoff?
+    ${VCFTools} \
+      --vcf allsamples.filtered.recal.snpsindels.vcf 
+      --max-alleles 8 \
+      --recode \
+      --recode-INFO-all \
+      --out allsamples.filtered.recal.snps.indels.allelereduction.vcf
+
+    #Index resulting VCF
+    ${GATK4} IndexFeatureFile \
+      -F allsamples.filtered.recal.snps.indels.allelereduction.vcf
+
+    #Let's flag variant that fail our VQSR filtering, and produce our final VCF file
+    ${GATK4} SelectVariants \
+      --reference ${ref_fasta} \
+      --variant allsamples.filtered.recal.snps.indels.allelereduction.vcf \
+      -O allsamples.filtered.recal.snp.indels.allelereduction.VQSR.recode.vcf
+
+  }
+
+  output {
+    File vqsr_output_vcf = "${output_file_name}"
+  }
+
+  runtime {
+    rt_mem: "32gb"
+    rt_walltime: "02:00:00"
+  }
 
 }

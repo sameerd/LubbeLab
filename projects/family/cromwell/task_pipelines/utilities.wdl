@@ -21,6 +21,7 @@ task fetch_resources {
   output {
     # Programs
     String GATK4 = "${progams_dir}/gatk_2018/gatk-4.0.10.0/gatk" 
+    String VCFTOOLS = "${progams_dir}/vcftools/bin/vcftools"
     String BWA = "${progams_dir}/bwa-0.7.12/bwa"
     String SAMTOOLS = "${progams_dir}/samtools/samtools"
 

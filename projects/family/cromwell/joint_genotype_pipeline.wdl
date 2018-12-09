@@ -81,6 +81,17 @@ workflow joint_genotype_workflow {
       ref_fasta=Definitions.GENOMEREF_V37
   }
 
+  call Genotyper.ApplyVQSR {
+    input:
+      filtered_vcf = CombineFilteredSNPsIndels.filtered_vcf,
+      GATK4=Definitions.GATK4,
+      VCFTOOLS=Definitions.VCFTOOLS,
+      ref_fasta=Definitions.GENOMEREF_V37
+
+
+
+  }
+
 
   # copy output files to output directory
   #call Utilities.final_copy {
