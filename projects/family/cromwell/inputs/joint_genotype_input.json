@@ -1,6 +1,6 @@
 {
-  "joint_genotype_workflow.input_file_prefix": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/sample_datasets",
-  "joint_genotype_workflow.input_gvcf_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_gvcf_samples.tsv",
+  "joint_genotype_workflow.input_file_prefix": "/projects/b1049/sameer/LubbeLab/projects/family/data/input/gvcfs",
+  "joint_genotype_workflow.input_gvcf_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_gvcf_files.tsv",
   "joint_genotype_workflow.Definitions.project_tmp_dir": "/projects/b1042/LubbeLab/testtemp",
   "joint_genotype_workflow.output_destination_dir": "/tmp"
 }
