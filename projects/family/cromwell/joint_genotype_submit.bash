@@ -10,8 +10,8 @@ msub -A b1042 \
 -o "${cwd}/logs/outlog.txt" \
 -d "${cwd}" \
 -q genomicslong \
--l walltime=9:00:00:00 \
--l nodes=1:ppn=2 \
+-l walltime=4:00:00:00 \
+-l nodes=1:ppn=1 \
 - <<EOJ
 #!/bin/bash
 

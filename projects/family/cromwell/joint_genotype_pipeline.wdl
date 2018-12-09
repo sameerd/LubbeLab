@@ -87,17 +87,13 @@ workflow joint_genotype_workflow {
       GATK4=Definitions.GATK4,
       VCFTOOLS=Definitions.VCFTOOLS,
       ref_fasta=Definitions.GENOMEREF_V37
-
-
-
   }
 
-
   # copy output files to output directory
-  #call Utilities.final_copy {
-  #  input:
-  #    files = sub_hc.gvcf_file,
-  #    destination = output_destination_dir
-  #}
+  call Utilities.final_copy {
+    input:
+      files = ApplyVQSR.vqsr_output_vcf,
+      destination = output_destination_dir
+  }
 
 }

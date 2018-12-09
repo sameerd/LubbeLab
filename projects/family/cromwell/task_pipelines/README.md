@@ -10,7 +10,7 @@ up with a sorted unique BAM file ready for further processing.
 ### [Haplotype\_Caller.wdl](haplotype_caller.wdl)
 This file takes the sorted deduped BAM file and makes it a gvcf
 
-### [Joint\ Genotype](joint_genotype.wdl)
+### [Joint\_Genotype](joint_genotype.wdl)
 These tasks combine gvcf files and do the filtering / VQSR steps
 
 
