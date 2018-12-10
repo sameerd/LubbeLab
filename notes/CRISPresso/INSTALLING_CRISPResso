@@ -1,0 +1,46 @@
+#following instructions loosely from 
+# https://github.com/lucapinello/CRISPResso/blob/master/Dockerfile
+
+# Load conda 2.7 environment
+module load python/anaconda
+
+# Check that this is version 2.7
+which python
+python --version
+
+# biopython is already installed for us on quest
+# do not reinstall
+#conda install biopython
+
+# make the directory where CRISPResso will live
+INSTALL_DIR=/projects/b1049/genetics_programs/CRISPResso
+mkdir -p "${INSTALL_DIR}"
+
+# not tested
+export CRISPRESSO_DEPENDENCIES_FOLDER="${INSTALL_DIR}"
+
+
+cd "${INSTALL_DIR}"
+
+# Download latest version of master
+wget https://github.com/lucapinello/CRISPResso/archive/master.zip
+unzip master.zip 
+cd CRISPResso-master/
+
+PYTHONPATH=${INSTALL_DIR}/lib/python2.7/site-packages python setup.py install --prefix ${INSTALL_DIR}
+
+# move CRISPResso_dependencies from the home directory to the INSTALL_DIR
+# if CRISPRESSO_DEPENDENCIES_FOLDER is set correctly then no need to do this step
+mv ~/CRISPResso_dependencies "${INSTALL_DIR}"
+# put a sym link to the CRISPResso_dependencies directory for now. 
+cd ~
+ln -s ${INSTALL_DIR}/CRISPResso_dependencies 
+cd ${INSTALL_DIR}
+
+TODO manually
+# 1. Remove edits to the PATH in .bashrc
+# 2. Set the PYTHONPATH and the PATH manually when using CRISPResso
+
+# INSTALLING via singularity
+singularity pull docker://lucapinello/crispresso
+
