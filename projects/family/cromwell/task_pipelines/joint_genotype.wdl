@@ -3,6 +3,23 @@
 # Combine all the gvcf files into one
 task CombineGVCFs {
 
+  # FIXME: We can speed this up with scatter/gather by making it a sub workflow. 
+  # https://gatkforums.broadinstitute.org/gatk/discussion/5469/how-to-speed-up-combinegvcfs-seems-unfeasibly-slow
+  #for chrom in $all_chroms; do
+  #  WKDIR=$(mktemp -d)
+  #  for fn in $file_list; do
+  #    GATK -T SelectVariants -V $fn -o $WKDIR/$chr.$fn -L $chr
+  #    # OR: tabix -h $fn $chr > $WKDIR/$chr.$fn.vcf
+  #  done
+  #
+  #  GATK -T CombineGVCFs -V $WKDIR/$chr.* -o chrom_$chr.vcf.gz
+  #  rm -rf $WKDIR
+  #done
+  #
+  #GATK -T CombineVariants -V chrom_*.vcf.gz -o final_gvcf.vcf.gz \
+  #    --assumeIdenticalSamples -genotypeMergeOptions UNSORTED 
+  
+
   Array[File] input_gvcfs
 
   String GATK4
@@ -25,9 +42,9 @@ task CombineGVCFs {
 
   runtime {
     rt_nodes: 1
-    rt_ppn: 4
-    rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_ppn: 2
+    rt_mem: "16gb"
+    rt_walltime: "02:23:00:00"
   }
 
 } 
@@ -252,7 +269,7 @@ task ApplyVQSR {
 
     #Let's flag variants with too many alleles #I typically use 8 as a cutoff?
     ${VCFTOOLS} \
-      --vcf allsamples.filtered.recal.snpsindels.vcf 
+      --vcf allsamples.filtered.recal.snpsindels.vcf \
       --max-alleles 8 \
       --recode \
       --recode-INFO-all \

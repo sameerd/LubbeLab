@@ -10,7 +10,7 @@ msub -A b1042 \
 -o "${cwd}/logs/outlog.txt" \
 -d "${cwd}" \
 -q genomicslong \
--l walltime=4:00:00:00 \
+-l walltime=9:00:00:00 \
 -l nodes=1:ppn=1 \
 - <<EOJ
 #!/bin/bash
@@ -20,7 +20,7 @@ module load java
 java -Dconfig.file=cromwell/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
      run -i cromwell/inputs/joint_genotype_input.json \
-     cromwell/joint_genotype.wdl
+     cromwell/joint_genotype_pipeline.wdl
 
 EOJ
 
