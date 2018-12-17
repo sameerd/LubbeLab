@@ -273,16 +273,16 @@ task ApplyVQSR {
       --max-alleles 8 \
       --recode \
       --recode-INFO-all \
-      --out allsamples.filtered.recal.snps.indels.allelereduction.vcf
+      --out allsamples.filtered.recal.snps.indels.allelereduction
 
     #Index resulting VCF
     ${GATK4} IndexFeatureFile \
-      -F allsamples.filtered.recal.snps.indels.allelereduction.vcf
+      -F allsamples.filtered.recal.snps.indels.allelereduction.recode.vcf
 
     #Let's flag variant that fail our VQSR filtering, and produce our final VCF file
     ${GATK4} SelectVariants \
       --reference ${ref_fasta} \
-      --variant allsamples.filtered.recal.snps.indels.allelereduction.vcf \
+      --variant allsamples.filtered.recal.snps.indels.allelereduction.recode.vcf \
       -O allsamples.filtered.recal.snp.indels.allelereduction.VQSR.recode.vcf
 
   }
