@@ -101,6 +101,8 @@ WGS_ALL_FILTERED_VCF_REJECTED="${WORKINGDIR}/wgs_all_filtered_rejected.vcf"
 WGS_ANNOVAR_INPUT="${WORKINGDIR}/wgs_annovar.avinput"
 WGS_ANNOVAR_OUTPUT="${ANNOVAR_INPUT}.hg19_multianno.txt"
 
+WGS_BB_PIPELINE_VCF="${INPUTDIR}/NM_SS400_WGS.processed.vcf"
+
 WGS_FAM2_VCF="${WORKINGDIR}/wgs_family2_hg19.vcf"
 
 SNP_CHIP_INPUT="${WORKINGDIR}"/CytoSNP-850Kv1-2_iScan_B1.csv

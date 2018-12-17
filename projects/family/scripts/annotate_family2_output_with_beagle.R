@@ -43,7 +43,9 @@ GetBeagleLod("chr10", 8000000,
 
 beagle.annotated.hits <- hits %>%
   rowwise() %>%
-  mutate(Beagle_lod=GetBeagleLod(Chr, Start, "SS4009021", "SS4009030", beagle.db)) %>%
+  mutate(beagle_lod_21_30=GetBeagleLod(Chr, Start, "SS4009021", "SS4009030", beagle.db)) %>%
+  mutate(beagle_lod_21_23=GetBeagleLod(Chr, Start, "SS4009021", "SS4009023", beagle.db)) %>%
+  mutate(beagle_lod_23_30=GetBeagleLod(Chr, Start, "SS4009023", "SS4009030", beagle.db)) %>%
   identity
 
 write.table(beagle.annotated.hits %>% as.data.frame, 
