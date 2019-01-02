@@ -22,8 +22,8 @@ module load bcftools
 module load current
 
 # create list of files to merge 
-ls output/*.vcf.gz > merge.list
+ls data/output/*.vcf.gz > merge.list
 
-bcftools merge --file-list merge.list > merged.vcf
+bcftools merge --file-list merge.list > data/input/NUgenomes/merged.vcf
 
 EOJ

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Sort the vcf files with gatk4
+
 cwd=`pwd`
 queue=genomics
 allocation=b1042
@@ -26,6 +28,6 @@ module load gatk/4.0.4
 #parallel -a vcflist.txt gatk --java-options "-Xmx4G" SortVcf --INPUT {} --OUTPUT output/{/.}.sorted.vcf
 
 # read directly from file
-parallel gatk --java-options "-Xmx4G" SortVcf --INPUT {} --OUTPUT output/{/.}.sorted.vcf ::: raw/*/*.vcf
+parallel gatk --java-options "-Xmx4G" SortVcf --INPUT {} --OUTPUT data/output/{/.}.sorted.vcf ::: data/input/NUgenomes/raw/*/*.vcf
 
 EOJ

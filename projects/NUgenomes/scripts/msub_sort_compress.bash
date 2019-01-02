@@ -22,7 +22,7 @@ module load parallel
 module load vcftools/current
 module load samtools
 
-cd output
+cd data/output
 
 parallel bgzip {} ::: *.vcf
 parallel tabix -p vcf {} ::: *.vcf.gz
