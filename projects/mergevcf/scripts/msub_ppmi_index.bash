@@ -3,7 +3,7 @@
 cwd=`pwd`
 queue=genomics
 allocation=b1042
-walltime="02:00:00:00"
+walltime="05:00:00"
 #walltime="20:00"
 
 msub \
@@ -23,7 +23,7 @@ module load samtools
 
 cd data/output
 
-parallel tabix -p vcf {} ::: *.vcf.gz
+parallel tabix {} ::: *.bcf
 
 
 EOJ

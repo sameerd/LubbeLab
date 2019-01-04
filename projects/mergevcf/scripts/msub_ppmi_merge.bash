@@ -19,11 +19,10 @@ msub \
 #!/bin/bash
 
 module load bcftools
-module load current
 
 # create list of files to merge 
-ls data/output/*.vcf.gz > merge.list
+ls data/output/*.bcf > data/ppmi_merge.list
 
-bcftools merge --file-list merge.list > data/input/ppmi/wgs_merged.vcf
+bcftools merge --file-list data/ppmi_merge.list > data/input/ppmi/wgs_merged.vcf
 
 EOJ
