@@ -1,4 +1,6 @@
 
-clean:
-	rm -f data/output/*
+cleanlogs:
 	rm -f logs/*
+
+clean: cleanlogs
+	rm -f data/output/*

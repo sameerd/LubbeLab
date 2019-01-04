@@ -4,7 +4,6 @@ cwd=`pwd`
 queue=genomicslong
 allocation=b1042
 walltime="06:00:00:00"
-#walltime="20:00"
 
 msub \
   -e "${cwd}/logs/errlog.txt" \
@@ -12,7 +11,8 @@ msub \
   -d "${cwd}" \
   -q ${queue} \
   -l walltime=${walltime} \
-  -l nodes=1:ppn=2 \
+  -l nodes=1:ppn=6 \
+  -l mem=30gb \
   -A ${allocation} \
   - <<EOJ
 
