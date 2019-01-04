@@ -1,0 +1,4 @@
+##INFO=<ID=dbSNP138_ID,Number=1,Type=String,Description="dbSNP138 ID">
+##INFO=<ID=dbSNP142_ID,Number=1,Type=String,Description="dbSNP142 ID">
+##INFO=<ID=1000G_phase1_release_v3_AF,Number=1,Type=Float,Description="Some kind of 1000G AF number">
+##INFO=<ID=ESP6500_AF,Number=1,Type=Float,Description="Some kind of ES6500 AF number">

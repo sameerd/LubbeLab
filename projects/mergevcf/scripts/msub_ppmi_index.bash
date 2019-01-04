@@ -19,7 +19,6 @@ msub \
 #!/bin/bash
 
 module load parallel
-module load vcftools/current
 module load samtools
 
 cd data/output
