@@ -11,9 +11,9 @@ module load java
 
 ${JAVA} -jar ${PICARD} LiftoverVcf \
     I="${WGS_BB_PIPELINE_VCF}"\
-    O="${PRE_GEN_VCF_SORTED}" \
+    O="${ALL_VCF_SORTED}" \
     CHAIN="${B37_to_HG19_CHAIN}" \
-    REJECT="${PRE_GEN_VCF_REJECTED}" \
+    REJECT="${ALL_FILTERED_VCF_REJECTED}" \
     R="${GENOMEREF}"
 
 
