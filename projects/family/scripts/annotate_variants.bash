@@ -5,6 +5,12 @@ source ./scripts/project_variables.bash
 
 echo ${OUTPUTDIR}
 
+
+# Take the header information from the vcf file and 
+# put it in a separate file. This is the list of columns
+# in "Otherinfo"
+grep -m 1 "^#C" "${ALL_VCF_SORTED_QC}" > "${ANNOVAR_HEADERS}"
+
 # Annotate the variants file
 
 ${ANNOVAR_CONVERT} -format vcf4 \
@@ -12,6 +18,7 @@ ${ANNOVAR_CONVERT} -format vcf4 \
         -allsample -withfreq \
         -includeinfo \
         -outfile "${ANNOVAR_INPUT}"
+
 
 # Convert to Annovar Table
 ${ANNOVAR_TABLE} "${ANNOVAR_INPUT}" \

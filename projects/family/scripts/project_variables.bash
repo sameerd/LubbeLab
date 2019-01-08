@@ -35,6 +35,7 @@ MERGED_VCF="${WORKINGDIR}/merged.vcf"
 
 ANNOVAR_INPUT="${WORKINGDIR}/annovar.avinput"
 ANNOVAR_OUTPUT="${ANNOVAR_INPUT}.hg19_multianno.txt"
+ANNOVAR_HEADERS="${WORKINGDIR}/otherinfo.headers.txt"
 
 BEAGLE_OUTPUT_DIR="${WORKINGDIR}/beagle_output"
 
