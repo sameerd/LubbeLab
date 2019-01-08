@@ -8,18 +8,16 @@ echo ${OUTPUTDIR}
 # Annotate the variants file
 
 ${ANNOVAR_CONVERT} -format vcf4 \
-        "${MERGED_VCF}" \
+        "${ALL_VCF_SORTED_QC}" \
         -allsample -withfreq \
         -includeinfo \
         -outfile "${ANNOVAR_INPUT}"
 
-
-# -protocol refGene,genomicSuperDups,gnomad_genome,esp6500siv2_all,cadd13gt20,dbnsfp33a,cg69,exac03,1000g2015aug_all,avsnp150,clinvar_20170905 \
-# -operation g,r,f,f,f,f,f,f,f,f,f \
-
 # Convert to Annovar Table
 ${ANNOVAR_TABLE} "${ANNOVAR_INPUT}" \
-        "${ANNOVARDIR}/humandb/" -buildver hg19 \
-        -protocol refGene,genomicSuperDups,gnomad_genome,gnomad_exome,cadd13gt10 \
-        -operation g,r,f,f,f \
-        -remove -otherinfo -nastring .
+        "${ANNOVARDIR}/humandb/" -otherinfo -buildver hg19 \
+        -protocol wgEncodeRegTfbsClusteredV3,tfbsConsSites,wgEncodeRegDnaseClusteredV3,RegulomeDB_dbSNP141,refGene,genomicSuperDups,esp6500siv2_all,gnomad_exome,gnomad_genome,dbnsfp33a,cg69,exac03,1000g2015aug_all,clinvar_20170905,avsnp150,cadd13gt10 \
+        -operation r,r,r,r,g,r,f,f,f,f,f,f,f,f,f,f \
+        -remove -nastring . \
+        -thread 20
+

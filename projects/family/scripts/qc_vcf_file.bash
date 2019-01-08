@@ -15,13 +15,13 @@ MIN_GQ=20
 MIN_DP=5
 
 # calculate Ts/Tv ratio
-$VCFTOOLS --vcf "${PRE_GEN_VCF_SORTED}" \
+$VCFTOOLS --vcf "${ALL_VCF_SORTED}" \
         --TsTv-summary \
         --out "${WORKINGDIR}/input_noQC" \
         --temp /tmp
 
 # Filter Raw VCF to get only PASS variants
-$VCFTOOLS --vcf "${PRE_GEN_VCF_SORTED}" \
+$VCFTOOLS --vcf "${ALL_VCF_SORTED}" \
     --remove-filtered-all \
     --recode \
     --recode-INFO-all \
@@ -67,7 +67,7 @@ $VCFTOOLS --vcf "${WORKINGDIR}/step2_${VCF_BASE_FILE}_2.recode.vcf"  \
         --temp /tmp
 
 cp "${WORKINGDIR}/step2_${VCF_BASE_FILE}_2.recode.vcf" \
-  "${PRE_GEN_VCF_SORTED_QC}"
+  "${ALL_VCF_SORTED_QC}"
 
 
 

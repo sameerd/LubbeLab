@@ -4,6 +4,7 @@
 allocation=""
 queue=""
 walltime=""
+ppn=2
 
 show_help () 
 {
@@ -17,6 +18,7 @@ walltime based on the queue variable.
 Optional arguments
 -A   : allocation (default: b1042)
 -q   : queue (default: short)
+-p   : processors per node (default: 2)
 -w   : walltime (default: based on queue)
 HEREDOC
 
@@ -26,7 +28,7 @@ set -x
 
 OPTIND=1 # Reset in case getopts has been used previously in the shell.
 
-while getopts "h?A:q:w:" opt; do
+while getopts "h?A:q:w:p:" opt; do
     case "$opt" in
     h|\?)
         show_help
@@ -35,6 +37,8 @@ while getopts "h?A:q:w:" opt; do
     A)  allocation=$OPTARG
         ;;
     q)  queue=$OPTARG
+        ;;
+    p)  ppn=$OPTARG
         ;;
     w)  walltime=$OPTARG
         ;;
@@ -81,7 +85,7 @@ msub \
   -d "${cwd}" \
   -q ${queue} \
   -l walltime=${walltime} \
-  -l nodes=1:ppn=2 \
+  -l nodes=1:ppn=${ppn} \
   -A ${allocation} \
   "$1"
 
