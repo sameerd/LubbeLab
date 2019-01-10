@@ -46,12 +46,19 @@ output_headers_indices = [all_headers.index(o) for o in output_headers]
 # and false if a line is to be rejected
 # line is a list of strings in an annotated line
 
-def maf_filter_functor(maf_cutoff):
-  idx = all_headers.index("gnomAD_exome_ALL")
+def maf_filter_functor(column_name, maf_cutoff):
+  idx = all_headers.index(column_name)
   def maf_filter(line):
     val = line[idx]
     return (val == ".") or (float(val) <= maf_cutoff)
   return maf_filter
+
+def cadd_filter_functor(cutoff):
+  idx = all_headers.index("CADD13_PHRED")
+  def cadd_filter(line):
+    val = line[idx]
+    return (val == ".") or (float(val) >= cutoff)
+  return cadd_filter
 
 def regulomedb_filter_functor():
   idx = all_headers.index("RegulomeDB_dbSNP141_Score")
@@ -102,7 +109,9 @@ def exonic_and_regulatory_filter_functor():
 # false we stop looking at the next filters and move onto the next line
 # We should put the filters that eliminate the most lines first
 all_filters = [ 
-    maf_filter_functor(0.05),
+    maf_filter_functor("gnomAD_genome_ALL", 0.05),
+    maf_filter_functor("gnomAD_exome_ALL", 0.05),
+    cadd_filter_functor(12.37),
     superdups_filter_functor(),
     regulomedb_filter_functor(),
     exonic_and_regulatory_filter_functor()
