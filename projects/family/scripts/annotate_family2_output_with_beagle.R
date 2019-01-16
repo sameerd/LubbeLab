@@ -7,7 +7,7 @@ colnames(x) <- c("sample1", "hapindex1", "sample2", "hapindex2", "chr",
                  "startpos", "endpos", "lod")
 # save the output in a compatible db
 beagle.db <- x %>%  
-        #mutate(chr = paste0("chr", chr)) %>%
+        mutate(chr = paste0("", chr)) %>%
         identity
 
 # read in the hits file

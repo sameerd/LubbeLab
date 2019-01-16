@@ -33,7 +33,10 @@ x_small <- x %>%
   # Make sure we only have bi-allelic variables
   filter_at(sample.names, all_vars(. %in% c("0/0", "0/1", "1/0", "1/1"))) %>%
   # drop all samples except the ones in our family
-  select(-samples.to.drop)
+  select(-samples.to.drop) %>%
+  # change 1/0 to 0/1. Since the genotypes are unphased this is okay
+  mutate_at(sample.names, funs(recode(., `1/0`="0/1")))
+
 
 #x_small %>% compact_viewer() %>% head()
 

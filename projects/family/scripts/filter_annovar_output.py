@@ -28,7 +28,7 @@ sample_headers = all_headers[(all_headers.index("FORMAT")+1):]
 output_headers = ['#CHROM', 'POS', 'ID', 'REF', 'ALT',
         'wgEncodeRegTfbsClusteredV3', 'tfbsConsSites',
         'wgEncodeRegDnaseClusteredV3', 'RegulomeDB_dbSNP141_Score',
-        'Func.refGene', 'Gene.refGene', 'GeneDetail.refGene',
+        'gerp++gt2', 'Func.refGene', 'Gene.refGene', 'GeneDetail.refGene',
         'ExonicFunc.refGene', 'AAChange.refGene', 'genomicSuperDups',
         'esp6500siv2_all', 'gnomAD_exome_ALL', 'gnomAD_genome_ALL',
         'SIFT_score', 'Polyphen2_HDIV_score', 'CADD13_RawScore',
@@ -81,6 +81,7 @@ def exonic_and_regulatory_filter_functor():
   tbfs_clustered_idx = all_headers.index('wgEncodeRegTfbsClusteredV3')
   tbfs_cons_idx = all_headers.index('tfbsConsSites') 
   dnase_clustered_idx = all_headers.index('wgEncodeRegDnaseClusteredV3')  
+  gerp_idx = all_headers.index('gerp++gt2')
   def exonic_and_regulatory_filter(line):
     func_refgene = line[func_refgene_idx]
     exonicfunc_refgene = line[exonicfunc_refgene_idx]
@@ -98,9 +99,11 @@ def exonic_and_regulatory_filter_functor():
       tbfs_clustered = line[tbfs_clustered_idx]
       tbfs_cons = line[tbfs_cons_idx]
       dnase_clustered = line[dnase_clustered_idx]
+      gerp_val = line[gerp_idx] 
       # We keep the line if there is something in tbfs_clustered or tbfs_cons
       # and dnase_clustered is non empty
-      return ((tbfs_clustered != "." or tbfs_cons != ".") and (dnase_clustered != "."))
+      return (((tbfs_clustered != "." or tbfs_cons != ".") and (dnase_clustered != "."))
+              and (gerp_val != ".") and (float(gerp_val) > 2.0))
   return (exonic_and_regulatory_filter)
 
 
