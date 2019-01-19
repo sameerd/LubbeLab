@@ -1,7 +1,8 @@
 clean:
 	rm -f breakdancer* chr.?.* chr.??.* contigs delly* lumpy_exclude.bed *.svp \
 			output.cnv* output.root* cnvnator.* survivor* lumpy.?.vcf lumpy.??.vcf \
-			msub.sh.o*
+			msub.sh.o* *.delly.deletion.vcf lumpy.vcf lumpy.gff \
+			diploidSV.vcf breakseq.vcf
 	rm -rf breakseq2 manta
 
 deepclean: clean
@@ -10,7 +11,7 @@ deepclean: clean
 
 
 run:
-	singularity exec \
+	LANG= singularity exec \
 		-B `pwd`/input:/home/dnanexus/in:rw \
 		-B `pwd`/output:/home/dnanexus/out:rw \
 		parliament2_0.1.9.sif   \
