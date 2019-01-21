@@ -8,31 +8,17 @@ clean:
 deepclean: clean
 	rm -rf output/*
 
-
+pull:
+	rm -f parliament2_latest.sif
+	singularity pull shub://sameerd/parliament2
 
 run:
-	LANG= singularity exec \
+	LANG= singularity run \
 		-B `pwd`/input:/home/dnanexus/in:rw \
 		-B `pwd`/output:/home/dnanexus/out:rw \
-		parliament2_0.1.9.sif   \
-		python parliament2.py \
+		parliament2_latest.sif   \
 			--bam SS4009013_sorted_unique.bam \
 			--bai SS4009013_sorted_unique.bam.bai \
 			-r human_g1k_v37.fasta \
 			--fai human_g1k_v37.fasta.fai 
 
-#run:
-#	singularity exec \
-#		-B `pwd`/input:/home/dnanexus/in:rw \
-#		-B `pwd`/output:/home/dnanexus/out:rw \
-#		parliament2_0.1.9.sif   \
-#		python parliament2.py \
-#			--bam SS4009013_sorted_unique.bam \
-#			--bai SS4009013_sorted_unique.bam.bai \
-#			-r human_g1k_v37.fasta \
-#			--fai human_g1k_v37.fasta.fai \
-#			--breakdancer --cnvnator --manta \
-#			--breakseq --lumpy \
-#			--delly_deletion --delly_insertion \
-#			--delly_inversion --delly_duplication \
-#			--genotype 
