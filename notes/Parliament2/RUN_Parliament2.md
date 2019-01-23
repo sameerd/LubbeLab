@@ -11,13 +11,6 @@ This code needs a few modifications before it can be run via Singularity.
 
 #### Preparing a dataset to run
 
-1. Prepare a directory structure like the one below
-
----
-**WARNING** Almost everything in this directory and its sub directories will
-end up being modified in some way so it is best to copy files over 
----
-
 ```
 .
 ├── parliament2_latest.sif
@@ -28,6 +21,8 @@ end up being modified in some way so it is best to copy files over
 │   └── human_g1k_v37.fasta.fai
 └── output/
 ```
+
+*WARNING:* Almost everything in this directory and its sub directories will end up being modified in some way so it is best to copy files over.
 
 ```shell
 ## commands to create a structure like the one above
@@ -48,7 +43,7 @@ module load singularity
 singularity pull shub://sameerd/parliament2
 ```
 
-2. Run Singularity container
+#### Run Singularity container
 
 ```shell
 #!/bin/bash
@@ -76,9 +71,9 @@ LANG= singularity run \
 		--cnvnator --lumpy --genotype 
 ```
 
-
-3. The directory `work/output/` should have all the results in it. 
-
-4. (Optional). The [README.md](https://github.com/dnanexus/parliament2/blob/master/README.md) file has more options at the end that you can use. 
+#### Output and Options
+The directory `work/output/` should have all the results in it. The
+[README.md](https://github.com/dnanexus/parliament2/blob/master/README.md) file
+has more options at the end that you can use. 
 
 
