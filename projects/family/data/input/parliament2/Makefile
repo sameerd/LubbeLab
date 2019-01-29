@@ -13,7 +13,8 @@ deepclean: clean
 
 pull:
 	rm -f parliament2_latest.sif
-	singularity pull shub://sameerd/parliament2
+	singularity pull docker://sameerdcosta/parliament2
+	#singularity pull shub://sameerd/parliament2
 
 run:
 	LANG= singularity run \
@@ -25,6 +26,6 @@ run:
 			-r human_g1k_v37.fasta \
 			--fai human_g1k_v37.fasta.fai \
 			--breakdancer --breakseq  --manta \
-			--cnvnator --lumpy --genotype \
-		    --svviz --svviz_only_validated_candidates
+			--cnvnator --lumpy --genotype 
+		    # \ --svviz --svviz_only_validated_candidates
 

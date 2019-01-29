@@ -40,7 +40,7 @@ cp "${sample_name}.bam" "${sample_name}.bam.bai" work/inputs
 # download the parliament2_latest.sif (Singularity container)
 cd work
 module load singularity
-singularity pull shub://sameerd/parliament2
+singularity pull docker://sameerdcosta/parliament2
 ```
 
 #### Run Singularity container
