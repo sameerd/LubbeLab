@@ -22,7 +22,7 @@ task parliament2 {
 
   # here we also need to strip out the extension to figure out
   # what the output file will be named
-  String ID = basename(input_file_bam_index, ".bam")
+  String ID = basename(ref_basename, ".bam")
 
   command {
       mkdir input output
