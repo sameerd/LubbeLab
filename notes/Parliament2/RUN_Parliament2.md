@@ -1,12 +1,13 @@
-### Running Parliament2 on quest
+### Running Parliament2 on Quest
 
 [Parliament 2](https://github.com/dnanexus/parliament2) is a docker container
 that runs programs to generate Structural Variant calls with the following
 callers: Breakdancer, Breakseq2, CNVnator, Delly2, Manta, and Lumpy. 
 
-This code needs a few modifications before it can be run via Singularity.
+This code needs a few modifications before it can be run via Singularity on Quest.
 
 * Code modifications [https://github.com/sameerd/parliament2](https://github.com/sameerd/parliament2)
+* Docker Container (Singularity compatible) [https://hub.docker.com/r/sameerdcosta/parliament2](https://hub.docker.com/r/sameerdcosta/parliament2)
 * Singularity Container [https://www.singularity-hub.org/collections/2124](https://www.singularity-hub.org/collections/2124)
 
 #### Preparing a dataset to run
@@ -37,13 +38,13 @@ cp /projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta.fai work/inputs
 sample_name="sample"
 cp "${sample_name}.bam" "${sample_name}.bam.bai" work/inputs
 
-# download the parliament2_latest.sif (Singularity container)
+# download the parliament2_latest.sif (Docker compatible container)
 cd work
 module load singularity
 singularity pull docker://sameerdcosta/parliament2
 ```
 
-#### Run Singularity container
+#### Run Docker container via Singularity
 
 ```shell
 #!/bin/bash
@@ -67,8 +68,9 @@ LANG= singularity run \
 		--bai sample.bam.bai \
 		-r human_g1k_v37.fasta \
 		--fai human_g1k_v37.fasta.fai \
-		--breakdancer --breakseq  --manta \
-		--cnvnator --lumpy --genotype 
+        --breakdancer --delly_deletion \
+        --breakseq  --manta \
+        --cnvnator --lumpy --genotype 
 ```
 
 #### Output and Options
