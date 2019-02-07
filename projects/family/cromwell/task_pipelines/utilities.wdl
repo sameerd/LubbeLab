@@ -4,6 +4,12 @@
 task fetch_resources {
   String progams_dir = "/projects/b1049/genetics_programs"
   String refs_dir = "/projects/b1049/genetics_refs"
+ 
+  String? human_ref = "human_g1k_v37.fasta"
+  # change to using hs37d5.fa in inputs.json
+
+  # remove an extension that is .fa or .fasta or something like that
+  String human_ref_basename = sub(basename(human_ref), "\\.fa[a-zA-Z0-9]+$", "")
 
   String project_tmp_dir = "/projects/b1042/LubbeLab/testtemp"
   String picard_tmp_dir = "--TMP_DIR=${project_tmp_dir}"
@@ -24,6 +30,7 @@ task fetch_resources {
     String VCFTOOLS = "${progams_dir}/vcftools/bin/vcftools"
     String BWA = "${progams_dir}/bwa-0.7.12/bwa"
     String SAMTOOLS = "${progams_dir}/samtools/samtools"
+    String PARLIAMENT2 = "${progams_dir}/parliament2/parliament2_latest.sif"
 
     # ReferenceFiles
     # If the Ref's below are coded as `Files` instead of `Strings` then
@@ -33,10 +40,10 @@ task fetch_resources {
     # them below.  A shortcut (bad!) is to name them as strings so that we
     # actually reference the original locations and the other files are
     # automatically picked up from there. 
-    String GENOMEREF_V37 = "${refs_dir}/fasta/human_g1k_v37.fasta"
-    String GENOMEREF_V37_INDEX_FAI = "${refs_dir}/fasta/human_g1k_v37.fasta.fai"
-    String GENOMEREF_V37_DICT = "${refs_dir}/fasta/human_g1k_v37.dict"
-    String GENOMEREF_V37_INDEX = "${refs_dir}/fasta/human_g1k_v37.fastai"
+    String GENOMEREF_V37 = "${refs_dir}/fasta/${human_ref}"
+    String GENOMEREF_V37_INDEX = "${GENOMEREF_V37}.fai"
+    String GENOMEREF_V37_DICT = "${refs_dir}/fasta/${human_ref_basename}.dict"
+
     String GENOMEREF_V37_2BIT = "${refs_dir}/fasta/human_g1k_v37.2bit"
 
     # Additional Arguments
