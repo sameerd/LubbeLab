@@ -8,7 +8,7 @@ msub -A b1042 \
   -e "${cwd}/logs/errlog_parliament.txt" \
   -o "${cwd}/logs/outlog_parliament.txt" \
   -d "${cwd}" \
-  -q short \
+  -q genomics \
   -l mem=4gb \
   -l walltime=48:00:00 \
   -l nodes=1:ppn=1 \
