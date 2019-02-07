@@ -2,7 +2,7 @@
   "parliament_workflow.Definitions.human_ref": "hs37d5.fa",
   "parliament_workflow.parliament2.core_count": 24,
   "parliament_workflow.parliament2.task_mem_str": "118gb",
-  "parliament_workflow.input_bam_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_bam_files.tsv",
+  "parliament_workflow.input_bam_list_file": "/projects/b1049/sameer/LubbeLab/projects/family/cromwell/inputs/NM_decoy_bam_files.tsv",
   "parliament_workflow.output_destination_dir" : "/projects/b1042/LubbeLab/sameer/tmp_output",
   "parliament_workflow.input_file_prefix" : "/projects/b1049/sameer/LubbeLab/projects/family/data/input/bams_decoy"
 }

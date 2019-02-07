@@ -50,11 +50,28 @@ workflow parliament_workflow {
     }
   }
 
+  # Merge all the output files into one array
+  Array[File] output_vcfs = flatten(parliament2.vcfs) 
+  Array[File] sv_caller_results = flatten(parliament2.sv_caller_results) 
+  Array[File] svtyped_vcfs = flatten(parliament2.svtyped_vcfs) 
+
   # copy output files to output directory
-  call Utilities.final_copy {
+  call Utilities.final_copy as copy_output_vcfs {
     input:
-      files = parliament2.output_vcf,
+      files = output_vcfs,
       destination = output_destination_dir
   }
+  call Utilities.final_copy as copy_sv_caller_results {
+    input:
+      files = sv_caller_results,
+      destination = output_destination_dir + "/sv_caller_results"
+  }
+  call Utilities.final_copy as copy_svtyped_vcfs {
+    input:
+      files = svtyped_vcfs,
+      destination = output_destination_dir + "/svtyped_vcfs"
+  }
+
+
 
 }

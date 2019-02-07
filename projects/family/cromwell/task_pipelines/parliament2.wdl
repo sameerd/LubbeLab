@@ -34,6 +34,7 @@ task parliament2 {
          "${input_file_bam}" \
          "${input_file_bam_index}" input/
 
+
       LANG= singularity run \
         -B `pwd`/input:/home/dnanexus/in:rw \
         -B `pwd`/output:/home/dnanexus/out:rw \
@@ -42,12 +43,16 @@ task parliament2 {
           --bai "${input_file_bam_index_basename}" \
           -r "${ref_basename}" \
           --fai "${ref_index_basename}" \
-          --breakdancer --breakseq  --manta \
+          --breakdancer --delly_deletion \
+          --breakseq  --manta \
           --cnvnator --lumpy --genotype 
   }
 
   output { 
-      File output_vcf = "output/${ID}.combined.genotyped.vcf"
+    File output_vcf = "output/${ID}.combined.genotyped.vcf"
+    Array[File] vcfs = glob("output/*.vcf")
+    Array[File] sv_caller_results = glob("output/sv_caller_results/*")
+    Array[File] svtyped_vcfs = glob("output/svtyped_vcfs/*.vcf")
   }
 
   runtime {
