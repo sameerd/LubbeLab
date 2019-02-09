@@ -18,8 +18,8 @@ This code needs a few modifications before it can be run via Singularity on Ques
 ├── input/
 │   ├── sample.bam
 │   ├── sample.bai
-│   ├── human_g1k_v37.fasta
-│   └── human_g1k_v37.fasta.fai
+│   ├── hs37d5.fa
+│   └── hs37d5.fa.fai
 └── output/
 ```
 
@@ -31,8 +31,8 @@ This code needs a few modifications before it can be run via Singularity on Ques
 mkdir -p work/inputs work/outputs
 
 # copy over reference files and zip them
-cp /projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta work/inputs
-cp /projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta.fai work/inputs
+cp /projects/b1049/genetics_refs/fasta/hs37d5.fa work/inputs
+cp /projects/b1049/genetics_refs/fasta/hs37d5.fa.fai work/inputs
 
 # copy over input bam's and indices
 sample_name="sample"
@@ -66,8 +66,8 @@ LANG= singularity run \
 	parliament2_latest.sif   \
     	--bam sample.bam \
 		--bai sample.bam.bai \
-		-r human_g1k_v37.fasta \
-		--fai human_g1k_v37.fasta.fai \
+		-r hs37d5.fa \
+		--fai hs37d5.fa.fai \
         --breakdancer --delly_deletion \
         --breakseq  --manta \
         --cnvnator --lumpy --genotype 
