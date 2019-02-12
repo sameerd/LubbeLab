@@ -7,8 +7,8 @@ cwd=`pwd`
 cromwell_dir="../../../cromwell"
 
 msub -A b1042 \
-  -e "${cwd}/logs/errlog.txt" \
-  -o "${cwd}/logs/outlog.txt" \
+  -e "${cwd}/errlog.txt" \
+  -o "${cwd}/outlog.txt" \
   -d "${cwd}" \
   -q genomics \
   -l mem=4gb \
