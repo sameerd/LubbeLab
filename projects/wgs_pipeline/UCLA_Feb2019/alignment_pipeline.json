@@ -1,0 +1,5 @@
+{
+  "alignment_workflow.input_samples_file" : "/projects/b1049/sameer/LubbeLab/projects/wgs_pipeline/UCLA_Feb2019/samples_fastq.tsv", 
+  "alignment_workflow.output_destination_dir" : "/projects/b1042/LubbeLab/sameer/tmp_output",
+  "alignment_workflow.input_file_prefix" : "/projects/b1049/genomes/jan_2018/UCLA_Feb2019"
+}
