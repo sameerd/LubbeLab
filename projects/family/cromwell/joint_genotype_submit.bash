@@ -4,6 +4,7 @@ set -x
 
 # assuming this script gets run from the scripts directory
 cwd=`pwd`
+cromwell_dir="../../cromwell"
 
 msub -A b1042 \
 -e "${cwd}/logs/errlog.txt" \
@@ -17,10 +18,10 @@ msub -A b1042 \
 
 module load java
 
-java -Dconfig.file=cromwell/cromwell_config.conf \
+java -Dconfig.file=$cromwell_dir/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
      run -i cromwell/inputs/joint_genotype_input.json \
-     cromwell/joint_genotype_pipeline.wdl
+     $cromwell_dir/joint_genotype_pipeline.wdl
 
 EOJ
 

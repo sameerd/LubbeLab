@@ -5,6 +5,8 @@ set -x
 # assuming this script gets run from the scripts directory
 cwd=`pwd`
 
+cromwell_dir="../../cromwell"
+
 msub -A b1042 \
 -e "${cwd}/logs/errlog.txt" \
 -o "${cwd}/logs/outlog.txt" \
@@ -17,10 +19,10 @@ msub -A b1042 \
 
 module load java
 
-java -Dconfig.file=cromwell/cromwell_config.conf \
+java -Dconfig.file=$cromwell_dir/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
      run -i cromwell/inputs/beagle_phase_input.json  \
-     cromwell/beagle_phase.wdl
+     $cromwell_dir/beagle_phase.wdl
 
 EOJ
 

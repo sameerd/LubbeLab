@@ -4,6 +4,8 @@ set -x
 
 cwd=`pwd`
 
+cromwell_dir="../../cromwell"
+
 # to use spark version
 spark="_spark"
 # to use non spark version
@@ -21,10 +23,10 @@ msub -A b1042 \
 
 module load java
 
-java -Dconfig.file=cromwell/cromwell_config.conf \
+java -Dconfig.file=$cromwell_dir/cromwell_config.conf \
      -jar /projects/b1049/genetics_programs/cromwell/cromwell-35.jar \
      run -i cromwell/inputs/haplotype_caller${spark}.json \
-     cromwell/haplotype_caller${spark}_pipeline.wdl
+     $cromwell_dir/haplotype_caller${spark}_pipeline.wdl
 
 EOJ
 
