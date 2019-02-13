@@ -1,0 +1,7 @@
+{
+  "haplotype_caller_workflow.input_bam_list_file": "/projects/b1049/sameer/LubbeLab/projects/wgs_pipeline/UCLA_Feb2019/bam_files.tsv",
+  "haplotype_caller_workflow.output_destination_dir" : "/projects/b1042/LubbeLab/sameer/tmp_output",
+  "haplotype_caller_workflow.input_file_prefix" : "/projects/b1042/LubbeLab/sameer/tmp_output",
+  "haplotype_caller_workflow.sub_hc.chromosomes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X", "Y", "MT"]
+}
+
