@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(fuzzyjoin)
+library(ggplot2)
 
 # Pull in the Structural variants with some basic filtering
 filtering.script <- '
@@ -48,11 +49,59 @@ results %>% head
 
 benchmark <- read.table("data/NA12878/NA12878_benchmark_no_chr.txt", 
                     	header=TRUE, sep="\t") %>%
-  transmute(chromosome=paste0("chr", Chromosome), 
+  transmute(CHROM=paste0("chr", Chromosome), 
             POS=as.integer(Start.position), END=as.integer(End.position) )
 
 benchmark %>% head
 
+p.reciprocal.overlap <- function(astart, aend, bstart, bend, p=0.5) {
 
+  if (!is.na(astart) && !is.na(aend) && !is.na(bstart) && !is.na(bend)) {
+    # From https://rdrr.io/bioc/chromswitch/man/pReciprocalOverlap.html
+    a <- IRanges::IRanges(astart, aend)
+    b <- IRanges::IRanges(bstart, bend)
+  
+    # look for an overlap of size p times the largest width of the two ranges
+    minoverlap=max(p*IRanges::width(a), p*IRanges::width(b))  
+    IRanges::overlapsAny(a, b, minoverlap=minoverlap) 
+  } else { # one of input elements was NA
+    FALSE
+  }
+}
+
+# p.reciprocal.overlap(1, 10, 5, 15)
+# p.reciprocal.overlap(1, 10, 5, NA)
+
+
+benchmark.results <- fuzzyjoin::genome_join(benchmark, results, 
+                                            by=c("CHROM", "POS", "END"),
+                                            mode="left") %>%
+  mutate(hit= purrr::pmap(list(astart=POS.x, aend=END.x,
+                               bstart=POS.y, bend=END.y, p=0.5), 
+                               p.reciprocal.overlap)) %>%
+  tidyr::unnest() %>%
+  # group by each SV in the benchmark and select only one result
+  # preferably a true result with the highest support if one exists
+  group_by(CHROM.x, POS.x, END.x) %>%
+  mutate(hit.rank = rank(order(hit, SUPP), ties.method="first")) %>%
+  filter(hit.rank == max(hit.rank)) %>%
+  select(-hit.rank) %>%
+  as.data.frame() 
+
+benchmark.results %>% 
+        nrow()
+
+
+table(benchmark.results$hit, benchmark.results$SUPP)
+
+#> table(benchmark.results$hit, benchmark.results$SUPP)                          
+#         1   2   3   4   5                                                     
+# FALSE   6   0   0   0   1                                                     
+# TRUE   10  71 170 214 113  
+
+
+
+
+ 
 
 
