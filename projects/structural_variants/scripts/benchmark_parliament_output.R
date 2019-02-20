@@ -92,13 +92,18 @@ benchmark.results %>%
         nrow()
 
 
-table(benchmark.results$hit, benchmark.results$SUPP)
+table(benchmark.results$hit, benchmark.results$SUPP, useNA="ifany")
 
-#> table(benchmark.results$hit, benchmark.results$SUPP)                          
-#         1   2   3   4   5                                                     
-# FALSE   6   0   0   0   1                                                     
-# TRUE   10  71 170 214 113  
+table(benchmark.results$CALLERS, useNA="ifany")
 
+benchmark.results %>% select(hit, SUPP) %>%
+group_by(SUPP, hit) %>% summarize(n=n()) %>%
+  ggplot(aes(x=SUPP, y=n, fill=hit, label=n)) + 
+    geom_bar(stat="identity")  +
+    geom_text(size=3, position=position_stack(vjust=0.5)) +
+    labs(x="Number of callers", y="Number of overlaps",
+         title="NA12878 benchmark deletions") 
+ggsave("~/NA12878.deletions.parliament.png")
 
 
 
