@@ -20,8 +20,7 @@ workflow parliament_workflow {
   # add a trailing / if we have an input_file_prefix
   String real_input_file_prefix = if defined(input_file_prefix) then input_file_prefix + "/" else ""  
 
-  # Directory where we want the sorted_unique.bam and sorted_unique.bam.bai
-  # files copied
+  # Directory where we want the output files copied
   String output_destination_dir
 
   # Remove all the samples that are commented out with 

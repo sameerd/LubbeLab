@@ -22,7 +22,7 @@ task parliament2 {
 
   # here we also need to strip out the extension to figure out
   # what the output file will be named
-  String ID = basename(ref_basename, ".bam")
+  String ID = basename(input_file_bam_index_basename, ".bam")
 
   command {
       mkdir input output
@@ -49,7 +49,10 @@ task parliament2 {
   }
 
   output { 
-    File output_vcf = "output/${ID}.combined.genotyped.vcf"
+    # use output_vcf only if we really need to. Otherwise it is hard to 
+    # guess what the combined output files will be called. It is 
+    # commented out for now
+    #File output_vcf = "output/${ID}.combined.genotyped.vcf"
     Array[File] vcfs = glob("output/*.vcf")
     Array[File] sv_caller_results = glob("output/sv_caller_results/*")
     Array[File] svtyped_vcfs = glob("output/svtyped_vcfs/*.vcf")
