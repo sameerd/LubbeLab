@@ -39,8 +39,6 @@ colnames(x)
 # remove input dataframes now that we have joined everything
 rm(x1, x2, x3, x4)
 
-table(x$SS13_GT)
-x %>% head(2)
 
 # let's remove all rows where this family has the same genotype
 # these rows are not interesting. This removes 0/0 genotypes mostly
@@ -71,8 +69,8 @@ x %<>% separate_ci("SS13_CI") %>%
   separate_ci("SS16_CI") %>%
   identity()
 
-# Filtering on disease pattern
-x %>%
+# Filtering on disease inheritance pattern
+x.inherit <- x %>%
   # SS13 and SS16 should have their lower confidence values greater than reference
   filter((SS13_CI_1_L > REF) | (SS13_CI_2_L > REF)) %>%
   filter((SS16_CI_1_L > REF) | (SS16_CI_2_L > REF)) %>%
@@ -81,7 +79,9 @@ x %>%
   filter(pmax(SS13_CI_1_L, SS13_CI_2_L) > pmax(SS14_CI_1_U, SS14_CI_2_U)) %>%
   filter(pmax(SS13_CI_1_L, SS13_CI_2_L) > pmax(SS15_CI_1_U, SS15_CI_2_U)) %>%
   # The last generation should have a lower confidence value greater than 
-  # the upper confidence values of the previous generation
-  filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS13_CI_1_U, SS13_CI_2_U))  %>%
-  head()
+  # or equal to the lower confidence values of the previous generation
+  filter(pmax(SS16_CI_1_L, SS16_CI_2_L) >= pmax(SS13_CI_1_L, SS13_CI_2_L))  %>%
+  identity()
+
+write_tsv(x.inherit, "~/gangstr.family3.tsv")
 
