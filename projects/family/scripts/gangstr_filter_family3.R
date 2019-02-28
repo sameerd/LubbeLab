@@ -83,5 +83,47 @@ x.inherit <- x %>%
   filter(pmax(SS16_CI_1_L, SS16_CI_2_L) >= pmax(SS13_CI_1_L, SS13_CI_2_L))  %>%
   identity()
 
-write_tsv(x.inherit, "~/gangstr.family3.tsv")
+
+working.gangstr.file <-  "data/working/family3_gangstr/annovar.tsv"
+
+#db to send to annovar
+# In order to send this to annovar we add a FAKEREF and FAKEWT column
+# of zeros
+x.annovar <- x.inherit %>% 
+            mutate(CHROM=paste0("chr", CHROM)) %>%
+            add_column(FAKEREF="0", .after="END") %>%
+            add_column(FAKEWT="0", .after="FAKEREF")
+write_tsv(x.annovar, working.gangstr.file, col_names=FALSE)
+
+system(paste("/projects/b1049/genetics_programs/annovar_2017/annovar/table_annovar.pl",
+        working.gangstr.file, 
+       "/projects/b1049/genetics_programs/annovar_2017/annovar/humandb/ \\
+       -buildver hg19 -otherinfo -protocol refGene,genomicSuperDups -operation g,r -nastring ." ))
+
+# Pull in the annotated file and rename columns
+multianno.output.file <- paste0(working.gangstr.file, ".hg19_multianno.txt")
+ann <- read.csv(multianno.output.file, sep="\t", stringsAsFactors=FALSE, header=FALSE, skip=1)
+# pull out the header column separately
+ann.header <- strsplit(readLines(multianno.output.file, n=1), "\t")[[1]]
+
+# The first 5 columns of x.annovar belong to Annovar and it rearrages them as it sees fit
+# From column 6 onwards we have otherinfo. 
+# So we pick the annovar headers from the annovar output file
+# and we pick the otherinfo headers from the input file
+colnames(ann) <- c(ann.header[1:(length(ann.header)-1)], 
+                   colnames(x.annovar)[6:length(colnames(x.annovar))])
+
+
+# Remove the fake columns and write out to file
+# Also modify some scores and split intergenic genes into two columns
+ann %>% 
+  select(-Ref, -Alt)  %>%
+  mutate(SingleRefGene = Gene.refGene) %>%
+  separate_rows(SingleRefGene, sep=";") %>%
+  extract(genomicSuperDups, into=c("superDupsScore"), 
+          regex="Score=([0-9\\.]+);Name=", remove=TRUE) %>%
+  replace_na(list(superDupsScore=".")) %>%
+  distinct() %>%
+  write_tsv("~/gangstr.family3.tsv")
+
 
