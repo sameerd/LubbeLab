@@ -60,7 +60,7 @@ module load singularity
 
 cd "${PBS_O_WORKDIR}/work"
 
-TMPDIR= LANG= singularity run \
+TMPDIR=/tmp LANG= singularity run \
 	-B `pwd`/input:/home/dnanexus/in:rw \
 	-B `pwd`/output:/home/dnanexus/out:rw \
 	parliament2_latest.sif   \

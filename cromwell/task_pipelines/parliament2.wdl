@@ -35,7 +35,7 @@ task parliament2 {
          "${input_file_bam_index}" input/
 
 
-      TMPDIR= LANG= singularity run \
+      TMPDIR=/tmp LANG= singularity run \
         -B `pwd`/input:/home/dnanexus/in:rw \
         -B `pwd`/output:/home/dnanexus/out:rw \
         ${PARLIAMENT2} \
