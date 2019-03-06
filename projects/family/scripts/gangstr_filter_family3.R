@@ -78,9 +78,10 @@ x.inherit <- x %>%
   # range of each of the parents
   filter(pmax(SS13_CI_1_L, SS13_CI_2_L) > pmax(SS14_CI_1_U, SS14_CI_2_U)) %>%
   filter(pmax(SS13_CI_1_L, SS13_CI_2_L) > pmax(SS15_CI_1_U, SS15_CI_2_U)) %>%
-  # The last generation should have a lower confidence value greater than 
-  # or equal to the lower confidence values of the previous generation
-  filter(pmax(SS16_CI_1_L, SS16_CI_2_L) >= pmax(SS13_CI_1_L, SS13_CI_2_L))  %>%
+  # The lower confidence value of SS16 should be greater than the upper confidence
+  # range of each of the grandparents
+  filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS14_CI_1_U, SS14_CI_2_U)) %>%
+  filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS15_CI_1_U, SS15_CI_2_U)) %>%
   identity()
 
 
@@ -125,5 +126,4 @@ ann %>%
   replace_na(list(superDupsScore=".")) %>%
   distinct() %>%
   write_tsv("~/gangstr.family3.tsv")
-
 
