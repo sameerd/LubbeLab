@@ -18,6 +18,7 @@ do
   # Not sure if even this fixes it.
   cat <<EOJ  >> jobs/"$id".sh
 #!/bin/bash
+
 /projects/b1049/genetics_programs/gangSTR/GangSTR-2.3/bin/GangSTR \
       --bam ../bams/${id}_sorted_unique.bam \
       --ref /projects/b1049/genetics_refs/fasta/human_g1k_v37.fasta \
@@ -25,6 +26,25 @@ do
       --frrweight 0.25 --enclweight 1.0 --spanweight 1.0 --flankweight 1.0 \
       --ploidy 2 --numbstrap 50 --minmatch 5 --minscore 80 \
       --out ${id}
+
+# there is a bug in dumpSTR which requires the vcf to be binary
+gzip ${id}.vcf
+
+module load singularity
+
+singularity run \
+  /projects/b1049/genetics_programs/gangSTR/str-toolkit_latest.sif \
+  dumpSTR \
+    --vcf ${id}.vcf.gz \
+    --out ${id}.filtered \
+    --max-call-DP 1000 \
+    --filter-spanbound-only \
+    --filter-badCI      \
+    --filter-regions /STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
+    --filter-regions-names SEGDUP \
+    --min-call-DP 20 \
+    --expansion-prob-total 0.8
+
 EOJ
 
   # submit the newly created job
