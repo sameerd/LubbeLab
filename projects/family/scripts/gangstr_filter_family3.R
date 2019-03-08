@@ -1,19 +1,24 @@
 library(tidyverse)
 
+
 # pull in all the processed vcf files
-x1 <- read.csv("data/working/gangstr/SS4009013.txt", sep="\t", stringsAsFactors=FALSE)
-x2 <- read.csv("data/working/gangstr/SS4009014.txt", sep="\t", stringsAsFactors=FALSE)
-x3 <- read.csv("data/working/gangstr/SS4009015.txt", sep="\t", stringsAsFactors=FALSE)
-x4 <- read.csv("data/working/gangstr/SS4009016.txt", sep="\t", stringsAsFactors=FALSE)
+get_filtered_vcf_file <- function(sample.name, file.extension=".filtered.txt") {
+  read.csv(paste0("data/working/gangstr/", sample.name, file.extension),
+                  sep="\t", stringsAsFactors=FALSE)
+} 
+x1 <- get_filtered_vcf_file("SS4009013")
+x2 <- get_filtered_vcf_file("SS4009014")
+x3 <- get_filtered_vcf_file("SS4009015")
+x4 <- get_filtered_vcf_file("SS4009016")
 
 
-get.new.column.names <- function(x) {
+get.new.column.names <- function(x, sample.extension=".filtered.vcf") {
   # one of the columns is the sample vcf filename. e.g. SS4009013.vcf
   # find out which one
   idx <- grep("SS400", colnames(x))
   if (length(idx) != 0) {
     # shorten the sample name to something like SS13
-    sample.short.index <- gsub("SS40090([0-9]+).vcf", "SS\\1", colnames(x)[idx])
+    sample.short.index <- gsub(paste0("SS40090([0-9]+)", sample.extension), "SS\\1", colnames(x)[idx])
     
     # Keep all columns below idx the same. Rename the idx column and the ones after
     # to look like SS13_[original_column_name]
@@ -30,6 +35,7 @@ colnames(x2) <- get.new.column.names(x2)
 colnames(x3) <- get.new.column.names(x3)
 colnames(x4) <- get.new.column.names(x4)
 
+
 # merge all the data frames together
 x <- x1 %>% inner_join(x2, by=c("CHROM", "POS", "END", "RU", "REF")) %>% 
             inner_join(x3, by=c("CHROM", "POS", "END", "RU", "REF")) %>% 
@@ -37,7 +43,9 @@ x <- x1 %>% inner_join(x2, by=c("CHROM", "POS", "END", "RU", "REF")) %>%
 
 colnames(x)
 # remove input dataframes now that we have joined everything
-rm(x1, x2, x3, x4)
+#rm(x1, x2, x3, x4)
+
+
 
 
 # let's remove all rows where this family has the same genotype
@@ -45,7 +53,10 @@ rm(x1, x2, x3, x4)
 # For now let us assume that 0/1 and 1/0 are different 
 x %<>% filter(! ((SS13_GT == SS14_GT) & (SS14_GT == SS15_GT) & 
                  (SS15_GT == SS16_GT)) ) %>%
+       filter_at(vars(ends_with("_GT")), all_vars(. != "./.")) %>%
+       filter_at(vars(ends_with("_GT")), all_vars(. != ".")) %>%
        identity()
+
 
 # separate confidence interval columns
 # converts resulting values to integer
@@ -62,12 +73,14 @@ separate_ci <- function(x, column) {
         identity()
 }
 
+
 # separate all confidence interval columns
 x %<>% separate_ci("SS13_CI") %>%
   separate_ci("SS14_CI") %>%
   separate_ci("SS15_CI") %>%
   separate_ci("SS16_CI") %>%
   identity()
+
 
 # Filtering on disease inheritance pattern
 x.inherit <- x %>%
@@ -83,6 +96,7 @@ x.inherit <- x %>%
   filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS14_CI_1_U, SS14_CI_2_U)) %>%
   filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS15_CI_1_U, SS15_CI_2_U)) %>%
   identity()
+
 
 
 working.gangstr.file <-  "data/working/family3_gangstr/annovar.tsv"
