@@ -27,22 +27,23 @@ do
       --ploidy 2 --numbstrap 50 --minmatch 5 --minscore 80 \
       --out ${id}
 
-# there is a bug in dumpSTR which requires the vcf to be binary
-gzip ${id}.vcf
+## there is a bug in dumpSTR which requires the vcf to be binary
+#gzip ${id}.vcf
 
-module load singularity
+#module load singularity
 
-singularity run \
-  /projects/b1049/genetics_programs/gangSTR/str-toolkit_latest.sif \
-  dumpSTR \
-    --vcf ${id}.vcf.gz \
-    --out ${id}.filtered \
-    --max-call-DP 1000 \
-    --filter-spanbound-only \
-    --filter-badCI      \
-    --filter-regions /STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
-    --filter-regions-names SEGDUP 
-#    --min-call-DP 20 
+## dumpSTR has a bug which causes vcf writer to quit somewhere in Chromosome 10
+#singularity run \
+#  /projects/b1049/genetics_programs/gangSTR/str-toolkit_latest.sif \
+#  dumpSTR \
+#    --vcf ${id}.vcf.gz \
+#    --out ${id}.filtered \
+#    --max-call-DP 1000 \
+#    --filter-spanbound-only \
+#    --filter-badCI      \
+#    --filter-regions /STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
+#    --filter-regions-names SEGDUP 
+##    --min-call-DP 20 
 
 EOJ
 

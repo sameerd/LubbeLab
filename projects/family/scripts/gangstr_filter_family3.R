@@ -6,10 +6,10 @@ get_filtered_vcf_file <- function(sample.name, file.extension=".filtered.txt") {
   read.csv(paste0("data/working/gangstr/", sample.name, file.extension),
                   sep="\t", stringsAsFactors=FALSE)
 } 
-x1 <- get_filtered_vcf_file("SS4009013")
-x2 <- get_filtered_vcf_file("SS4009014")
-x3 <- get_filtered_vcf_file("SS4009015")
-x4 <- get_filtered_vcf_file("SS4009016")
+x1 <- get_filtered_vcf_file("SS4009013", file.extension=".txt")
+x2 <- get_filtered_vcf_file("SS4009014", file.extension=".txt")
+x3 <- get_filtered_vcf_file("SS4009015", file.extension=".txt")
+x4 <- get_filtered_vcf_file("SS4009016", file.extension=".txt")
 
 
 get.new.column.names <- function(x, sample.extension=".filtered.vcf") {
@@ -30,10 +30,10 @@ get.new.column.names <- function(x, sample.extension=".filtered.vcf") {
   }
 }
 
-colnames(x1) <- get.new.column.names(x1)
-colnames(x2) <- get.new.column.names(x2)
-colnames(x3) <- get.new.column.names(x3)
-colnames(x4) <- get.new.column.names(x4)
+colnames(x1) <- get.new.column.names(x1, sample.extension=".vcf")
+colnames(x2) <- get.new.column.names(x2, sample.extension=".vcf")
+colnames(x3) <- get.new.column.names(x3, sample.extension=".vcf")
+colnames(x4) <- get.new.column.names(x4, sample.extension=".vcf")
 
 
 # merge all the data frames together
@@ -44,7 +44,6 @@ x <- x1 %>% inner_join(x2, by=c("CHROM", "POS", "END", "RU", "REF")) %>%
 colnames(x)
 # remove input dataframes now that we have joined everything
 #rm(x1, x2, x3, x4)
-
 
 
 
@@ -96,8 +95,6 @@ x.inherit <- x %>%
   filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS14_CI_1_U, SS14_CI_2_U)) %>%
   filter(pmax(SS16_CI_1_L, SS16_CI_2_L) > pmax(SS15_CI_1_U, SS15_CI_2_U)) %>%
   identity()
-
-
 
 working.gangstr.file <-  "data/working/family3_gangstr/annovar.tsv"
 
