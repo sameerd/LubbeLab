@@ -41,9 +41,8 @@ singularity run \
     --filter-spanbound-only \
     --filter-badCI      \
     --filter-regions /STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
-    --filter-regions-names SEGDUP \
-    --min-call-DP 20 \
-    --expansion-prob-total 0.8
+    --filter-regions-names SEGDUP 
+#    --min-call-DP 20 
 
 EOJ
 
