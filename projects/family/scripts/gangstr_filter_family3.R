@@ -9,7 +9,7 @@ is.filtered = ".filtered"
 get_filtered_vcf_file <- function(sample.name, 
                                   file.extension=paste0(is.filtered, ".txt")) {
   read.csv(paste0("data/working/gangstr/", sample.name, file.extension),
-                  sep="\t", stringsAsFactors=FALSE, nrows=200000)
+                  sep="\t", stringsAsFactors=FALSE)
 } 
 x1 <- get_filtered_vcf_file("SS4009013")
 x2 <- get_filtered_vcf_file("SS4009014")
