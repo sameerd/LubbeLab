@@ -27,12 +27,9 @@ do
       --ploidy 2 --numbstrap 50 --minmatch 5 --minscore 80 \
       --out ${id}
 
-## there is a bug in dumpSTR which requires the vcf to be binary
-#gzip ${id}.vcf
 
+# Wait for dumpSTR dockerhub to update before using this
 #module load singularity
-
-## dumpSTR has a bug which causes vcf writer to quit somewhere in Chromosome 10
 #singularity run \
 #  /projects/b1049/genetics_programs/gangSTR/str-toolkit_latest.sif \
 #  dumpSTR \
@@ -43,7 +40,20 @@ do
 #    --filter-badCI      \
 #    --filter-regions /STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
 #    --filter-regions-names SEGDUP 
-##    --min-call-DP 20 
+
+# filtering with manual installation
+module load anaconda3
+
+PYTHONPATH=/projects/b1049/genetics_programs/gangSTR/lib/python3.7/site-packages/ \
+PATH=\${PATH}:/projects/b1049/genetics_programs/gangSTR/bin \
+  dumpSTR \
+    --vcf ${id}.vcf \
+    --out ${id}.filtered \
+    --max-call-DP 1000 \
+    --filter-spanbound-only \
+    --filter-badCI      \
+    --filter-regions /projects/b1049/genetics_programs/gangSTR/STRTools/dumpSTR/filter_files/hs37_segmentalduplications.bed.gz \
+    --filter-regions-names SEGDUP 
 
 EOJ
 
