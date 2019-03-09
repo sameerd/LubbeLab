@@ -33,7 +33,7 @@ do
 #singularity run \
 #  /projects/b1049/genetics_programs/gangSTR/str-toolkit_latest.sif \
 #  dumpSTR \
-#    --vcf ${id}.vcf.gz \
+#    --vcf ${id}.vcf \
 #    --out ${id}.filtered \
 #    --max-call-DP 1000 \
 #    --filter-spanbound-only \

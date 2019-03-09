@@ -1,18 +1,23 @@
 library(tidyverse)
 
+# select whether we are looking at the gangSTR output
+is.filtered = ""
+# or the vcf filtered with dumpSTR
+is.filtered = ".filtered"
 
 # pull in all the processed vcf files
-get_filtered_vcf_file <- function(sample.name, file.extension=".filtered.txt") {
+get_filtered_vcf_file <- function(sample.name, 
+                                  file.extension=paste0(is.filtered, ".txt")) {
   read.csv(paste0("data/working/gangstr/", sample.name, file.extension),
-                  sep="\t", stringsAsFactors=FALSE)
+                  sep="\t", stringsAsFactors=FALSE, nrows=200000)
 } 
-x1 <- get_filtered_vcf_file("SS4009013", file.extension=".txt")
-x2 <- get_filtered_vcf_file("SS4009014", file.extension=".txt")
-x3 <- get_filtered_vcf_file("SS4009015", file.extension=".txt")
-x4 <- get_filtered_vcf_file("SS4009016", file.extension=".txt")
+x1 <- get_filtered_vcf_file("SS4009013")
+x2 <- get_filtered_vcf_file("SS4009014")
+x3 <- get_filtered_vcf_file("SS4009015")
+x4 <- get_filtered_vcf_file("SS4009016")
 
 
-get.new.column.names <- function(x, sample.extension=".filtered.vcf") {
+get.new.column.names <- function(x, sample.extension=paste0(is.filtered, ".vcf")) {
   # one of the columns is the sample vcf filename. e.g. SS4009013.vcf
   # find out which one
   idx <- grep("SS400", colnames(x))
@@ -30,10 +35,10 @@ get.new.column.names <- function(x, sample.extension=".filtered.vcf") {
   }
 }
 
-colnames(x1) <- get.new.column.names(x1, sample.extension=".vcf")
-colnames(x2) <- get.new.column.names(x2, sample.extension=".vcf")
-colnames(x3) <- get.new.column.names(x3, sample.extension=".vcf")
-colnames(x4) <- get.new.column.names(x4, sample.extension=".vcf")
+colnames(x1) <- get.new.column.names(x1)
+colnames(x2) <- get.new.column.names(x2)
+colnames(x3) <- get.new.column.names(x3)
+colnames(x4) <- get.new.column.names(x4)
 
 
 # merge all the data frames together

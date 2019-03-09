@@ -33,3 +33,9 @@ cd GangSTR-2.3
 ./install-gangstr.sh `realpath .`
 ```
 
+```shell
+git clone https://github.com/gymreklab/STRTools
+module load anaconda3
+PYTHONPATH=/projects/b1049/genetics_programs/gangSTR/lib/python3.7/site-packages/ python setup.py install --prefix=/projects/b1049/genetics_programs/gangSTR
+```
+
