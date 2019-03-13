@@ -19,6 +19,7 @@ sample.names = paste0(sample.prefix, c("9014", "9015", "9013", "9016"))
 compact_viewer <-  function(z, n=1:4) z %>% select(n, sample.names)
 
 
+
 # select sample column names
 # but not the ones we want to keep
 samples.to.drop <- select_vars(names(x), starts_with(sample.prefix), -sample.names)
@@ -43,13 +44,18 @@ x_small <- x %>%
 
 x_filtered <- x_small %>%
   # remove rows where all samples in the family have the same genotype
-  filter(! (SS4009013 == SS4009014) & 
+  filter(! ((SS4009013 == SS4009014) & 
            (SS4009014 == SS4009015) &
-           (SS4009015 == SS4009016)) %>%
+           (SS4009015 == SS4009016))) %>%
+  filter( SS4009013 != "0/0" )  %>%
+  filter(! ( (SS4009014 == "0/0") & (SS4009015 == "0/0")))  %>%
+  filter( SS4009016 != "0/0" )  %>%
   # Create a new column called SingleRefGene and split out ;
   mutate(SingleRefGene = Gene.refGene) %>%
   separate_rows(SingleRefGene, sep=";") %>%
   distinct() # because sometimes the ";" includes genes of the same name
+
+table(x_filtered$SS4009013)
 
   # Ressive pattern is empty
   #filter( SS4009013 == "1/1" & SS4009016 == "1/1" 
