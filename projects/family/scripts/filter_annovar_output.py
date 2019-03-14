@@ -7,10 +7,10 @@ otherinfo_headers_file = sys.argv[2]
 
 otherinfo_headers = []
 # read in the otherinfo headers
-with file(otherinfo_headers_file) as fh:
+with open(otherinfo_headers_file) as fh:
   otherinfo_headers = fh.readline().strip().split("\t")
 
-fh = file(annovar_output_file)
+fh = open(annovar_output_file)
 annovar_headers = fh.readline().strip().split("\t")
 
 # remove otherinfo (last element) from annovar_headers 
@@ -57,6 +57,7 @@ def cadd_filter_functor(cutoff):
   idx = all_headers.index("CADD13_PHRED")
   def cadd_filter(line):
     val = line[idx]
+    #return (float(val) >= cutoff)
     return (val == ".") or (float(val) >= cutoff)
   return cadd_filter
 
@@ -114,9 +115,9 @@ def exonic_and_regulatory_filter_functor():
 all_filters = [ 
     maf_filter_functor("gnomAD_genome_ALL", 0.05),
     maf_filter_functor("gnomAD_exome_ALL", 0.05),
-    cadd_filter_functor(12.37),
     superdups_filter_functor(),
     regulomedb_filter_functor(),
+    cadd_filter_functor(12.37),
     exonic_and_regulatory_filter_functor()
   ]
 
@@ -126,7 +127,7 @@ print("\t".join(output_headers))
 for line in fh:
   line = line.strip().split("\t")
   output_line = []
-  # Pass line in the fi
+  # Pass line in the filter pipeline
   line_ok = all(filter_func(line) for filter_func in all_filters)
   if line_ok is True: # print out
     # Build an output_line

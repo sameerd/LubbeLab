@@ -1,6 +1,6 @@
 library(tidyverse)
 
-x <- read.table("data/working/CA10", stringsAsFactors=FALSE)
+x <- read.table("data/input/CA10", stringsAsFactors=FALSE)
 
 # GTnames are the 9th column
 gtsplit <- strsplit(x[1,9], ":")[[1]]
