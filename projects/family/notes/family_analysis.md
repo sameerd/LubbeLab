@@ -20,24 +20,25 @@ We use Annovar to annotate using the following Bash script
 \[[annotate\_variants.bash](../scripts/annotate_variants.bash)\]. We have the
 following variants in each annotated region.
 
-| Count  | Region |
-| ---:   | :--- |
-|  66105 | downstream |
-|  49445 | exonic |
-|     66 | exonic;splicing |
-|5214155 | intergenic |
-|3379976 | intronic |
-|  32143 | ncRNA\_exonic |
-|      8 | ncRNA\_exonic;splicing |
-| 584081 | ncRNA\_intronic |
-|    188 | ncRNA\_splicing |
-|      6 | ncRNA\_UTR5 |
-|    405 | splicing |
-|  61720 | upstream |
-|   2239 | upstream;downstream |
-|  72485 | UTR3 |
-|  15248 | UTR5 |
-|     43 | UTR5;UTR3 |
+```shell
+ Count  Region 
+  66105 downstream 
+  49445 exonic 
+     66 exonic;splicing 
+5214155 intergenic 
+3379976 intronic 
+  32143 ncRNA_exonic 
+      8 ncRNA_exonic;splicing 
+ 584081 ncRNA_intronic 
+    188 ncRNA_splicing 
+      6 ncRNA_UTR5 
+    405 splicing 
+  61720 upstream 
+   2239 upstream;downstream 
+  72485 UTR3 
+  15248 UTR5 
+     43 UTR5;UTR3 
+```
 
 #### Filtering steps
 We filter these variants to look for causal variants in the exonic, splicing and some regulartory regions. \[[Filter python script](./scripts/filter_annovar_output.py)\]
