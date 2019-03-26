@@ -41,7 +41,7 @@ following variants in each annotated region.
 ```
 
 #### Filtering steps
-We filter these variants to look for causal variants in the exonic, splicing and some regulartory regions. \[[Filter python script](./scripts/filter_annovar_output.py)\]
+We filter these variants to look for causal variants in the exonic, splicing and some regulatory regions. \[[Filter python script](../scripts/filter_annovar_output.py)\]
 
 1. **Filter** annotated variants by matching the *all* of following four main rules     
     1. MAF < 0.05
