@@ -20,6 +20,7 @@ We use Annovar to annotate using the following Bash script
 \[[annotate\_variants.bash](../scripts/annotate_variants.bash)\]. We have the
 following variants in each annotated region.
 
+| Count  | Region |
 | ---:   | :--- |
 |  66105 | downstream |
 |  49445 | exonic |
