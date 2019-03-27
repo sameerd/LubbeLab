@@ -1,13 +1,13 @@
 ## Family SNP Analysis 
 
-#### GATK Pipeline
+### GATK Pipeline
 We start with the Fastq files for 10 individuals in 3 families and use Gatk 4
 to call variants. The Cromwell pipeline files for alignment, haplotype caller
 and joint genotyping with VQSR steps are available [in the cromwell
 directory](../cromwell/). The output of the pipeline steps gives us a VCF file
 with raw variants. 
 
-#### QC steps
+### QC steps
 Started with the vcf file perform further QC steps. \[[qc\_vcf\_file.bash](../scripts/qc_vcf_file.bash)\]
 1. **QC check**. Ts/Tv ratio is 2.861 in the exonic region 
 1. **Select Variants** that pass filtering and are of good quality `minDP=5, minGQ=20, missing=0.1` 
@@ -15,12 +15,12 @@ Started with the vcf file perform further QC steps. \[[qc\_vcf\_file.bash](../sc
 
 We are left with approximately 9.5M variants. 
 
-#### Annotating variants
+### Annotating variants
 We use Annovar to annotate using the following Bash script
 \[[annotate\_variants.bash](../scripts/annotate_variants.bash)\]. We have the
 following variants in each annotated region.
 
-```shell
+```
   Count Func.refGene
   ----- ------------
   66105 downstream 
@@ -41,7 +41,7 @@ following variants in each annotated region.
      43 UTR5;UTR3 
 ```
 
-#### Filtering steps
+### Filtering steps
 We filter these variants to look for causal variants in the exonic, splicing
 and some regulatory regions. The python script to filter variants is at
 \[[filter\_annovar\_output.py](../scripts/filter_annovar_output.py)\] and the
@@ -64,4 +64,5 @@ bash script that calls the python script is at
     * `wgEncodeRegDnaseClusteredV3` is not empty
     * `gerp++ score` > 2
 
+After filtering we are left with approximately 16k variants.
 

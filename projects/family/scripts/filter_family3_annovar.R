@@ -18,12 +18,9 @@ sample.names = paste0(sample.prefix, c("9014", "9015", "9013", "9016"))
 # Only select a few columns to view
 compact_viewer <-  function(z, n=1:4) z %>% select(n, sample.names)
 
-
-
 # select sample column names
 # but not the ones we want to keep
 samples.to.drop <- tidyselect::vars_select(names(x), starts_with(sample.prefix), -sample.names)
-
 
 # this code below ends up filtering out missing values only. ./.
 # we do not have genotypes other than the ones specified below. 
@@ -41,7 +38,6 @@ x_small <- x %>%
 
 #x_small %>% compact_viewer() %>% head()
 
-
 # read in the list of mds genes
 mds_genes <- read.table("data/input/mds_genes.txt")
 colnames(mds_genes) <- "GENE"
@@ -58,13 +54,21 @@ x_filtered <- x_small %>%
   mutate(SingleRefGene = Gene.refGene) %>%
   mutate(MdsGene= SingleRefGene %in% mds_genes$GENE) %>%
   separate_rows(SingleRefGene, sep=";") %>%
-  distinct() # because sometimes the ";" includes genes of the same name
+  distinct() %>% # because sometimes the ";" includes genes of the same name
+  rowwise() %>%
+  identity
+
+# add Beagle Lod Score
+source("scripts/beagle_db.R")
+x_filtered %<>%
+  mutate(beagle_lod_13_16=GetBeagleLod(CHROM, POS, "SS4009013", "SS4009016", beagle.db)) %>%
+  mutate(beagle_lod_14_16=GetBeagleLod(CHROM, POS, "SS4009014", "SS4009016", beagle.db)) %>%
+  mutate(beagle_lod_15_16=GetBeagleLod(CHROM, POS, "SS4009015", "SS4009016", beagle.db)) %>%
+  identity
 
 
 # save tables to disk
-write.table(x_filtered, file="data/output/family3/variants.txt", 
+write.table(x_filtered %>% as.data.frame, file="data/output/family3/variants.txt", 
             sep="\t", quote=FALSE, row.names=FALSE)
 
-
-x_filtered %>% filter(MdsGene == 1)
 
