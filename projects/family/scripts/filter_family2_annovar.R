@@ -39,7 +39,9 @@ x_small <- x %>%
 
 
 #x_small %>% compact_viewer() %>% head()
-
+# read in the list of mds genes
+mds_genes <- read.table("data/input/mds_genes.txt")
+colnames(mds_genes) <- "GENE"
 
 x_filtered <- x_small %>%
   # keep rows where generation 1 is same as generation 3
@@ -54,10 +56,19 @@ x_filtered <- x_small %>%
   filter(SS4009023 != "1/1" ) %>%
   # Create a new column called SingleRefGene and split out ;
   mutate(SingleRefGene = Gene.refGene) %>%
+  mutate(MdsGene= SingleRefGene %in% mds_genes$GENE) %>%
   separate_rows(SingleRefGene, sep=";") %>%
   distinct() # because sometimes the ";" includes genes of the same name
 
 #x_filtered %>% compact_viewer() %>% head()
+# add Beagle Lod Score
+source("scripts/beagle_db.R")
+x_filtered %<>%
+  rowwise() %>%
+  mutate(beagle_lod_21_30=GetBeagleLod(CHROM, POS, "SS4009021", "SS4009030", beagle.db)) %>%
+  mutate(beagle_lod_23_30=GetBeagleLod(CHROM, POS, "SS4009023", "SS4009030", beagle.db)) %>%
+  mutate(beagle_lod_21_23=GetBeagleLod(CHROM, POS, "SS4009021", "SS4009023", beagle.db)) %>%
+  identity
 
 x_dominant <- x_filtered %>%
   filter(SS4009021 == "0/1" | SS4009030 == "1/0") %>%
@@ -66,6 +77,7 @@ x_dominant <- x_filtered %>%
 # save tables to disk
 write.table(x_dominant, file="data/output/family2/dominant.txt", 
             sep="\t", quote=FALSE, row.names=FALSE)
-
+write.table(x_filtered, file="data/output/family2/variants.txt", 
+            sep="\t", quote=FALSE, row.names=FALSE)
 
 

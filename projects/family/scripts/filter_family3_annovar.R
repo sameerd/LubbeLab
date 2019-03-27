@@ -55,12 +55,12 @@ x_filtered <- x_small %>%
   mutate(MdsGene= SingleRefGene %in% mds_genes$GENE) %>%
   separate_rows(SingleRefGene, sep=";") %>%
   distinct() %>% # because sometimes the ";" includes genes of the same name
-  rowwise() %>%
   identity
 
 # add Beagle Lod Score
 source("scripts/beagle_db.R")
 x_filtered %<>%
+  rowwise() %>%
   mutate(beagle_lod_13_16=GetBeagleLod(CHROM, POS, "SS4009013", "SS4009016", beagle.db)) %>%
   mutate(beagle_lod_14_16=GetBeagleLod(CHROM, POS, "SS4009014", "SS4009016", beagle.db)) %>%
   mutate(beagle_lod_15_16=GetBeagleLod(CHROM, POS, "SS4009015", "SS4009016", beagle.db)) %>%
