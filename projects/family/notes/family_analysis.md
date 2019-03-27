@@ -50,7 +50,7 @@ bash script that calls the python script is at
 
 1. Filter annotated variants by matching the *all* of following three main rules     
     1. `MAF` < 0.05 or unknown
-    1. Not a `genomic\_superdups` region
+    1. Not a `genomic_superdups` region
     1. `CADD` score > 12.37 or unknown
 1. If the variant is in the Exonic region or splicing region match *any one* of
    the following three subrules to keep the variant 
