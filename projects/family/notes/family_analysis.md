@@ -42,22 +42,26 @@ following variants in each annotated region.
 ```
 
 #### Filtering steps
-We filter these variants to look for causal variants in the exonic, splicing and some regulatory regions. The python script to filter variants is at \[[filter\_annovar\_output.py](../scripts/filter_annovar_output.py)\] and the bash script that calls the python script is at  \[[filter\_annovar\_output.bash](../scripts/filter_annovar_output.bash)\] 
+We filter these variants to look for causal variants in the exonic, splicing
+and some regulatory regions. The python script to filter variants is at
+\[[filter\_annovar\_output.py](../scripts/filter_annovar_output.py)\] and the
+bash script that calls the python script is at
+\[[filter\_annovar\_output.bash](../scripts/filter_annovar_output.bash)\]. 
 
-1. **Filter** annotated variants by matching the *all* of following three main rules     
-    1. *MAF* < 0.05 or unknown
-    1. Not a *genomic\_superdups* region
-    1. *CADD* score > 12.37 or unknown
+1. Filter annotated variants by matching the *all* of following three main rules     
+    1. `MAF` < 0.05 or unknown
+    1. Not a `genomic\_superdups` region
+    1. `CADD` score > 12.37 or unknown
 1. If the variant is in the Exonic region or splicing region match *any one* of
    the following three subrules to keep the variant 
-    * ExonicFunc is not `synonymous SNV` and not `nonsynonymous SNV`
-    * ExonicFunc is `nonsynonymous SNV`
-    * ExonicFunc is `synonymous SNV` and Func.refGene is in `exonic;splicing`
-1. If the variant is not in the exonic or splicing regions then match *all* the
-   following rules to keep the variant
-    * RegulomeDB_dbSNP141_Score is not 6 or 7
-    * wgEncodeRegTfbsClusteredV3 or tfbsConsSites is not empty
-    * wgEncodeRegDnaseClusteredV3 is not empty
-    * gerp++ score > 2
+    * `ExonicFunc` is not `synonymous SNV` and not `nonsynonymous SNV`
+    * `ExonicFunc` is `nonsynonymous SNV`
+    * `ExonicFunc` is `synonymous SNV` and Func.refGene is in `exonic;splicing`
+1. If the variant is not in the exonic or splicing regions then we are probably
+   in a regulatory region and so match *all* the following rules to keep the variant
+    * `RegulomeDB_dbSNP141_Score is not 6 or 7
+    * `wgEncodeRegTfbsClusteredV3 or tfbsConsSites is not empty
+    * `wgEncodeRegDnaseClusteredV3 is not empty
+    * `gerp++ score` > 2
 
 
