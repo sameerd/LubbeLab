@@ -59,9 +59,9 @@ bash script that calls the python script is at
     * `ExonicFunc` is `synonymous SNV` and Func.refGene is in `exonic;splicing`
 1. If the variant is not in the exonic or splicing regions then we are probably
    in a regulatory region and so match *all* the following rules to keep the variant
-    * `RegulomeDB_dbSNP141_Score is not 6 or 7
-    * `wgEncodeRegTfbsClusteredV3 or tfbsConsSites is not empty
-    * `wgEncodeRegDnaseClusteredV3 is not empty
+    * `RegulomeDB_dbSNP141_Score` is not 6 or 7
+    * `wgEncodeRegTfbsClusteredV3` or `tfbsConsSites` is not empty
+    * `wgEncodeRegDnaseClusteredV3` is not empty
     * `gerp++ score` > 2
 
 
