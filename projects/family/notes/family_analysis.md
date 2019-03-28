@@ -66,3 +66,15 @@ bash script that calls the python script is at
 
 After filtering we are left with approximately 16k variants.
 
+
+### Family Specific filtering
+In this step we mainly filter on genotype and disease inheritance pattern.
+After we done with filtering we add a little bit of further annotation about
+MDS genes and Beagle LOD scores. 
+
+#### Family 2
+The filter script is at \[ [filter\_family2\_annovar.R](../scripts/filter_family2_annovar.R) \].
+
+#### Family 3
+The filter script is at \[ [filter\_family3\_annovar.R](../scripts/filter_family3_annovar.R) \].
+
