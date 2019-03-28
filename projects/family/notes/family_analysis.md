@@ -73,8 +73,8 @@ After we done with filtering we add a little bit of further annotation about
 MDS genes and Beagle LOD scores. 
 
 #### Family 2
-The filter script is at \[ [filter\_family2\_annovar.R](../scripts/filter_family2_annovar.R) \].
+The filter script is at \[[filter\_family2\_annovar.R](../scripts/filter_family2_annovar.R)\].
 
 #### Family 3
-The filter script is at \[ [filter\_family3\_annovar.R](../scripts/filter_family3_annovar.R) \].
+The filter script is at \[[filter\_family3\_annovar.R](../scripts/filter_family3_annovar.R)\].
 

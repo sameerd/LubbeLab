@@ -70,6 +70,10 @@ x_filtered %<>%
   mutate(beagle_lod_21_23=GetBeagleLod(CHROM, POS, "SS4009021", "SS4009023", beagle.db)) %>%
   identity
 
+# save tables to disk
+write.table(x_filtered, file="data/output/family2/variants.txt", 
+            sep="\t", quote=FALSE, row.names=FALSE)
+
 x_dominant <- x_filtered %>%
   filter(SS4009021 == "0/1" | SS4009030 == "1/0") %>%
   filter(SS4009021 == "0/1" | SS4009030 == "1/0")
@@ -77,7 +81,4 @@ x_dominant <- x_filtered %>%
 # save tables to disk
 write.table(x_dominant, file="data/output/family2/dominant.txt", 
             sep="\t", quote=FALSE, row.names=FALSE)
-write.table(x_filtered, file="data/output/family2/variants.txt", 
-            sep="\t", quote=FALSE, row.names=FALSE)
-
 
