@@ -55,8 +55,12 @@ x.inherit <- x %>%
 working.gangstr.file <-  "data/working/family3_gangstr/annovar.tsv"
 ann <- annotate_db(x.inherit, working.gangstr.file)
 
+mds_genes <- read.table("data/input/mds_genes.txt")
+colnames(mds_genes) <- "GENE"
+
 ann %>%
   mutate(SingleRefGene = Gene.refGene) %>%
+  mutate(MdsGene = SingleRefGene %in% mds_genes$GENE) %>%
   separate_rows(SingleRefGene, sep=";") %>%
   extract(genomicSuperDups, into=c("superDupsScore"), 
           regex="Score=([0-9\\.]+);Name=", remove=TRUE) %>%

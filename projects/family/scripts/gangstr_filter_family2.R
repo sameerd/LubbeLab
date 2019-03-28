@@ -1,66 +1,57 @@
 library(tidyverse)
 
+# Common gangstr filtering 
+source("scripts/gangstr_filter.R")
+
+#is.filtered = ".filtered"
+is.filtered = ""
+
 # pull in all the vcf files
-x1 <- read.csv("data/working/gangstr/SS4009021.vcf", sep="\t", stringsAsFactors=FALSE)
-x2 <- read.csv("data/working/gangstr/SS4009023.vcf", sep="\t", stringsAsFactors=FALSE)
-x3 <- read.csv("data/working/gangstr/SS4009030.vcf", sep="\t", stringsAsFactors=FALSE)
+x1 <- get_filtered_vcf_file_with_cols("SS4009021", is.filtered)
+x2 <- get_filtered_vcf_file_with_cols("SS4009023", is.filtered)
+x3 <- get_filtered_vcf_file_with_cols("SS4009030", is.filtered)
 
 # merge all the data frames together
 x <- x1 %>% inner_join(x2) %>% inner_join(x3) 
 
-strs <- x %>% 
-   rename_at(vars(ends_with("vcf")), funs(gsub(".vcf","", .))) %>%
-   separate(SS4009021, sep=",", c("i1s21","i2s21")) %>%
-   separate(SS4009023, sep=",", c("i1s23","i2s23")) %>%
-   separate(SS4009030, sep=",", c("i1s30","i2s30")) %>%
-   identity()
+x %<>% filter(! ((SS21_GT == SS30_GT) & (SS21_GT == SS23_GT)) ) %>%
+       filter_at(vars(ends_with("_GT")), all_vars(. != "./.")) %>%
+       filter_at(vars(ends_with("_GT")), all_vars(. != ".")) %>%
+       identity()
 
-
-# Remove everything where the family has equal counts
-db <- strs %>% 
-  filter( ! (   (i1s21 == i2s21) & (i2s21 == i1s23) & (i1s23 == i2s23) &
-                (i2s23 == i1s30) & (i1s30 == i2s30)  )) %>% 
+# separate all confidence interval columns
+x %<>% separate_ci("SS21_CI") %>%
+  separate_ci("SS23_CI") %>%
+  separate_ci("SS30_CI") %>%
   identity()
 
-db %>% filter(CHROM == "14", POS >= 55308000, POS <= 55370000 ) %>% 
-        identity()
-
-
-# pull in top 150 genes from genecards
-dyt.genes <- read.table("data/input/dystonia_genes.txt")
-colnames(dyt.genes) <- c("CHROM", "STRAND", "START", "END", "GENE")
-
-dyt.genes %<>% 
-  mutate(CHROM = gsub("^chr", "", CHROM)) %>% 
-  group_by(GENE, CHROM) %>%
-  summarize(START=as.integer(min(START)), END=as.integer(max(END))) %>%
-  ungroup() %>%
+# Filtering on disease inheritance pattern
+x.inherit <- x %>%
+  filter(SS21_GT != SS23_GT) %>%
+  # SS21 and SS30 should have their lower confidence values greater than reference
+  filter((SS21_CI_1_L > REF) | (SS21_CI_2_L > REF)) %>%
+  filter((SS30_CI_1_L > REF) | (SS30_CI_2_L > REF)) %>%
+  # The lower confidence value of SS21 and SS30 should be greater than the
+  # upper confidence range of each of unaffected individuals
+  filter(pmax(SS21_CI_1_L, SS21_CI_2_L) > pmax(SS23_CI_1_U, SS23_CI_2_U)) %>%
+  filter(pmax(SS30_CI_1_L, SS30_CI_2_L) > pmax(SS23_CI_1_U, SS23_CI_2_U)) %>%
   identity()
 
+working.gangstr.file <-  "data/working/family2_gangstr/annovar.tsv"
+ann <- annotate_db(x.inherit, working.gangstr.file)
 
-str.counts <- dyt.genes %>% split(.$GENE) %>% 
-  map_dfr(function(x) {
-    db %>% 
-      filter(CHROM==!!x$CHROM[1], POS >= !!x$START[1], END <= !!x$END[1] ) %>% 
-      identity()
-  }, .id="GENE") %>% 
-  identity()
+mds_genes <- read.table("data/input/mds_genes.txt")
+colnames(mds_genes) <- "GENE"
 
-str.counts %>% write.csv(., file="~/str.dystonia.filter.txt") 
-
-db %>% 
-  mutate(m21 = pmax(as.integer(i1s21), as.integer(i2s21)),
-         m23 = pmax(as.integer(i1s23), as.integer(i2s23)),
-         m30 = pmax(as.integer(i1s30), as.integer(i2s30))) %>%
-  filter(m21 > as.integer(REF)) %>% 
-  filter(m30 > m21) %>% 
-  filter(m30 > 2 * as.integer(REF)) %>% 
-  filter(m21 > m23) %>% 
-  #filter(RU == "ctg") %>%
-  filter(str_length(RU) == 3) %>%
-  select(-starts_with("m")) %>%
-  identity() 
-
+ann %>%
+  mutate(SingleRefGene = Gene.refGene) %>%
+  mutate(MdsGene = SingleRefGene %in% mds_genes$GENE) %>%
+  separate_rows(SingleRefGene, sep=";") %>%
+  extract(genomicSuperDups, into=c("superDupsScore"), 
+          regex="Score=([0-9\\.]+);Name=", remove=TRUE) %>%
+  replace_na(list(superDupsScore=".")) %>%
+  distinct() %>%
+  write_tsv("~/gangstr.family2.tsv")
 
 
 
