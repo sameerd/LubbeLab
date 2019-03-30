@@ -88,4 +88,30 @@ annotate_db <- function(x, working.gangstr.file) {
   ann %>% select(-Ref, -Alt) 
 }
 
+# find the maximum Repeat Allele length from STR catalog 
+# Warning if we do not find the repeat we will return 0 for the maximum
+get_repeat_max_from_catalog <- function(chrom, pos, catalog=c("SDP", "G1K")) {
+  catalog_dir <- "/projects/b1049/genetics_programs/gangSTR/reference/"
+  catalog_files <- list(SDP="sgdp.calls.vcf.gz", 
+                        G1K="phase_1_final_calls.vcf.gz")
+
+  catalog <- match.arg(catalog) 
+  catalog_file <- paste0(catalog_dir, catalog_files[[catalog]])
+
+  # remove chr/CHR from chrom variable
+  chrom <- gsub("^chr", "", chrom, ignore.case=TRUE) 
+  if (catalog == "G1K") { # add it back for 1000G as it uses hg19
+    chrom <- paste0("chr", chrom)
+  }
+  tabix.query <- paste0("\"", chrom, ":", pos, "-", pos, "\"")
+  #print(tabix.query)
+
+  cmd <- paste("tabix", "-f", catalog_file, tabix.query,
+               "| grep -oP 'RPA=\\K[^;]*' ", # Extract something like RPA=23,34,56;
+               "| grep -o '[^,]\\+$' ") # Find the last number in this list above
+
+  read.table(pipe(cmd), header=FALSE, col.names=c("val"))[1, 1]
+}
+#get_repeat_max_from_catalog("chr17", "49909028", catalog="G1K")
+
 
