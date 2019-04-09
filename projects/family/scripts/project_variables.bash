@@ -53,6 +53,9 @@ ALL_FILTERED_VCF="${WORKINGDIR}/all_filtered.vcf"
 ALL_FILTERED_VCF_hg19="${WORKINGDIR}/all_filtered_hg19.vcf"
 ALL_FILTERED_VCF_REJECTED="${WORKINGDIR}/all_filtered_rejected.vcf"
 
+PARLIAMENT_INPUTDIR="${INPUTDIR}/parliament2"
+SURVIVOR_WORKDIR="${WORKINGDIR}/survivor"
+
 
 
 

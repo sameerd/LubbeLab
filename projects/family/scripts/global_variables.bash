@@ -25,7 +25,8 @@ KING="${PROGRAMSDIR}/king/king"
 PLINK="${PROGRAMSDIR}/plink_feb2018/plink"
 MERGE_IBD="${PROGRAMSDIR}/beagle/merge-ibd-segments.12Jul18.a0b.jar"
 
-
+SURVIVOR="${PROGRAMSDIR}/SURVIVOR/Debug/SURVIVOR"
+SURVIVOR_ANT=${PROGRAMSDIR}/SURVIVOR_ant/bin/survivor_ant-core-0.1.0/survivor_ant
 
 ANNOVARDIR="${PROGRAMSDIR}/annovar_2017/annovar"
 ANNOVAR_CONVERT="${ANNOVARDIR}/convert2annovar.pl"
@@ -36,6 +37,8 @@ B37_to_HG19_CHAIN="${REFSDIR}/chain_files/b37tohg19.chain"
 
 GENOMEREF_37="${REFSDIR}/fasta/human_g1k_v37.fasta"
 GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
+
+GENECODE_BED=${REFSDIR}/gencode.gene.bed
 
 
 JAVA=java
