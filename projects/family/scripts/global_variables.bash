@@ -38,8 +38,9 @@ B37_to_HG19_CHAIN="${REFSDIR}/chain_files/b37tohg19.chain"
 GENOMEREF_37="${REFSDIR}/fasta/human_g1k_v37.fasta"
 GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
 
-GENECODE_BED=${REFSDIR}/gencode.gene.bed
+GENECODE_BED="${REFSDIR}/gencode.gene.bed"
 
+PARLIAMENT2="${PROGRAMSDIR}/parliament2/parliament2_latest.sif"
 
 JAVA=java
 

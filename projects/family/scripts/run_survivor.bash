@@ -1,6 +1,9 @@
 #!/bin/bash
 
-#run Survivor and Survivor annotation
+
+#run Survivor for each sample and only extract calls supported by three callers 
+
+module load singularity
 
 source ./scripts/global_variables.bash
 source ./scripts/project_variables.bash
@@ -8,13 +11,44 @@ source ./scripts/project_variables.bash
 echo ${OUTPUTDIR}
 
 # create a directory for file that are supported by three callers
-SUPP3DIR="${SURVIVOR_WORKDIR}/SUPP3"
 mkdir -p "${SUPP3DIR}"
-cd "${SUPP3DIR}"
 
 # read all the files in the svtyped_vcf directory and extract out all IDs
 mapfile -t id_array < <(ls ${PARLIAMENT_INPUTDIR}/svtyped_vcfs/* | grep -oP "SS400[0-9]*" | sort | uniq)
 #printf '%s\n' "${id_array[@]}" 
+
+# script that we use inside the parliament container to 
+# redo the survivor command to only keep calls supported by 3 callers
+# These lines below are modified from https://github.com/dnanexus/parliament2/blob/37d6306530cccbb61d503e070fb50b8e85405f56/parliament2.sh
+
+cat <<'EOF' > "${SUPP3DIR}/survivor_supp3.bash"
+#!/bin/bash
+
+if [[ $# -eq 0 ]] ; then
+    echo 'Need the prefix argument'
+    exit 1
+fi
+
+prefix=$1
+
+# Run SURVIVOR
+echo "Running SURVIVOR"
+survivor merge "${prefix}_inputs.txt" 1000 3 1 0 0 10 "${prefix}.survivor.output.vcf"
+
+# Prepare SURVIVOR outputs for upload
+vcf-sort -c > "${prefix}.survivor_sorted.vcf" < "${prefix}.survivor.output.vcf"
+
+sed -i 's/SAMPLE/breakdancer/g' "${prefix}.survivor_sorted.vcf"
+
+python /combine_combined.py "${prefix}.survivor_sorted.vcf" \
+    "${prefix}" "${prefix}_inputs.txt" /all.phred.txt \
+        | python /correct_max_position.py > "${prefix}".combined.genotyped.vcf
+EOF
+
+chmod +x "${SUPP3DIR}/survivor_supp3.bash"
+ 
+
+mkdir -p "${SUPP3DIR}/input"
 
 # Merge the various caller results so that we have one file per ID. 
 # The default Parliament output gives us the entire results. Here we
@@ -22,33 +56,17 @@ mapfile -t id_array < <(ls ${PARLIAMENT_INPUTDIR}/svtyped_vcfs/* | grep -oP "SS4
 for id in "${id_array[@]}"
 do
     echo "Processing $id alone"
-    ${SURVIVOR} merge \
-            <(ls ${PARLIAMENT_INPUTDIR}/svtyped_vcfs/$id*) 1000 3 1 0 0 30 \
-            "${SUPP3DIR}/${id}_merged.vcf"
+    cd ${PARLIAMENT_INPUTDIR}/svtyped_vcfs
+      #copy over the input files
+      cp $id* "${SUPP3DIR}/input/"
+      # create a file with the list of input files 
+      ls $id* | sed 's/^/\/home\/dnanexus\/in\//' > "${SUPP3DIR}/${id}_inputs.txt"
+    cd -
+
+    cd "${SUPP3DIR}"
+    TMPDIR=/tmp LANG= singularity exec \
+            -B `pwd`/input:/home/dnanexus/in:rw \
+            ${PARLIAMENT2} \
+            ./survivor_supp3.bash "$id"
+    cd -
 done
-
-# Family 2
-ids=($G1 $G2 $G3)
-## construct the locations of the input files
-file_patterns=( "${ids[@]/%/_merged.vcf}")
-file_patterns=( "${file_patterns[@]/#/${SUPP3DIR}/SS400}")
-
-#echo "File patterns"
-#printf '%s\n' "${file_patterns[@]}"
-
-${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 sample_files_family2.vcf
-${SURVIVOR_ANT} -i sample_files_family2.vcf \
-        -b  ${GENECODE_BED} \
-        -o sample_merged_annotated_family2.vcf
-
-
-# Family 3
-ids=($F1 $F2 $F3 $F4)
-## construct the locations of the input files
-file_patterns=( "${ids[@]/%/_merged.vcf}")
-file_patterns=( "${file_patterns[@]/#/${SUPP3DIR}/SS400}")
-
-${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 sample_files_family3.vcf
-${SURVIVOR_ANT} -i sample_files_family3.vcf \
-        -b  ${GENECODE_BED} \
-        -o sample_merged_annotated_family3.vcf
