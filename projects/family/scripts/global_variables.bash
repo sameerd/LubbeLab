@@ -39,6 +39,7 @@ GENOMEREF_37="${REFSDIR}/fasta/human_g1k_v37.fasta"
 GENOMEREF_37_DICT="${GENOMEREF_37%.*}".dict
 
 GENECODE_BED="${REFSDIR}/gencode.gene.bed"
+GNOMAD_SV_BED="${REFSDIR}/gnomad_v2_sv.sites.bed"
 
 PARLIAMENT2="${PROGRAMSDIR}/parliament2/parliament2_latest.sif"
 

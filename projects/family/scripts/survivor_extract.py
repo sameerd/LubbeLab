@@ -17,20 +17,35 @@ vcf_reader = vcf.Reader(filename=input_file)
 samples = vcf_reader.samples
 num_samples = len(samples)
 
-output_cols = [ "CHROM", "POS", "END" , "SVTYPE", "SVLEN", "QUAL", "SUPP_VEC"]
-output_cols += samples
-output_cols += [x + "_SUPP" for x in samples]
-output_cols += ["NUM_ANN", "ANNOTATION", "GENE_NAME", "GENE_TYPE", "MDS_GENE" ]
+# create gnomAD dictionary
+gnomAD_dict = {}
+with open("/projects/b1049/genetics_refs/gnomad_v2_sv.sites.bed") as fh:
+    header = fh.next().strip().split("\t")
+
+    protein_coding_cols = ["PROTEIN_CODING__LOF", "PROTEIN_CODING__DUP_LOF",
+            "PROTEIN_CODING__COPY_GAIN", "PROTEIN_CODING__DUP_PARTIAL",
+            "PROTEIN_CODING__MSV_EXON_OVR", "PROTEIN_CODING__INTRONIC",
+            "PROTEIN_CODING__INV_SPAN", "PROTEIN_CODING__UTR",
+            "PROTEIN_CODING__NEAREST_TSS", "PROTEIN_CODING__INTERGENIC",
+            "PROTEIN_CODING__PROMOTER"]
+
+    extract_cols = ["NAME", "SVTYPE", "FREQ_HOMREF", "FREQ_HET", 
+            "FREQ_HOMALT"] + protein_coding_cols
+    extract_idx = [header.index(e) for e in extract_cols]
+    for line in fh:
+        linesp = line.strip().split("\t")
+        line_dict = dict(zip(extract_cols, (linesp[i] for i in extract_idx)))
+        gnomAD_dict[line_dict["NAME"]] = line_dict
 
 # reading genecode bed file
 # create a master dictionary of gene_id linked to gene_names etc
-genecode_dict = {}
-with open("/projects/b1049/genetics_refs/gencode.gene.bed") as fh:
-    for line in fh:
-        info = line.split("\t")[9].rstrip()
-        info_dict = dict((x[0], x[1].replace('"', "")) for 
-                x in map(str.split, info.split(";")) if len(x) != 0)
-        genecode_dict[info_dict["gene_id"]] = info_dict
+#genecode_dict = {}
+#with open("/projects/b1049/genetics_refs/gencode.gene.bed") as fh:
+#    for line in fh:
+#        info = line.split("\t")[9].rstrip()
+#        info_dict = dict((x[0], x[1].replace('"', "")) for 
+#                x in map(str.split, info.split(";")) if len(x) != 0)
+#        genecode_dict[info_dict["gene_id"]] = info_dict
 
 # read in MDS gene list
 mds_set = None
@@ -39,6 +54,12 @@ with open("data/input/mds_genes.txt") as fh:
 
 def print_line(l):
     print("\t".join(map(str, l))) 
+
+output_cols = [ "CHROM", "POS", "END" , "SURV_TYPE", "SVLEN", "QUAL", "SUPP_VEC"]
+output_cols += samples
+output_cols += [x + "_SUPP" for x in samples]
+output_cols += ["NUM_ANN", "MDSGENE"]
+output_cols += extract_cols
 
 print_line(output_cols)
 
@@ -52,16 +73,20 @@ for record in vcf_reader:
                 record.INFO["SUPP_VEC"] ]
         calls = [record.genotype(s) for s in samples]
         output_values += [c.data.GT for c in calls]
-        output_values += [c.data.PSV for c in calls]
+        # put a string "v" in front of the PSV data so that 
+        # spreadsheet programs do not truncate the leading zeros
+        output_values += ["v" + c.data.PSV for c in calls] 
         ta = None # total annotations
         if "total_Annotations" in record.INFO: 
             # We have multiple annotations so we need to create new records
             ta = record.INFO["total_Annotations"][0]
             if ta != '0':
+                # duplicate line for each overlapped_Annotations
                 for annotation in record.INFO["overlapped_Annotations"]:
-                    gd = genecode_dict[annotation]
-                    print_line(output_values + [ta, annotation, gd["gene_name"], 
-                        gd["gene_type"], gd["gene_name"] in mds_set]) 
+                    gd = gnomAD_dict[annotation]
+                    print_line(output_values + 
+                       [ta, gd["PROTEIN_CODING__NEAREST_TSS"] in mds_set] +
+                       list(gd[e] for e in extract_cols) ) 
         if ta is None or ta == '0': # print without annotations
-            print_line(output_values + ["0", ".", ".", ".", "."])
+            print_line(output_values + ["0", "NA"] + ["NA"]*len(extract_cols) )
 
