@@ -5,6 +5,8 @@
 source ./scripts/global_variables.bash
 source ./scripts/project_variables.bash
 
+module load vcftools
+
 echo ${OUTPUTDIR}
 
 cd "${SURVIVOR_WORKDIR}"
@@ -23,6 +25,7 @@ ${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 \
 ${SURVIVOR_ANT} -i sample_files_family2.vcf \
         -b  ${GENECODE_BED} \
         -o sample_merged_annotated_family2.vcf
+vcf-sort -c < sample_merged_annotated_family2.vcf > sample_merged_sorted_annotated_family2.vcf
 
 
 # Family 3
@@ -36,3 +39,11 @@ ${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 \
 ${SURVIVOR_ANT} -i sample_files_family3.vcf \
         -b  ${GENECODE_BED} \
         -o sample_merged_annotated_family3.vcf
+vcf-sort -c < sample_merged_annotated_family3.vcf > sample_merged_sorted_annotated_family3.vcf
+
+cd - # change back to the directory we started from (family directory)
+module load python
+python scripts/survivor_extract.py "${SURVIVOR_WORKDIR}/sample_merged_sorted_annotated_family2.vcf" \
+        101 > data/output/family2/cnv_parliament2.tsv
+python scripts/survivor_extract.py "${SURVIVOR_WORKDIR}/sample_merged_sorted_annotated_family3.vcf" \
+        1001 > data/output/family3/cnv_parliament2.tsv
