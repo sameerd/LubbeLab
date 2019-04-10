@@ -5,7 +5,7 @@ Then [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) is used to combine
 the results across samples and
 [SURVIVOR\_ant](https://github.com/fritzsedlazeck/SURVIVOR_ant) is used to
 annotate the calls with [structural variant data from
-gnomAD](https://macarthurlab.org/2019/03/20/structural-variants-in-gnomad/)
+gnomAD](https://macarthurlab.org/2019/03/20/structural-variants-in-gnomad/).
 
 
 ### Pipeline Steps
@@ -36,7 +36,7 @@ The output looks something like this.
 ### Installation
 
 **Parliament2 installation**.
-Detailed instructions are [here](./RUN_Parliament2.md)
+Detailed instructions are [here](./RUN_Parliament2.md).
 
 **SURVIVOR Installation**
 Straightforward from the github websites. 
