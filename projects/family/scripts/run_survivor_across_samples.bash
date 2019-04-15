@@ -23,7 +23,7 @@ file_patterns=( "${file_patterns[@]/#/${SUPP3DIR}/SS400}")
 ${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 \
         sample_files_family2.vcf
 ${SURVIVOR_ANT} -i sample_files_family2.vcf \
-        -b  ${GNOMAD_SV_BED} \
+        -b  "${GENECODE_BED}","${GNOMAD_SV_BED}" \
         -o sample_merged_annotated_family2.vcf
 vcf-sort -c < sample_merged_annotated_family2.vcf > sample_merged_sorted_annotated_family2.vcf
 
@@ -37,7 +37,7 @@ file_patterns=( "${file_patterns[@]/#/${SUPP3DIR}/SS400}")
 ${SURVIVOR} merge <(printf '%s\n' "${file_patterns[@]}") 1000 1 1 0 0 30 \
         sample_files_family3.vcf
 ${SURVIVOR_ANT} -i sample_files_family3.vcf \
-        -b  ${GNOMAD_SV_BED} \
+        -b  "${GENECODE_BED}","${GNOMAD_SV_BED}" \
         -o sample_merged_annotated_family3.vcf
 vcf-sort -c \
         < sample_merged_annotated_family3.vcf \

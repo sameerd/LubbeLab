@@ -29,38 +29,45 @@ with open("/projects/b1049/genetics_refs/gnomad_v2_sv.sites.bed") as fh:
             "PROTEIN_CODING__NEAREST_TSS", "PROTEIN_CODING__INTERGENIC",
             "PROTEIN_CODING__PROMOTER"]
 
-    extract_cols = ["NAME", "SVTYPE", "FREQ_HOMREF", "FREQ_HET", 
+    gd_extract_cols = ["NAME", "SVTYPE", "FREQ_HOMREF", "FREQ_HET", 
             "FREQ_HOMALT"] + protein_coding_cols
-    extract_idx = [header.index(e) for e in extract_cols]
+    extract_idx = [header.index(e) for e in gd_extract_cols]
     for line in fh:
         linesp = line.strip().split("\t")
-        line_dict = dict(zip(extract_cols, (linesp[i] for i in extract_idx)))
+        line_dict = dict(zip(gd_extract_cols, (linesp[i] for i in extract_idx)))
         gnomAD_dict[line_dict["NAME"]] = line_dict
 
 # reading genecode bed file
 # create a master dictionary of gene_id linked to gene_names etc
-#genecode_dict = {}
-#with open("/projects/b1049/genetics_refs/gencode.gene.bed") as fh:
-#    for line in fh:
-#        info = line.split("\t")[9].rstrip()
-#        info_dict = dict((x[0], x[1].replace('"', "")) for 
-#                x in map(str.split, info.split(";")) if len(x) != 0)
-#        genecode_dict[info_dict["gene_id"]] = info_dict
+genecode_dict = {}
+with open("/projects/b1049/genetics_refs/gencode.gene.bed") as fh:
+    for line in fh:
+        info = line.split("\t")[9].rstrip()
+        info_dict = dict((x[0], x[1].replace('"', "")) for 
+                x in map(str.split, info.split(";")) if len(x) != 0)
+        genecode_dict[info_dict["gene_id"]] = info_dict
+genecode_extract_cols = ["gene_id", "gene_name", "gene_type"]
 
 # read in MDS gene list
 mds_set = None
 with open("data/input/mds_genes.txt") as fh:
     mds_set = set(line.strip() for line in fh)
 
-def print_line(l):
-    print("\t".join(map(str, l))) 
 
 output_cols = [ "CHROM", "POS", "END" , "SURV_TYPE", "SVLEN", "QUAL", "SUPP_VEC"]
 output_cols += samples
 output_cols += [x + "_SUPP" for x in samples]
-output_cols += ["NUM_ANN", "MDSGENE"]
-output_cols += extract_cols
+output_cols += ["NUM_ANN"]
+output_cols += genecode_extract_cols
+output_cols += ["MDSGENE"]
+output_cols += gd_extract_cols
 
+# dictionary to use when gnomAD_annotation is empty
+gd_empty_anno = {key:"NA" for key in gd_extract_cols}
+
+def print_line(l):
+    print("\t".join(map(str, l))) 
+# print the header of the output file
 print_line(output_cols)
 
 for record in vcf_reader:
@@ -81,12 +88,28 @@ for record in vcf_reader:
             # We have multiple annotations so we need to create new records
             ta = record.INFO["total_Annotations"][0]
             if ta != '0':
-                # duplicate line for each overlapped_Annotations
-                for annotation in record.INFO["overlapped_Annotations"]:
-                    gd = gnomAD_dict[annotation]
+                # We have two types of annotation gencode and gnomAD
+                # We expect only one gnomAD annotation but we can have
+                # multiple gencode annotations
+                # duplicate line for each overlapped gencode annotation
+                annotations = record.INFO["overlapped_Annotations"]
+                gnomad_anno = filter(lambda x: x.startswith("gnomAD_"), annotations)
+                gen_anno = filter(lambda x: x.startswith("ENSG"), annotations)
+                if len(gnomad_anno):
+                    gd = gnomAD_dict[gnomad_anno[0]]
+                else:
+                    gd = gd_empty_anno
+                for annotation in gen_anno:
+                    gen_data = genecode_dict[annotation]
                     print_line(output_values + 
-                       [ta, gd["PROTEIN_CODING__NEAREST_TSS"] in mds_set] +
-                       list(gd[e] for e in extract_cols) ) 
+                       [ta] + 
+                       list(gen_data[x] for x in genecode_extract_cols) + 
+                       [gen_data["gene_name"] in mds_set] +
+                       list(gd[e] for e in gd_extract_cols) ) 
         if ta is None or ta == '0': # print without annotations
-            print_line(output_values + ["0", "NA"] + ["NA"]*len(extract_cols) )
+            print_line(output_values + 
+                       ["0"] +
+                       ["NA"]*len(genecode_extract_cols) + 
+                       ["NA"] +
+                       ["NA"]*len(gd_extract_cols) )
 
