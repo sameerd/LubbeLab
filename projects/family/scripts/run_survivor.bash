@@ -19,8 +19,8 @@ mapfile -t id_array < <(ls ${PARLIAMENT_INPUTDIR}/svtyped_vcfs/* | grep -oP "SS4
 
 # script that we use inside the parliament container to 
 # redo the survivor command to only keep calls supported by 3 callers
-# These lines below are modified from https://github.com/dnanexus/parliament2/blob/37d6306530cccbb61d503e070fb50b8e85405f56/parliament2.sh
-
+# These lines below are modified from 
+# https://github.com/dnanexus/parliament2/blob/37d6306530cccbb61d503e070fb50b8e85405f56/parliament2.sh
 cat <<'EOF' > "${SUPP3DIR}/survivor_supp3.bash"
 #!/bin/bash
 
@@ -40,9 +40,30 @@ vcf-sort -c > "${prefix}.survivor_sorted.vcf" < "${prefix}.survivor.output.vcf"
 
 sed -i 's/SAMPLE/breakdancer/g' "${prefix}.survivor_sorted.vcf"
 
+combined_vcf="${prefix}.combined.genotyped.vcf"
+
 python /combine_combined.py "${prefix}.survivor_sorted.vcf" \
     "${prefix}" "${prefix}_inputs.txt" /all.phred.txt \
-        | python /correct_max_position.py > "${prefix}".combined.genotyped.vcf
+        | python /correct_max_position.py > ${combined_vcf}
+
+## BB reccomended filtering on combined vcf (below)
+filtered_vcf="${prefix}.combined.genotyped.filtered.vcf"
+
+# First, filter single-individual VCF extracting only PASS variants:
+grep "#" "${combined_vcf}" > "${filtered_vcf}"
+grep -v "#" "${combined_vcf}" | awk '$7 == "PASS" {print}' >> "${filtered_vcf}"
+
+# Second, filter the output with SURVIVOR using:
+# i)   Merged events within 1000 bp in distance one each other
+# ii)  No frequency filtering (-1)
+# iii) At least 10 reads supporting the event (10)
+# remove combined vcf file and re-write it using survivor filter
+rm "${combined_vcf}" 
+
+survivor filter "${filtered_1_vcf}" 1000 -1 10 > \
+    vcf-sort -c > "${combined_vcf}"
+## End of BB recommended filtering for single sample
+
 EOF
 
 chmod +x "${SUPP3DIR}/survivor_supp3.bash"
