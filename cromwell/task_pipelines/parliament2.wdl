@@ -10,7 +10,7 @@ task parliament2 {
   String GENOMEREF_V37_INDEX
 
   Int core_count = 24
-  String task_mem_str = "118gb"
+  String task_mem_str = "120000"
 
   # basenames for singularity
   # We just need to strip out the directory here

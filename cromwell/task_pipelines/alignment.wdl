@@ -13,7 +13,7 @@ task alignment_create_samfile {
   String BWA
 
   Int core_count = 12
-  String task_mem_str = "64gb"
+  String task_mem_str = "65536"
 
   command {
     module load java
@@ -67,7 +67,7 @@ task alignment_task {
   # max(gatk_men, samtools_mem * core_count) 
   # and if this larger than 100GB then we should reduce the samtools_mem
   # for now let's hard code sensible values
-  String task_mem_str = "64gb"
+  String task_mem_str = "65536"
 
   String file_basename = basename(sam_file, ".bam")
 

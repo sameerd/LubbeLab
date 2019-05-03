@@ -47,7 +47,7 @@ task haplotype_caller_task {
     rt_walltime : walltime
     rt_nodes : num_nodes
     rt_ppn : 24
-    rt_mem : "120gb"
+    rt_mem : "120000"
     
   }
 
@@ -81,7 +81,7 @@ task HaplotypeCallerERCPerChr {
     File gvcf = "raw.likelihood.g.vcf.gz"
   } 
   runtime {
-    rt_mem: "8gb"
+    rt_mem: "8096"
     rt_walltime: "24:00:00"
   }
 }
@@ -105,7 +105,7 @@ task GatherGVCFs {
     File gvcf_file = "${sample_name}.g.vcf.gz"
   }
   runtime {
-    rt_mem: "16gb"
+    rt_mem: "16384"
     rt_walltime: "9:00:00"
   }
 }
