@@ -51,7 +51,7 @@ task fetch_resources {
   }
 
   runtime {
-    rt_queue : "short"
+    rt_queue : "genomics"
     rt_walltime : "10:00"
   }
 }
@@ -71,7 +71,7 @@ task final_copy {
     Array[File] out = files
   }
   runtime {
-    rt_queue : "short"
+    rt_queue : "genomics"
     rt_walltime : "4:00:00"
   }
 }
@@ -94,7 +94,7 @@ task strip_leading_hash {
   }
 
   runtime {
-    rt_queue : "short"
+    rt_queue : "genomics"
     rt_walltime : "10:00"
 
   }
@@ -115,7 +115,7 @@ task gunzip_file {
   }
 
   runtime {
-    rt_queue : "short"
+    rt_queue : "genomics"
     rt_walltime : "03:59:00"
   }
 
