@@ -25,6 +25,9 @@ task parliament2 {
   String ID = basename(input_file_bam_index_basename, ".bam")
 
   command {
+      
+      module load singularity
+
       mkdir input output
       
       # copy files into input directory which singularity shall mount into 
