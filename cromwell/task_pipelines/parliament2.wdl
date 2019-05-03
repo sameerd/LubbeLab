@@ -61,7 +61,7 @@ task parliament2 {
   runtime {
     rt_alloc : "b1042"
     rt_queue : "genomics"
-    rt_naccesspolicy : "singlenode"
+    rt_naccesspolicy : "--exclusive"
     rt_walltime : "48:00:00"
     rt_nodes : 1
     rt_ppn : core_count
