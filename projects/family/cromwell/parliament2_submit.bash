@@ -5,15 +5,15 @@ set -x
 cwd=`pwd`
 cromwell_dir="../../cromwell"
 
-msub -A b1042 \
-  -e "${cwd}/logs/errlog_parliament.txt" \
-  -o "${cwd}/logs/outlog_parliament.txt" \
-  -d "${cwd}" \
-  -q genomics \
-  -l mem=4gb \
-  -l walltime=48:00:00 \
-  -l nodes=1:ppn=1 \
-  - <<EOJ
+sbatch -A b1042 \
+  --error "${cwd}/logs/errlog_parliament.txt" \
+  --output "${cwd}/logs/outlog_parliament.txt" \
+  -D "${cwd}" \
+  --partition genomics \
+  --mem=4000 \
+  -t 48:00:00 \
+  -N 1 -n 1 \
+<<EOJ
 #!/bin/bash
 
 module load java
@@ -24,4 +24,3 @@ java -Dconfig.file=$cromwell_dir/cromwell_config.conf \
      $cromwell_dir/parliament2_pipeline.wdl
 
 EOJ
-

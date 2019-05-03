@@ -67,11 +67,11 @@ case "$queue" in
     echo "Setting walltime to : $walltime"
     ;;
   genomics)
-    if [ -z "$walltime" ]; then walltime="01:23:00:00"; fi
+    if [ -z "$walltime" ]; then walltime="47:00:00"; fi
     echo "Setting walltime to : $walltime"
     ;;
   genomicslong)
-    if [ -z "$walltime" ]; then walltime="07:00:00:00"; fi
+    if [ -z "$walltime" ]; then walltime="168:00:00"; fi
     echo "Setting walltime to : $walltime"
     ;;
 esac
@@ -83,7 +83,7 @@ sbatch \
   --error="${cwd}/logs/errlog.txt" \
   --output="${cwd}/logs/outlog.txt" \
   -D "${cwd}" \
-  --partition=${queue} \
+  -p ${queue} \
   -t ${walltime} \
   -n 1 \
   --ntasks-per-node=${ppn} \
