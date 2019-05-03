@@ -44,7 +44,7 @@ task CombineGVCFs {
     rt_nodes: 1
     rt_ppn: 2
     rt_mem: "16gb"
-    rt_walltime: "02:23:00:00"
+    rt_walltime: "71:00:00"
   }
 
 } 
@@ -76,7 +76,7 @@ task JointGenotype {
     rt_nodes: 1
     rt_ppn: 4
     rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_walltime: "48:00:00"
   }
 
 }
@@ -120,7 +120,7 @@ task ExtractandFilterSNPs {
     rt_nodes: 1
     rt_ppn: 4
     rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_walltime: "48:00:00"
   }
 
 }
@@ -163,7 +163,7 @@ task ExtractandFilterINDELs {
     rt_nodes: 1
     rt_ppn: 4
     rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_walltime: "48:00:00"
   }
 
 }
@@ -197,7 +197,7 @@ task CombineFilteredSNPsIndels {
     rt_nodes: 1
     rt_ppn: 4
     rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_walltime: "48:00:00"
   }
 }
 
@@ -295,7 +295,7 @@ task ApplyVQSR {
     rt_nodes: 1
     rt_ppn: 4
     rt_mem: "32gb"
-    rt_walltime: "02:00:00:00"
+    rt_walltime: "48:00:00"
   }
 
 }
